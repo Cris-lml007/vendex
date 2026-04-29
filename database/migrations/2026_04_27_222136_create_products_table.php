@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Status;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,10 +16,12 @@ return new class extends Migration
             // $table->id();
             $table->uuid('id')->unique();
             $table->string('name');
-            $table->string('description');
+            $table->string('brand');
+            $table->string('model');
+            $table->string('description')->nullable();
             $table->decimal('price');
-            $table->integer('status');
-            $table->unsignedBigInteger('category_id');
+            $table->enum('status',Status::cases())->default(Status::ACTIVE);
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->timestamps();
         });
     }
