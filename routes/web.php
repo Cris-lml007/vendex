@@ -16,8 +16,8 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::prefix('/dashboard')->group(function(){
-    Route::get('/product',ProductView::class)->name('admin.product');
-    Route::get('/category',CategoryView::class)->name('admin.category');
-    Route::get('/inventory',InventoryView::class)->name('admin.inventory');
-    Route::get('/store',StoreView::class)->name('admin.store');
+    Route::get('/products',ProductView::class)->name('admin.products');
+    Route::get('/categories',CategoryView::class)->name('admin.categories');
+    Route::get('/kardex',InventoryView::class)->name('admin.kardex');
+    Route::get('/stores',StoreView::class)->name('admin.stores');
 });

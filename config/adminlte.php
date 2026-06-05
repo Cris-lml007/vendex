@@ -330,22 +330,22 @@ return [
         ['header' => 'account_settings'],
         [
             'text' => 'Catalogo',
-            'route' => 'admin.product',
+            'route' => 'admin.products',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
             'text' => 'Categoria',
-            'route' => 'admin.category',
+            'route' => 'admin.categories',
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
-            'text' => 'Inventario',
-            'route' => 'admin.inventory',
+            'text' => 'Kardex',
+            'route' => 'admin.kardex',
             'icon' => 'fas fa-fw fa-box',
         ],
         [
             'text' => 'Tiendas y Almacenes',
-            'route' => 'admin.store',
+            'route' => 'admin.stores',
             'icon' => 'fas fa-fw fa-box',
         ],
         ['header' => 'labels'],

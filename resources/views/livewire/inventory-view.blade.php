@@ -1,6 +1,6 @@
 <x-slot name="header">
     <div class="d-flex justify-content-between">
-        <h1>Inventario</h1>
+        <h1>Kardex</h1>
         <button data-bs-toggle="modal" data-bs-target="#modal-inventory" class="btn btn-primary"><i class="fa fa-plus"></i> Añadir Nuevo Lote</button>
     </div>
 </x-slot>
@@ -13,10 +13,11 @@
                     <tr>
                         <td>{{ $item->id }}</td>
                         <td>{{ $item->product->name }}</td>
+                        <td>{{ $item->price*$item->quantity }}</td>
+                        <td> --- </td>
+                        <td>{{ $item->quantity }}</td>
                         <td>{{ $item->type->name }}</td>
                         <td>{{ $item->store->name }}</td>
-                        <td>{{ $item->quantity }}</td>
-                        <td>{{ $item->price }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>
                             <button class="btn btn-primary"><i class="fa fa-pen"></i></button>
