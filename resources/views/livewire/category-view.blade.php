@@ -25,8 +25,9 @@
             </livewire:table>
         </x-card>
     </div>
-
-    <x-modal id="modal-category" title="Nueva Categoria">
-        <livewire:category-form></livewire:category-form>
-    </x-modal>
+    @island
+        <x-modal id="modal-category" title="Nueva Categoria">
+            <livewire:category-form></livewire:category-form>
+        </x-modal>
+    @endisland
 </div>

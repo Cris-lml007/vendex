@@ -10,7 +10,7 @@ class CategoryView extends Component
 {
 
     public function getCategory($id){
-        $this->dispatch('getCategory',$id);
+        $this->dispatch('getCategory',$id)->to(CategoryForm::class);
     }
 
 

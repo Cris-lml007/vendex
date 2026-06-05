@@ -9,5 +9,8 @@
         <tbody>
             {{ $slot }}
         </tbody>
+        <tfoot>
+            {{ $slot['footer'] }}
+        </tfoot>
     </table>
 </div>

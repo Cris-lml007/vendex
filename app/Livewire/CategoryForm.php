@@ -29,13 +29,14 @@ class CategoryForm extends Component
     }
 
     public function save(){
-        if($this->category->id == null){
+        if($this->category?->id == null){
             $this->category = new Category();
         }
         $this->category->name = $this->name;
         $this->category->save();
         $this->reset();
 
+        $this->category = new Category();
         $this->js('$("#modal-category").modal("hide")');
         $this->dispatch('refresh')->to(CategoryView::class);
     }
