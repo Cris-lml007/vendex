@@ -18,7 +18,7 @@
                         <td>{{ $item?->category?->name ?? '---' }}</td>
                         <td>{{ Number::format($item->price, precision: 2) }}</td>
                     <td>
-                        <button class="btn btn-primary"><i class="fa fa-eye"></i></button>
+                        <a href="{{ route('admin.product.id',$item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                     </td>
                     </tr>
                 @endforeach

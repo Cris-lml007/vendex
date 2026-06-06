@@ -65,6 +65,35 @@
                     @enderror
                 </div>
             </div>
+            <div class="d-flex justify-content-between my-3">
+                <h5>En Inventario</h5>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <table class="table table-striped">
+                        <thead>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Cantidad</th>
+                        </thead>
+                        <tbody>
+                        @foreach($stores ?? [] as $item)
+                            <tr>
+                                <td>{{ $item->name }}</td>
+                                <td>{{ $item->type->name }}</td>
+                                <td>
+                                    <input wire:blur="setStock({{$item->id}}, $event.target.value)" type="number" class="form-control" value="{{ $stocks[$item->id]}}"/>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                        <tfoot>
+                        <th colspan="2">TOTAL</th>
+                        <th @class(['text-success', 'text-danger' => $total != $total_origin])>{{ $total }}</th>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-primary">Guargar</button>

@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Enums\Type;
 use App\Models\Kardex;
 use App\Models\Product;
+use App\Models\Stock;
 use App\Models\Store;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -50,6 +51,13 @@ class InventoryForm extends Component
                         'quantity' => $value,
                         'price' => $this->price,
                         'type' => Type::IN,
+                    ]);
+
+                    Stock::updateOrCreate([
+                        'product_id' => $this->_id,
+                        'store_id' => $item,
+                    ],[
+                        'quantity' => $value,
                     ]);
                 }
             });
