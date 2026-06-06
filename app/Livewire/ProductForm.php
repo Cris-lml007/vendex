@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Store;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -40,8 +41,7 @@ class ProductForm extends Component
 
     public function mount(Product $product = null){
         $this->product = $product;
-        if($this->product != null){
-
+        if($this->product->id != null){
             $this->edit = true;
             $this->barcode = $this->product->id;
             $this->name = $this->product->name;
@@ -93,7 +93,8 @@ class ProductForm extends Component
                             'store_id' => $id,
                             'quantity' => $value,
                             'price' => 0,
-                            'type' => Type::TRANSFER
+                            'type' => Type::TRANSFER,
+                            'user_id' => Auth::user()->id
                         ]);
                     }
                 });

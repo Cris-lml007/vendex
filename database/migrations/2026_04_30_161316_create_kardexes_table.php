@@ -19,6 +19,9 @@ return new class extends Migration
             $table->enum('type',Type::cases());
             $table->integer('quantity');
             $table->decimal('price');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('reference_id')->nullable();
+            $table->string('reference_type')->nullable();
             $table->timestamps();
         });
     }

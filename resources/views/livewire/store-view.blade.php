@@ -14,7 +14,9 @@
                     <td>{{ $item->name }}</td>
                     <td>{{ $item->type->name }}</td>
                     <td>{{ $item->status->name }}</td>
-                    <td></td>
+                    <td>
+                        <a class="btn btn-primary" href="{{ route('admin.store.id', $item->id) }}"><i class="fa fa-eye"></i></a>
+                    </td>
                 </tr>
                 @endforeach
             </livewire:table>

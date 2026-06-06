@@ -2,6 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Enums\Type;
+use App\Models\Kardex;
+use App\Models\Stock;
 use App\Models\Store;
 use Livewire\Component;
 
@@ -13,6 +16,24 @@ class StoreForm extends Component
     public $status;
 
     public Store $store;
+    public $stock;
+    public $sales;
+    public $edit = false;
+
+    public function mount(Store $store = null){
+        if($store->id != null){
+            $this->edit = true;
+            $this->store = $store;
+            $this->name = $store->name;
+            $this->type = $store->type;
+            $this->status = $store->status;
+
+            $this->stock = $this->store->products;
+            $this->sales = Kardex::where('store_id', $this->store->id)->where('type',Type::OUT)->get();
+        }else{
+            $this->store = new Store();
+        }
+    }
 
     public function save(){
         $this->store = new Store();

@@ -7,6 +7,7 @@ use App\Models\Kardex;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Store;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -51,6 +52,7 @@ class InventoryForm extends Component
                         'quantity' => $value,
                         'price' => $this->price,
                         'type' => Type::IN,
+                        'user_id' => Auth::user()->id
                     ]);
 
                     Stock::updateOrCreate([

@@ -12,7 +12,8 @@ class Kardex extends Model
         'store_id',
         'quantity',
         'price',
-        'type'
+        'type',
+        'user_id'
     ];
 
     public function product(){

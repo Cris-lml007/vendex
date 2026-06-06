@@ -27,10 +27,47 @@
                     </select>
                 </div>
             </div>
+            @if($edit)
+                <div class="row">
+                    <div class="col">
+                        <h5>En Inventario</h5>
+                        <livewire:table :heads="['Nombre','Disponibles','Precio','Acciones']">
+                            @foreach($stock ?? [] as $item)
+                                <tr>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->pivot->quantity }}</td>
+                                    <td>{{ $item->price }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.product.id', $item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                        <button class="btn btn-secondary"><i class="fa fa-lock"></i></button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </livewire:table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h5>Vendidos</h5>
+                        <livewire:table :heads="['Id','Producto','Cliente','Cantidad','Precio','Por']">
+                            @foreach($sales ?? [] as $item)
+                                <tr>
+                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $item->product->name }}</td>
+                                    <td>{{ '' }}</td>
+                                    <td>{{ $item->quantity }}</td>
+                                    <td>{{ $item->price }}</td>
+                                    <td></td>
+                                </tr>
+                            @endforeach
+                        </livewire:table>
+                    </div>
+                </div>
+            @endif
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary">Guardar</button>
-            <button class="btn btn-secondary">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button data-bs-dismiss="modal" type="reset" class="btn btn-secondary">Cancelar</button>
         </div>
     </form>
 </div>

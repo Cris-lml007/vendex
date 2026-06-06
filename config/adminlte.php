@@ -312,57 +312,40 @@ return [
 
         // Sidebar items:
         [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'Principal',
+            'url' => '#',
+            'icon' => 'fas fa-fw fa-home',
         ],
         [
-            'text' => 'blog',
-            'url' => 'admin/blog',
-            'can' => 'manage-blog',
+            'text' => 'Registrar Venta',
+            'url' => '#',
+            'icon' => 'fas fa-fw fa-shopping-basket',
         ],
         [
-            'text' => 'pages',
-            'url' => 'admin/pages',
-            'icon' => 'far fa-fw fa-file',
-            'label' => 4,
-            'label_color' => 'success',
+            'text' => 'Ventas Realizadas',
+            'url' => '#',
+            'icon' => 'fas fa-fw fa-list-alt',
         ],
-        ['header' => 'account_settings'],
         [
             'text' => 'Catalogo',
             'route' => 'admin.products',
-            'icon' => 'fas fa-fw fa-user',
+            'icon' => 'fas fa-fw fa-book',
         ],
+        ['header' => 'Administracion'],
         [
             'text' => 'Categoria',
             'route' => 'admin.categories',
-            'icon' => 'fas fa-fw fa-lock',
+            'icon' => 'fas fa-fw fa-layer-group',
         ],
         [
             'text' => 'Kardex',
             'route' => 'admin.kardex',
-            'icon' => 'fas fa-fw fa-box',
+            'icon' => 'fas fa-fw fa-book-open',
         ],
         [
             'text' => 'Tiendas y Almacenes',
             'route' => 'admin.stores',
-            'icon' => 'fas fa-fw fa-box',
-        ],
-        ['header' => 'labels'],
-        [
-            'text' => 'important',
-            'icon_color' => 'red',
-            'url' => '#',
-        ],
-        [
-            'text' => 'warning',
-            'icon_color' => 'yellow',
-            'url' => '#',
-        ],
-        [
-            'text' => 'information',
-            'icon_color' => 'cyan',
-            'url' => '#',
+            'icon' => 'fas fa-fw fa-building',
         ],
     ],
 
