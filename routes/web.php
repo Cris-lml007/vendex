@@ -4,6 +4,7 @@ use App\Livewire\CategoryView;
 use App\Livewire\InventoryView;
 use App\Livewire\ProductForm;
 use App\Livewire\ProductView;
+use App\Livewire\SellView;
 use App\Livewire\StoreForm;
 use App\Livewire\StoreView;
 use Illuminate\Support\Facades\Auth;
@@ -25,4 +26,6 @@ Route::prefix('/dashboard')->group(function(){
     Route::get('/kardex',InventoryView::class)->name('admin.kardex');
     Route::get('/stores',StoreView::class)->name('admin.stores');
     Route::get('/store/{store}',StoreForm::class)->name('admin.store.id');
+
+    Route::get('/sell',SellView::class)->name('admin.sell');
 });

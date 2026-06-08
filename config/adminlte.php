@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'MY CELL',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
+    'logo' => '<b>MY</b>Cell',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -318,7 +318,7 @@ return [
         ],
         [
             'text' => 'Registrar Venta',
-            'url' => '#',
+            'route' => 'admin.sell',
             'icon' => 'fas fa-fw fa-shopping-basket',
         ],
         [
@@ -346,6 +346,11 @@ return [
             'text' => 'Tiendas y Almacenes',
             'route' => 'admin.stores',
             'icon' => 'fas fa-fw fa-building',
+        ],
+        [
+            'text' => 'Gestion de Usuarios',
+            'url' => '',
+            'icon' => 'fas fa-fw fa-lock',
         ],
     ],
 

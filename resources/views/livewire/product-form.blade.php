@@ -1,3 +1,7 @@
+<x-slot name="header">
+    <h1>Producto</h1>
+</x-slot>
+
 <div>
     <form wire:submit="save">
         <div class="modal-body">
