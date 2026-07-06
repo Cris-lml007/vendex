@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Role;
+use App\Enums\Status;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,8 +19,10 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->integer('status');
+            $table->enum('status',Status::cases())->default(Status::ACTIVE);
             $table->enum('role',Role::cases());
+            $table->unsignedBigInteger('store_id')->nullable();
+            $table->integer('phone')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

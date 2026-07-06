@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Role;
+use App\Enums\Status;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -22,7 +24,10 @@ class User extends Authenticatable
         'name',
         'password',
         'role',
-        'status'
+        'status',
+        'phone',
+        'username',
+        'store_id'
     ];
 
     /**
@@ -45,6 +50,13 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => Role::class,
+            'status' => Status::class,
         ];
+    }
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id','id');
     }
 }
