@@ -56,8 +56,20 @@ class BrandForm extends Component
         $this->brand->color_bg = $this->color_bg;
         $this->brand->save();
 
+        $this->restart();
+
         $this->js('$("#modal-brand").modal("hide")');
         $this->dispatch('refresh')->to(CategoryView::class);
+    }
+
+    public function restart()
+    {
+        $this->brand = new Brand();
+        $this->name = null;
+        $this->made = null;
+        $this->color_bg = null;
+        $this->color_text = null;
+
     }
 
     public function render()
