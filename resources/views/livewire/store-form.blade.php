@@ -12,9 +12,8 @@
                     <label for="">Tipo</label>
                     <select class="form-select" wire:model="type">
                         <option value="">Seleccione un Tipo</option>
-                        @foreach (App\Enums\Type::cases() as $item)
-                            <option value="{{ $item->value }}">{{ $item->name }}</option>
-                        @endforeach
+                        <option value="{{ \App\Enums\Type::STORE }}">{{ \App\Enums\Type::STORE->name  }}</option>
+                        <option value="{{ \App\Enums\Type::WAREHOUSE }}">{{ \App\Enums\Type::WAREHOUSE->name }}</option>
                     </select>
                 </div>
                 <div class="col">
