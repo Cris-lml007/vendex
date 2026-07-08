@@ -59,7 +59,7 @@ class InventoryForm extends Component
                         'product_id' => $this->_id,
                         'store_id' => $item,
                     ],[
-                        'quantity' => $value,
+                        'quantity' => $value + (Stock::where('product_id',$this->_id)->where('store_id',$item)?->first()?->quantity ?? 0),
                     ]);
                 }
             });

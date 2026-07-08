@@ -17,7 +17,12 @@
             <div class="row mb-3">
                 <div class="col">
                     <label for="">Marca</label>
-                    <input type="text" class="form-control" wire:model="brand" placeholder="Ingrese Marca">
+                    <select class="form-select" wire:model="brand">
+                        <option value="">Seleccione Marca</option>
+                        @foreach($brands as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
+                    </select>
                     @error('brand')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror

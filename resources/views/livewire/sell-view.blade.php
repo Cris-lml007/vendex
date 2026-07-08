@@ -13,11 +13,14 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label class="form-label">CI/NIT</label>
-                            <input type="text" class="form-control" placeholder="CI/NIT" wire:model.live="ci" @if($customer_id)disabled @endif/>
+                            <input type="text" class="form-control" placeholder="CI/NIT" wire:model.live="ci"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Nombre</label>
                             <input type="text" class="form-control" placeholder="Ingrese Nombre" wire:model="name" @if($customer_id)disabled @endif/>
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
@@ -28,6 +31,9 @@
                         <div class="mb-3">
                             <label class="form-label">Teléfono</label>
                             <input type="text" class="form-control" placeholder="Ingrese Celular" wire:model="phone" @if($customer_id)disabled @endif/>
+                            @error('phone')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
                     </div>
@@ -38,12 +44,20 @@
             <div class="col-md-8">
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h5 class="mb-0">Agregar Producto</h5>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="mt-2">Agregar Producto</h5>
+                            <select class="form-select w-50" wire:model.live="store" @if(Auth::user()->role == \App\Enums\Role::SELLER) disabled @endif>
+                                <option value="">Seleccione Tienda</option>
+                                @foreach($stores as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row align-items-end">
                             <div class="col-md-5">
-                                <label class="form-label">Buscar Producto</label>
+                                <label class="form-label">Producto</label>
                                 <div class="input-group">
                                     <select name="" id="" class="form-select" wire:model.live="product_id">
                                         <option value="">Seleccione Producto</option>
@@ -104,7 +118,7 @@
                                         <td>{{ $value['quantity']*$value['price'] }}</td>
                                         <td>
                                             <button
-                                                class="btn btn-danger btn-sm">
+                                                class="btn btn-danger btn-sm" wire:click="removeProduct({{ $item }})">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </td>
@@ -134,10 +148,12 @@
                                 <h5 class="mb-2">
                                     Total: {{ \Illuminate\Support\Number::format($total,2) }} Bs
                                 </h5>
-                                <button
-                                    class="btn btn-success btn-lg">
-                                    Guardar Venta
-                                </button>
+                                <div>
+                                    <button
+                                        class="btn btn-success btn-lg" wire:click="save">
+                                        Guardar Venta
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

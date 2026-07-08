@@ -7,6 +7,7 @@ use App\Livewire\ProductView;
 use App\Livewire\SellView;
 use App\Livewire\StoreForm;
 use App\Livewire\StoreView;
+use App\Livewire\UsersView;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -28,4 +29,6 @@ Route::prefix('/dashboard')->group(function(){
     Route::get('/store/{store}',StoreForm::class)->name('admin.store.id');
 
     Route::get('/sell',SellView::class)->name('admin.sell');
+
+    Route::get('/users',UsersView::class)->name('admin.users');
 });

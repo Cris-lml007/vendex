@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('quantity');
             $table->decimal('price');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('reference_id')->nullable();
-            $table->string('reference_type')->nullable();
+            $table->unsignedBigInteger('referenceable_id')->nullable();
+            $table->string('referenceable_type')->nullable();
             $table->timestamps();
         });
     }

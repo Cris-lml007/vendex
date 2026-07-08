@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Type;
 use Illuminate\Database\Eloquent\Model;
+use League\CommonMark\Reference\Reference;
 
 class Kardex extends Model
 {
@@ -22,6 +23,14 @@ class Kardex extends Model
 
     public function store(){
         return $this->belongsTo(Store::class);
+    }
+
+    public function referenceable(){
+        return $this->morphTo();
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 
     protected function casts(): array

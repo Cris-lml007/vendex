@@ -54,10 +54,10 @@
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->product->name }}</td>
-                                    <td>{{ '' }}</td>
+                                    <td>{{ $item->referenceable?->customer?->name ?? '---'}}</td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>{{ $item->price }}</td>
-                                    <td></td>
+                                    <td>{{ $item->user->name }}</td>
                                 </tr>
                             @endforeach
                         </livewire:table>

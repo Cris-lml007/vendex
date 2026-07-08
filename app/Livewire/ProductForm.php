@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Enums\Type;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Kardex;
 use App\Models\Product;
@@ -49,7 +50,7 @@ class ProductForm extends Component
             $this->category = $this->product->category_id;
             $this->description = $this->product->description;
             $this->barcode = $this->product->id;
-            $this->brand = $this->product->brand;
+            $this->brand = $this->product->brand_id;
             $this->model = $this->product->model;
 
             $this->stores = Store::all();
@@ -70,7 +71,7 @@ class ProductForm extends Component
         $this->product->name = $this->name;
         $this->product->price = $this->price;
         $this->product->description = $this->description;
-        $this->product->brand = $this->brand;
+        $this->product->brand_id = $this->brand;
         $this->product->model = $this->model;
         $this->product->category_id = $this->category;
         if($this->barcode != ''){
@@ -112,6 +113,7 @@ class ProductForm extends Component
     public function render()
     {
         $categories = Category::all();
-        return view('livewire.product-form')->with('categories',$categories);
+        $brands = Brand::all();
+        return view('livewire.product-form')->with('categories',$categories)->with('brands',$brands);
     }
 }

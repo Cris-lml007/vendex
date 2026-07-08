@@ -13,8 +13,13 @@
                     <tr>
                         <td>{{ $item->id }}</td>
                         <td>{{ $item->product->name }}</td>
-                        <td>{{ $item->price*$item->quantity }}</td>
-                        <td> --- </td>
+                        @if($item->type == \App\Enums\Type::IN)
+                            <td>{{ $item->price*$item->quantity }}</td>
+                            <td>---</td>
+                        @else
+                            <td>---</td>
+                            <td>{{ $item->price*$item->quantity }}</td>
+                        @endif
                         <td>{{ $item->quantity }}</td>
                         <td>{{ $item->type->name }}</td>
                         <td>{{ $item->store->name }}</td>
