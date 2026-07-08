@@ -331,6 +331,11 @@ return [
             'route' => 'admin.products',
             'icon' => 'fas fa-fw fa-book',
         ],
+        [
+            'text' => 'Clientes',
+            'route' => 'admin.customers',
+            'icon' => 'fas fa-fw fa-book',
+        ],
         ['header' => 'Administracion'],
         [
             'text' => 'Categoria',
@@ -338,7 +343,7 @@ return [
             'icon' => 'fas fa-fw fa-layer-group',
         ],
         [
-            'text' => 'Kardex',
+            'text' => 'Registros de Movimientos',
             'route' => 'admin.kardex',
             'icon' => 'fas fa-fw fa-book-open',
         ],
@@ -349,7 +354,7 @@ return [
         ],
         [
             'text' => 'Gestion de Usuarios',
-            'url' => '',
+            'route' => 'admin.users',
             'icon' => 'fas fa-fw fa-lock',
         ],
     ],

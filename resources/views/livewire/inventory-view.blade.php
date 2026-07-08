@@ -1,6 +1,6 @@
 <x-slot name="header">
     <div class="d-flex justify-content-between">
-        <h1>Kardex</h1>
+        <h1>Registro de Movimientos</h1>
         <button data-bs-toggle="modal" data-bs-target="#modal-inventory" class="btn btn-primary"><i class="fa fa-plus"></i> Añadir Nuevo Lote</button>
     </div>
 </x-slot>

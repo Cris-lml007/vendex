@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\CategoryView;
+use App\Livewire\CustomersView;
 use App\Livewire\InventoryView;
 use App\Livewire\ProductForm;
 use App\Livewire\ProductView;
@@ -31,4 +32,5 @@ Route::prefix('/dashboard')->group(function(){
     Route::get('/sell',SellView::class)->name('admin.sell');
 
     Route::get('/users',UsersView::class)->name('admin.users');
+    Route::get('/customers',CustomersView::class)->name('admin.customers');
 });
