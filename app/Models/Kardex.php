@@ -33,10 +33,6 @@ class Kardex extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function transferable(){
-        return $this->belongsTo(Transaction::class, 'transaction_id','id');
-    }
-
     protected function casts(): array
     {
         return [
