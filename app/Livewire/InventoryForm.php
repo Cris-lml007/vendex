@@ -9,6 +9,7 @@ use App\Models\Stock;
 use App\Models\Store;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class InventoryForm extends Component
@@ -20,6 +21,10 @@ class InventoryForm extends Component
     public $price;
 
     public $list;
+
+    public $store_name;
+    public $store_type;
+    public Kardex $kardex;
 
     public function updatedQuantity(): void{
         $this->total = 0;
@@ -33,6 +38,28 @@ class InventoryForm extends Component
         foreach($this->list as $item){
             $this->total += $item;
         }
+    }
+
+    #[On('getKardex')]
+    public function getKardex($id){
+        $this->kardex = Kardex::find($id);
+        $this->_id = $this->kardex->product_id;
+        $this->quantity = $this->kardex->quantity;
+        $this->price = $this->kardex->price;
+        $store = Store::find($this->kardex->store_id);
+        $this->store_name = $store->name;
+        $this->store_type = $store->type;
+    }
+
+    public function restart()
+    {
+        $this->_id = null;
+        $this->quantity = 0;
+        $this->price = 0;
+        $this->list = [];
+        $this->store_name = null;
+        $this->store_type = null;
+        $this->kardex = new Kardex();
     }
 
     public function save(): void
