@@ -5,10 +5,12 @@ namespace App\Livewire;
 use App\Enums\Type;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\DetailTransfer;
 use App\Models\Kardex;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Store;
+use App\Models\Transfer;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -81,22 +83,42 @@ class ProductForm extends Component
         if($this->edit){
             try{
                 DB::transaction(function(){
+                    $t = new Transfer();
+                    $t->user_id = Auth::id();
+                    $t->save();
                     foreach ($this->stocks as $id => $value){
-                        Stock::updateOrCreate([
-                            'product_id' => $this->product->id,
-                            'store_id' => $id,
-                        ],[
-                            'quantity' => $value,
-                        ]);
+                        $stock = Stock::where('product_id',$this->product->id)
+                            ->where('store_id',$id)
+                            ->first();
+                        if(($stock?->quantity ?? 0) != $value){
+                            $quantity_old = 0;
+                            if($stock?->id != null){
+                                $quantity_old = $stock->quantity;
+                            }
 
-                        Kardex::create([
-                            'product_id' => $this->product->id,
-                            'store_id' => $id,
-                            'quantity' => $value,
-                            'price' => 0,
-                            'type' => Type::TRANSFER,
-                            'user_id' => Auth::user()->id
-                        ]);
+                            $kardex = Kardex::create([
+                                'product_id' => $this->product->id,
+                                'store_id' => $id,
+                                'quantity' => $value,
+                                'price' => 0,
+                                'type' => Type::TRANSFER,
+                                'user_id' => Auth::user()->id
+                            ]);
+                            Stock::updateOrCreate([
+                                'product_id' => $this->product->id,
+                                'store_id' => $id,
+                            ],[
+                                'quantity' => $value,
+                            ]);
+
+                            $transfer = DetailTransfer::create([
+                                'transfer_id' => $t->id,
+                                'product_id' => $this->product->id,
+                                'store_id' => $id,
+                                'quantity' => $quantity_old ?? 0,
+                                'kardex_id' => $kardex->id,
+                            ]);
+                        }
                     }
                 });
             }catch(\Throwable $exception){
