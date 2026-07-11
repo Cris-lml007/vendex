@@ -43,8 +43,9 @@ class ProductForm extends Component
         $this->total = $this->total + $stock;
     }
 
-    public function mount(Product $product = null){
-        $this->product = $product;
+    public function mount($id = null){
+        $product = Product::find($id);
+        $this->product = $product ?? new Product();
         if($this->product->id != null){
             $this->edit = true;
             $this->barcode = $this->product->id;
@@ -85,6 +86,15 @@ class ProductForm extends Component
         }
         $this->product->save();
         if($this->edit){
+            $q = $this->product?->stocks()->sum('quantity') ?? 0;
+            if(array_sum($this->stocks) > $q || array_sum($this->stocks) == 0){
+                $this->js('Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Unidades no Disponibles"
+                })');
+                return;
+            }
             try{
                 DB::transaction(function(){
                     $t = new Transfer();
@@ -123,6 +133,9 @@ class ProductForm extends Component
                                 'kardex_id' => $kardex->id,
                             ]);
                         }
+                    }
+                    if($t->details()->count() == 0){
+                        $t->delete();
                     }
                 });
             }catch(\Throwable $exception){

@@ -5,9 +5,11 @@ use App\Livewire\CustomersView;
 use App\Livewire\InventoryView;
 use App\Livewire\ProductForm;
 use App\Livewire\ProductView;
+use App\Livewire\SaleView;
 use App\Livewire\SellView;
 use App\Livewire\StoreForm;
 use App\Livewire\StoreView;
+use App\Livewire\TransfersView;
 use App\Livewire\UsersView;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -20,9 +22,9 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::prefix('/dashboard')->group(function(){
+Route::prefix('/dashboard')->middleware('auth')->group(function(){
     Route::get('/products',ProductView::class)->name('admin.products');
-    Route::get('/product/{product}',ProductForm::class)->name('admin.product.id');
+    Route::get('/product/{id}',ProductForm::class)->name('admin.product.id');
 
     Route::get('/categories',CategoryView::class)->name('admin.categories');
     Route::get('/kardex',InventoryView::class)->name('admin.kardex');
@@ -33,4 +35,6 @@ Route::prefix('/dashboard')->group(function(){
 
     Route::get('/users',UsersView::class)->name('admin.users');
     Route::get('/customers',CustomersView::class)->name('admin.customers');
+    Route::get('/transfers',TransfersView::class)->name('admin.transfers');
+    Route::get('/sales',SaleView::class)->name('admin.sales');
 });
