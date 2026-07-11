@@ -119,9 +119,16 @@
                 </div>
             @endif
         </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Guargar</button>
-            <button data-bs-dismiss="modal" type="reset" class="btn btn-secondary">Cancelar</button>
-        </div>
+        @if(!$edit)
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Guargar</button>
+                <button data-bs-dismiss="modal" type="reset" class="btn btn-secondary">Cancelar</button>
+            </div>
+        @else
+            <div class="d-flex justify-content-end mb-3">
+                <button type="submit" class="btn btn-primary me-1">Guargar</button>
+                <a href="{{route('admin.products')}}" class="btn btn-secondary">Cerrar</a>
+            </div>
+        @endif
     </form>
 </div>
