@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('kardexes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
+            $table->string('product_id');
             $table->unsignedBigInteger('store_id');
             $table->enum('type',Type::cases());
             $table->integer('quantity');

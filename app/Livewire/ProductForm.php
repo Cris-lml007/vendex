@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\DetailTransfer;
 use App\Models\Kardex;
 use App\Models\Product;
+use App\Models\ProductSequense;
 use App\Models\Stock;
 use App\Models\Store;
 use App\Models\Transfer;
@@ -78,6 +79,9 @@ class ProductForm extends Component
         $this->product->category_id = $this->category;
         if($this->barcode != ''){
             $this->product->id = $this->barcode;
+        }else{
+            $p = ProductSequense::create();
+            $this->product->id = str_pad($p->id, 10, "0", STR_PAD_LEFT);
         }
         $this->product->save();
         if($this->edit){

@@ -11,15 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('detail_transfers', function (Blueprint $table) {
+        Schema::create('product_sequenses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('transfer_id');
-            $table->unsignedBigInteger('kardex_id');
-            $table->string('product_id');
-            $table->unsignedBigInteger('quantity');
-            $table->unsignedBigInteger('store_id');
             $table->timestamps();
-
         });
     }
 
@@ -28,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('detail_transfers');
+        Schema::dropIfExists('product_sequenses');
     }
 };
