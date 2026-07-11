@@ -59,7 +59,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary">Generar Recibo</button>
+        <a class="btn btn-primary" href="{{ route('admin.sell.id',$transaction->id ?? 9999999) }}">Generar Recibo</a>
         <button wire:click="remove" class="btn btn-danger" @if(!$verify) disabled @endif >Eliminar</button>
         <button data-bs-dismiss="modal" class="btn btn-secondary">Cerrar</button>
     </div>

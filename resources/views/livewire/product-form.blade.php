@@ -68,7 +68,10 @@
             <div class="row">
                 <div class="col">
                     <label for="">Barcode</label>
-                    <input type="text" class="form-control mb-3" wire:model.live="barcode" placeholder="Ingrese Barcode">
+                    <div class="input-group" >
+                        <input type="text" class="form-control" wire:model.live="barcode" placeholder="Ingrese Barcode">
+                        <button type="button" data-bs-target="#modal-scanner" data-bs-toggle="modal" class="btn btn-primary input-group-text"><i class="fa fa-qrcode"></i></button>
+                    </div>
                     <div class="d-flex justify-content-center mb-3">
                         <img class="img-fluid img-thumbnail" src="{{ $barcode_img }}" alt="Barcode">
                     </div>

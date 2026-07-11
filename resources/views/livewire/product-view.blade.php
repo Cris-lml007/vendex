@@ -26,7 +26,16 @@
         </x-card>
     </div>
 
+    @island
     <x-modal id="modal-product" title="Nuevo Producto">
         <livewire:product-form></livewire:product-form>
     </x-modal>
+    @endisland
+
+    @island
+
+    <x-modal id="modal-scanner" title="Escaner">
+        <livewire:scanner wire:model.live="product_id"></livewire:scanner>
+    </x-modal>
+    @endisland
 </div>

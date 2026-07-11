@@ -11,6 +11,7 @@ use App\Livewire\StoreForm;
 use App\Livewire\StoreView;
 use App\Livewire\TransfersView;
 use App\Livewire\UsersView;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -37,4 +38,20 @@ Route::prefix('/dashboard')->middleware('auth')->group(function(){
     Route::get('/customers',CustomersView::class)->name('admin.customers');
     Route::get('/transfers',TransfersView::class)->name('admin.transfers');
     Route::get('/sales',SaleView::class)->name('admin.sales');
+
+    Route::get('/sell/{transaction}',function (\App\Models\Transaction $transaction){
+
+
+        $format = new NumberFormatter('es',NumberFormatter::SPELLOUT);
+        $pdf = Pdf::setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true,
+        ])->loadView('pdf.receipt',[
+            'transaction' => $transaction,
+            'format' => $format,
+        ]);
+        $pdf->setPaper('letter', 'landscape');
+        $pdf->render();
+        return $pdf->stream();
+    })->name('admin.sell.id');
 });

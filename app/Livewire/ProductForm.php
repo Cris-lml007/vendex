@@ -16,6 +16,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Milon\Barcode\Facades\DNS1DFacade;
 
@@ -47,6 +48,13 @@ class ProductForm extends Component
         $this->total = $this->total - $this->stocks[$id];
         $this->stocks[$id] = $stock;
         $this->total = $this->total + $stock;
+    }
+
+    #[On('getBarcode')]
+    public function getBarcode($value)
+    {
+        $this->barcode = $value;
+        $this->updatedBarcode();
     }
 
     public function updatedBarcode(){

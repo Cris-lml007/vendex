@@ -20,6 +20,10 @@ class StoreForm extends Component
     public $sales;
     public $edit = false;
 
+    public $address;
+    public $phone;
+    public $email;
+
     public function mount(Store $store = null){
         if($store->id != null){
             $this->edit = true;
@@ -27,6 +31,9 @@ class StoreForm extends Component
             $this->name = $store->name;
             $this->type = $store->type;
             $this->status = $store->status;
+            $this->address = $store->address;
+            $this->phone = $store->phone;
+            $this->email = $store->email;
 
             $this->stock = $this->store->products;
             $this->sales = Kardex::where('store_id', $this->store->id)->where('type',Type::OUT)->get();
@@ -40,6 +47,9 @@ class StoreForm extends Component
         $this->store->name = $this->name;
         $this->store->type = $this->type;
         $this->store->status = $this->status;
+        $this->store->address = $this->address;
+        $this->store->phone = $this->phone;
+        $this->store->email = $this->email;
         $this->store->save();
         $this->js('$("#modal-store").modal("hide")');
 

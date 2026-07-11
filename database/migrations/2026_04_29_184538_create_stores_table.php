@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
             $table->float('lat')->nullable();
             $table->float('long')->nullable();
             $table->enum('status',Status::cases())->default(Status::ACTIVE);

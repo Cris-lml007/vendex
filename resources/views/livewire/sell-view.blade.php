@@ -65,18 +65,18 @@
                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
                                         @endforeach
                                     </select>
-                                    <button class="btn btn-primary"><i class="fa fa-qrcode"></i></button>
+                                    <button data-bs-toggle="modal" data-bs-target="#modal-scanner" class="btn btn-primary"><i class="fa fa-qrcode"></i></button>
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <label class="form-label">Cantidad</label>
-                                <input type="number" min="1" class="form-control" wire:model="quantity" placeholder="{{ $product_quantity }}">
+                                <input type="number" min="1" class="form-control" wire:model="quantity" placeholder="{{ $product_quantity ?? 'Ingrese Cantidad' }}">
                             </div>
 
                             <div class="col-md-2">
                                 <label class="form-label">Precio</label>
-                                <input type="number" step="0.01" class="form-control" wire:model="price" placeholder="{{ $product_price }}">
+                                <input type="number" step="0.01" class="form-control" wire:model="price" placeholder="{{ $product_price ?? 'Ingrese Precio' }}">
                             </div>
 
                             <div class="col-md-3">
@@ -114,8 +114,8 @@
                                         <td>{{ $item+1 }}</td>
                                         <td>{{ $value['name'] }}</td>
                                         <td>{{ $value['quantity'] }}</td>
-                                        <td>{{ $value['price'] }}</td>
-                                        <td>{{ $value['quantity']*$value['price'] }}</td>
+                                        <td>{{ Number::format($value['price'],2) }}</td>
+                                        <td>{{ Number::format($value['quantity']*$value['price'],2) }}</td>
                                         <td>
                                             <button
                                                 class="btn btn-danger btn-sm" wire:click="removeProduct({{ $item }})">
@@ -132,17 +132,9 @@
 
                     <div class="card-footer">
 
+                        <hr>
                         <div class="row">
-
                             <div class="col-md-6">
-                                <label class="form-label">
-                                    Método de Pago
-                                </label>
-
-                                <select class="form-select">
-                                    <option>Efectivo</option>
-                                    <option>Transferencia</option>
-                                </select>
                             </div>
                             <div class="col-md-6 text-end">
                                 <h5 class="mb-2">
@@ -151,7 +143,7 @@
                                 <div>
                                     <button
                                         class="btn btn-success btn-lg" wire:click="save">
-                                        Guardar Venta
+                                        Registrar Venta
                                     </button>
                                 </div>
                             </div>
@@ -161,4 +153,8 @@
             </div>
         </div>
     </div>
+
+    <x-modal id="modal-scanner" title="Scanner">
+        <livewire:scanner wire:model.live="product_id"></livewire:scanner>
+    </x-modal>
 </div>

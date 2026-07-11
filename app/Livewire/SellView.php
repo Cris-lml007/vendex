@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Store;
 use App\Models\Transaction;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -35,6 +36,8 @@ class SellView extends Component
     public $store;
     public $stores;
 
+    public Transaction $transaction;
+
     public function mount(){
         $this->store = Auth::user()->store->id ?? null;
 
@@ -43,18 +46,36 @@ class SellView extends Component
         }
     }
 
+    public function updatedStore(){
+        if($this->product_id != ''){
+            $this->updatedProductId();
+        }
+    }
+
     public function updatedProductId(){
         $p = Product::find($this->product_id);
         if($p?->id != null){
+            if($this->store == ''){
+                $this->js('Swal.fire({
+            title: "Sin Tienda?",
+            text: "Por favor Seleccione una Tienda",
+            icon: "warning"})
+            ');
+                return;
+            }
             $this->product_price = $p->price;
             $this->product_quantity = Stock::where('store_id',$this->store)
                 ->where('product_id',$this->product_id)
                 ->first()
-                ->quantity;
+                ->quantity ?? 0;
         }else{
             $this->product_price = '';
             $this->product_quantity = '';
-
+            $this->js('Swal.fire({
+            title: "Upss...",
+            text: "Parece que el producto no existe",
+            icon: "warning"})
+            ');
         }
     }
 
@@ -77,7 +98,7 @@ class SellView extends Component
         $stock = Stock::where('store_id',$this->store)
             ->where('product_id',$this->product_id)
             ->first();
-        if($stock->quantity < $this->quantity){
+        if(($stock->quantity ?? 0) < $this->quantity){
             $this->js('Swal.fire({title: "Ups...",icon: "error",showCancelButton: false, text: "Parace no haber Unidades Disponibles"})');
             $this->updatedProductId();
             return;
@@ -164,7 +185,40 @@ class SellView extends Component
                     $register->save();
                 }
 
-                return $this->redirect(route('admin.sell'));
+                $this->transaction = $transaction;
+
+                $this->js("
+    Swal.fire({
+        title: '¡Venta realizada exitosamente!',
+        text: '¿Desea imprimir el recibo?',
+        icon: 'success',
+
+        confirmButtonText: 'Nueva Venta',
+        denyButtonText: 'Imprimir Recibo',
+
+        showDenyButton: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false
+
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            window.location.reload();
+
+        } else if (result.isDenied) {
+
+            window.open('".route('admin.sell.id', $transaction->id)."', '_blank');
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+
+        }
+
+    });
+");
+                //return $this->redirect(route('admin.sell'));
             });
         } catch (\Throwable $e) {
             #$this->js('Swal.fire({title: "'. addslashes($e->getMessage()).'", icon: "error",showCancelButton: false})');
@@ -172,10 +226,13 @@ class SellView extends Component
         }
     }
 
+    public function generateReceipt(){
+    }
+
     public function render()
     {
         $this->products = Product::all();
-        $this->stores = Store::all();
+        $this->stores = Store::where('type',Type::STORE)->get();
         return view('livewire.sell-view');
     }
 }

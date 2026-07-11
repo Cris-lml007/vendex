@@ -7,6 +7,24 @@
                     <input type="text" class="form-control" placeholder="Ingrese Nombre" wire:model="name">
                 </div>
             </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="">Celular</label>
+                    <input type="text" class="form-control" placeholder="Ingrese Celular" wire:model="phone">
+                </div>
+                <div class="col">
+                    <label for="">Correo Electronico</label>
+                    <input type="email" class="form-control" placeholder="Ingrese Correo Electronico" wire:model="email">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="">Direccion</label>
+                    <input type="text" class="form-control" placeholder="Ingrese Direccion" wire:model="address">
+                </div>
+            </div>
+
             <div class="row mb-3">
                 <div class="col">
                     <label for="">Tipo</label>
