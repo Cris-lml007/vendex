@@ -128,6 +128,7 @@ class SellView extends Component
                 $transaction = Transaction::create([
                     'customer_id' => $this->customer_id ?? null,
                     'user_id' => Auth::user()->id,
+                    'store_id' => $this->store,
                 ]);
 
                 foreach ($this->list as $item) {

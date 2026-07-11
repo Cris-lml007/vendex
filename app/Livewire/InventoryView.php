@@ -20,12 +20,13 @@ class InventoryView extends Component
     }
 
     public function mount(){
-        $this->last = Kardex::latest()->first()->id;
+        $this->last = Kardex::latest('id')->first()->id ?? null;
     }
 
 
     public function remove($password, $id){
         if($this->last != $id){
+            $this->last = Kardex::latest('id')->first()->id ?? null;
             return false;
         }
         if(Hash::check($password, Auth::user()->password)){
@@ -33,16 +34,18 @@ class InventoryView extends Component
             $stock = Stock::where('product_id', $this->kardex->product_id)
                 ->where('store_id', $this->kardex->store_id)
                 ->first();
-            if($this->kardex->type == Type::OUT){
+            if($this->kardex->type == Type::IN){
                 $stock->quantity -= $this->kardex->quantity;
             }else{
                 $stock->quantity += $this->kardex->quantity;
             }
             $stock->save();
             $this->kardex->delete();
+            $this->last = Kardex::latest('id')->first()->id ?? null;
             return true;
         }
 
+        $this->last = Kardex::latest('id')->first()->id ?? null;
         return false;
     }
 
