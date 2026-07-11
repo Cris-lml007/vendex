@@ -13,12 +13,21 @@ use Livewire\Component;
 class InventoryView extends Component
 {
 
+    public $last;
+
     public function getKardex($id){
         $this->dispatch('getKardex',$id)->to(InventoryForm::class);
     }
 
+    public function mount(){
+        $this->last = Kardex::latest()->first()->id;
+    }
+
 
     public function remove($password, $id){
+        if($this->last != $id){
+            return false;
+        }
         if(Hash::check($password, Auth::user()->password)){
             $this->kardex = Kardex::find($id);
             $stock = Stock::where('product_id', $this->kardex->product_id)

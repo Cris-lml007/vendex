@@ -38,8 +38,8 @@
                         <td>{{ $item->created_at }}</td>
                         <td>
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-inventory" wire:click="getKardex({{ $item->id }})"><i class="fa fa-eye"></i></button>
-                            @if( $item->type != \App\Enums\Type::TRANSFER)
-                                <button class="btn btn-danger" wire:click="$js.delete({{ $item->id }})"><i class="fa fa-trash"></i></button>
+                            @if( $item->type != \App\Enums\Type::TRANSFER && $item->type != \App\Enums\Type::OUT)
+                                <button class="btn btn-danger" wire:click="$js.delete({{ $item->id }})" @if($item->id != $last) disabled @endif><i class="fa fa-trash"></i></button>
                             @endif
                         </td>
                     </tr>
