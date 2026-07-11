@@ -68,13 +68,26 @@
             <div class="row">
                 <div class="col">
                     <label for="">Barcode</label>
-                    <input type="text" class="form-control" wire:model="barcode" placeholder="Ingrese Barcode">
+                    <input type="text" class="form-control mb-3" wire:model.live="barcode" placeholder="Ingrese Barcode">
+                    <div class="d-flex justify-content-center mb-3">
+                        <img class="img-fluid img-thumbnail" src="{{ $barcode_img }}" alt="Barcode">
+                    </div>
                     @error('barcode')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
             @if($edit)
+                <h5>Generar Etiquetas</h5>
+                <div class="row">
+                    <div class="col">
+                        <label for="">Cantidad</label>
+                        <input type="number" class="form-control mb-3" placeholder="Ingrese Cantidad" wire:model="tags">
+                        <div class="d-flex justify-content-center mb-3">
+                            <button type="button" class="btn btn-success" wire:click="generatePdf()">Generar Etiquetas</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="d-flex justify-content-between my-3">
                     <h5>En Inventario</h5>
                 </div>

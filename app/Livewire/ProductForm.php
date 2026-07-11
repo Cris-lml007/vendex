@@ -12,10 +12,12 @@ use App\Models\ProductSequense;
 use App\Models\Stock;
 use App\Models\Store;
 use App\Models\Transfer;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Milon\Barcode\Facades\DNS1DFacade;
 
 class ProductForm extends Component
 {
@@ -37,10 +39,41 @@ class ProductForm extends Component
     public $total = 0;
     public $total_origin = 0;
 
+    public $barcode_img;
+
+    public $tags;
+
     public function setStock($id, $stock){
         $this->total = $this->total - $this->stocks[$id];
         $this->stocks[$id] = $stock;
         $this->total = $this->total + $stock;
+    }
+
+    public function updatedBarcode(){
+        $this->barcode_img = $this->generateBarcode($this->barcode);
+    }
+
+    public function generatePdf(){
+        $pdf = Pdf::setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true,
+        ])->loadView('pdf.barcodes', [
+            'name' => $this->product->name,
+            'barcode' => $this->generateBarcode($this->barcode,2,33),
+            'tags' => $this->tags
+        ]);
+
+        $pdf->setPaper('A4', 'portrait');
+
+        return response()->streamDownload(
+            fn () => print($pdf->output()),
+            'barcodes-'.$this->product->name.'-'.$this->tags .'.pdf'
+        );
+    }
+
+    public function generateBarcode($value, $w = 5, $h = 55){
+        return 'data:image/png;base64,' .
+            DNS1DFacade::getBarcodePNG($value, 'C128', $w,$h, array(1,1,1), true);
     }
 
     public function mount($id = null){
@@ -56,6 +89,7 @@ class ProductForm extends Component
             $this->barcode = $this->product->id;
             $this->brand = $this->product->brand_id;
             $this->model = $this->product->model;
+            $this->barcode_img = $this->generateBarcode($this->barcode);//  'data:image/png;base64,' . DNS1DFacade::getBarcodePNG($this->barcode, 'C128');
 
             $this->stores = Store::all();
             foreach ($this->stores as $store){
