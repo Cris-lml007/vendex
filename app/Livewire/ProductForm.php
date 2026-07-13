@@ -80,8 +80,12 @@ class ProductForm extends Component
     }
 
     public function generateBarcode($value, $w = 5, $h = 55){
-        return 'data:image/png;base64,' .
-            DNS1DFacade::getBarcodePNG($value, 'C128', $w,$h, array(1,1,1), true);
+        if($value == ''){
+            return '';
+        }else{
+            return 'data:image/png;base64,' .
+                DNS1DFacade::getBarcodePNG($value, 'C128', $w,$h, array(1,1,1), true);
+        }
     }
 
     public function mount($id = null){

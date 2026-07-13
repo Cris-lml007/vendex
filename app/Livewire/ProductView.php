@@ -6,21 +6,32 @@ use App\Enums\Status;
 use App\Models\Product;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ProductView extends Component
 {
+    use WithPagination;
+
     public $product_id;
 
     public $list = [
         'search' => '',
         'sort_field' => 'name',
-        'sort_direction' => 'asc'
+        'sort_direction' => 'asc',
+        'pages' => 1
     ];
 
     public function updatedProductId()
     {
         $this->dispatch('getBarcode', $this->product_id)->to(ProductForm::class);
         $this->js('$("#modal-scanner").modal("hide");$("#modal-product").modal("show")');
+    }
+
+    public function updatedList()
+    {
+        if($this->list['pages'] != ''){
+            $this->setPage($this->list['pages']);
+        }
     }
 
     #[On('refresh')]
@@ -46,11 +57,12 @@ class ProductView extends Component
                 })
                 ->orWhere('price', 'like', '%'.$search.'%')
                 ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
-                ->get();
+                ->paginate();
         }else{
             $products = Product::orderBy($this->list['sort_field'],$this->list['sort_direction'])
-                ->get();
+                ->paginate();
         }
+        $this->list['pages_max'] = $products->lastPage();
         //$products = Product::all();
         return view('livewire.product-view',compact(['heads','products']));
     }

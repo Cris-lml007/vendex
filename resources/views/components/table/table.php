@@ -11,6 +11,9 @@ new class extends Component
     public $sort_field;
     public $sort_direction = 'asc';
 
+    public $pages;
+    public $pages_max;
+
 
     public $heads;
 
@@ -20,10 +23,17 @@ new class extends Component
         $this->sort_field = $this->list['sort_field'];
         $this->sort_direction = $this->list['sort_direction'];
         $this->search = $this->list['search'];
+        $this->pages = $this->list['pages'] ?? null;
+        $this->pages_max = $this->list['pages_max'] ?? null;
     }
 
     public function updatedSearch(){
         $this->list['search'] = $this->search;
+    }
+
+    public function updatedPages(){
+        if($this->pages != '')
+            $this->list['pages'] = $this->pages;
     }
 
     public function sortBy($field)

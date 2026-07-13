@@ -1,7 +1,15 @@
 
 <div>
     <div class="d-flex justify-content-between mb-3">
-        <h1></h1>
+        @if($list['pages'] ?? null != null)
+        <div class="input-group w-25">
+            <h5 class="input-group-text">Pagina</h5>
+            <input type="number" class="form-control" wire:model.live="pages">
+            <div class="input-group-text">/{{ $pages_max }}</div>
+        </div>
+        @else
+            <h5></h5>
+        @endif
         <input type="text" class="form-control w-25" placeholder="Buscar...." wire:model.live="search">
     </div>
     <table class="table table-striped">

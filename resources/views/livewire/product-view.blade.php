@@ -9,7 +9,7 @@
 <div>
     <div>
         <x-card>
-            <livewire:table :heads="$heads">
+            <livewire:table :heads="$heads" wire:model.live="list">
                 @foreach ($products as $item)
                     <tr>
                         <td>{{ $item->name }}</td>
@@ -23,6 +23,7 @@
                     </tr>
                 @endforeach
             </livewire:table>
+            {{ $products->links() }}
         </x-card>
     </div>
 
