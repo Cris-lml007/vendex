@@ -10,7 +10,7 @@
 <div>
     <div>
         <x-card>
-            <livewire:table :heads="$heads">
+            <livewire:table :heads="$heads_category" wire:model.live="list1">
                 @foreach ($categories as $item)
                     <tr>
                         <td>{{ $item->id }}</td>
@@ -23,13 +23,14 @@
                     </tr>
                 @endforeach
             </livewire:table>
+            {{ $categories->links() }}
         </x-card>
         <div class="d-flex justify-content-between my-3">
             <h2>Marcas</h2>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-brand"><i class="fa fa-plus"></i> Añadir Nueva Marca</button>
         </div>
         <x-card>
-            <livewire:table :heads="['Id','Nombre','Origen','Acciones']">
+            <livewire:table :heads="$heads_brand" wire:model.live="list2">
                 @foreach ($brands as $item)
                     <tr>
                         <td>{{ $item->id }}</td>
@@ -43,6 +44,7 @@
                     </tr>
                 @endforeach
             </livewire:table>
+            {{ $brands->links() }}
         </x-card>
     </div>
     @island
