@@ -6,7 +6,7 @@
 
 <div>
     <x-card>
-        <livewire:table :heads="['Id','Fecha', 'Movimientos','Acciones']">
+        <livewire:table :heads="$heads" wire:model.live="list">
             @foreach($data as $item)
                 <tr>
                     <td>{{ $item->id }}</td>
@@ -18,6 +18,7 @@
                 </tr>
             @endforeach
         </livewire:table>
+        {{ $data->links() }}
     </x-card>
 
     @island

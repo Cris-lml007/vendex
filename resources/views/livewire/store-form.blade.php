@@ -56,7 +56,6 @@
                                     <td>{{ $item->price }}</td>
                                     <td>
                                         <a href="{{ route('admin.product.id', $item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                                        <button class="btn btn-secondary"><i class="fa fa-lock"></i></button>
                                     </td>
                                 </tr>
                             @endforeach

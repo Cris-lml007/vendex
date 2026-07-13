@@ -8,7 +8,7 @@
 <div>
     <div>
         <x-card>
-            <livewire:table :heads="$heads">
+            <livewire:table :heads="$heads" :searchable="false">
                 @foreach ($stores as $item)
                 <tr>
                     <td>{{ $item->name }}</td>
