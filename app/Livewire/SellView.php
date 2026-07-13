@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Enums\Role;
+use App\Enums\Status;
 use App\Enums\Type;
 use App\Models\Customer;
 use App\Models\DetailTransaction;
@@ -54,7 +55,7 @@ class SellView extends Component
 
     public function updatedProductId(){
         $p = Product::find($this->product_id);
-        if($p?->id != null){
+        if($p?->id != null && $p->status == Status::ACTIVE){
             if($this->store == ''){
                 $this->js('Swal.fire({
             title: "Sin Tienda?",
@@ -231,8 +232,9 @@ class SellView extends Component
 
     public function render()
     {
-        $this->products = Product::all();
-        $this->stores = Store::where('type',Type::STORE)->get();
+        $this->products = Product::where('status', Status::ACTIVE)->get();
+        $this->stores = Store::where('type',Type::STORE)
+            ->where('status', Status::ACTIVE)->get();
         return view('livewire.sell-view');
     }
 }
