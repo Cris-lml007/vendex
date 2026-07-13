@@ -24,7 +24,7 @@ class SaleForm extends Component
         $this->user = $this->transaction->user;
 
         $last = Kardex::latest()->first();
-        if($this->transaction->details()->where('id',$last->referenceable->id)->exists()){
+        if($this->transaction->details()->where('id',$last?->referenceable?->id ?? null)->exists()){
             $this->verify = true;
         }
     }
