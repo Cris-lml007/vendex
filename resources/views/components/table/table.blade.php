@@ -1,5 +1,6 @@
 
 <div>
+    @if($searchable)
     <div class="d-flex justify-content-between mb-3">
         @if($list['pages'] ?? null != null)
         <div class="input-group w-25">
@@ -10,8 +11,9 @@
         @else
             <h5></h5>
         @endif
-        <input type="text" class="form-control w-25" placeholder="Buscar...." wire:model.live="search">
+            <input type="text" class="form-control w-25" placeholder="Buscar...." wire:model.live="search">
     </div>
+    @endif
     <table class="table table-striped">
         <thead>
             @foreach ($heads as $item => $value)

@@ -26,6 +26,12 @@ class InventoryForm extends Component
     public $store_type;
     public Kardex $kardex;
 
+    public $actions = [
+        'search' => '',
+        'sort_field' => 'id',
+        'sort_direction' => 'asc',
+    ];
+
     public function updatedQuantity(): void{
         $this->total = 0;
         $this->list = [];
@@ -102,8 +108,13 @@ class InventoryForm extends Component
 
     public function render()
     {
+        $heads = [
+            'Nombre' => 'name',
+            'Tipo' => 'type',
+            'Cantidad' => 'quantity',
+        ];
         $stores = Store::all();
         $products = Product::all();
-        return view('livewire.inventory-form',compact('stores','products'));
+        return view('livewire.inventory-form',compact('stores','products','heads'));
     }
 }

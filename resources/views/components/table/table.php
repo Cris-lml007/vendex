@@ -14,17 +14,21 @@ new class extends Component
     public $pages;
     public $pages_max;
 
+    public $searchable = true;
 
     public $heads;
 
-    public function mount($heads){
+    public function mount($heads, $searchable = true){
         $this->heads = $heads;
 
-        $this->sort_field = $this->list['sort_field'];
-        $this->sort_direction = $this->list['sort_direction'];
-        $this->search = $this->list['search'];
-        $this->pages = $this->list['pages'] ?? null;
-        $this->pages_max = $this->list['pages_max'] ?? null;
+        $this->searchable = $searchable;
+        if($searchable){
+            $this->sort_field = $this->list['sort_field'];
+            $this->sort_direction = $this->list['sort_direction'];
+            $this->search = $this->list['search'];
+            $this->pages = $this->list['pages'] ?? null;
+            $this->pages_max = $this->list['pages_max'] ?? null;
+        }
     }
 
     public function updatedSearch(){

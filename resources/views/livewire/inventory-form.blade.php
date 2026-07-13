@@ -72,7 +72,7 @@
                 <div class="row">
                     <div class="col">
                         <label for="">Tiendas y Almacenes</label>
-                        <livewire:table :heads="['Nombre', 'Tipo', 'Cantidad']">
+                        <livewire:table :heads="$heads" wire:model.live="actions" :searchable="false">
                             @foreach ($stores as $item)
                                 <tr>
                                     <td>{{ $item->name }}</td>

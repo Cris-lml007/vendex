@@ -9,11 +9,27 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class InventoryView extends Component
 {
 
+    use WithPagination;
+
     public $last;
+
+    public $list = [
+        'search' => '',
+        'sort_field' => 'id',
+        'sort_direction' => 'asc',
+        'pages' => 1
+    ];
+
+    public function updatedList(){
+        if($this->list['pages'] != ''){
+            $this->setPage($this->list['pages']);
+        }
+    }
 
     public function getKardex($id){
         $this->dispatch('getKardex',$id)->to(InventoryForm::class);
@@ -52,8 +68,35 @@ class InventoryView extends Component
     #[On('refresh')]
     public function render()
     {
-        $heads = ['Id', 'Nombre', 'Precio de Adquisición', 'Precio de Venta', 'Cantidad', 'Tipo', 'Locación','Fecha' ,'Acciones'];
-        $data = Kardex::all();
+        $heads = [
+            'Id' => 'id',
+            'Nombre' => 'name',
+            'Precio de Adquisición' => 'price',
+            'Precio de Venta' => 'price',
+            'Cantidad' => 'quantity',
+            'Tipo' => 'type',
+            'Locación' => 'name',
+            'Fecha' => 'created_at',
+            'Acciones' => null
+        ];
+
+        $search = $this->list['search'];
+        if($search != ''){
+            $data = Kardex::Where('id','like', '%'.$search.'%')
+                ->orWhere('quantity', 'like', '%'.$search.'%')
+                ->orWhereRaw('(quantity*price) like ?', '%'.$search.'%')
+                ->orWhere('type', 'like', '%'.$search.'%')
+                ->orWhereHas('product', function($query) use ($search){
+                    $query->where('name', 'like', '%'.$search.'%');
+                })
+                ->orWhere('created_at', 'like', '%'.$search.'%')
+                ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
+                ->paginate();
+        }else{
+            $data = kardex::orderBy($this->list['sort_field'],$this->list['sort_direction'])
+                ->paginate();
+        }
+        $this->list['pages_max'] = $data->lastPage();
         return view('livewire.inventory-view', compact(['heads','data']));
     }
 }
