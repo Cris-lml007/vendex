@@ -7,7 +7,7 @@
 
 <div>
     <x-card>
-        <livewire:table :heads="['CI','Nombre Completo','Celular','Correo Electronico','Acciones']">
+        <livewire:table :heads="$heads" wire:model.live="list">
             @foreach($data as $item)
                 <tr>
                     <td>{{ $item->ci }}</td>
