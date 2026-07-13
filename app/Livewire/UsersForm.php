@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Enums\Type;
 use App\Models\Store;
 use App\Models\User;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class UsersForm extends Component
@@ -18,20 +19,40 @@ class UsersForm extends Component
     public $role;
     public $store_id;
 
+    public User $user;
+
+    #[On('getUser')]
+    public function getUser($id){
+        $user = User::find($id);
+        $this->user = $user;
+        $this->name = $user->name;
+        $this->username = $user->username;
+        $this->status = $user->status;
+        $this->role = $user->role;
+        $this->store_id = $user->store_id;
+        $this->phone = $user->phone;
+    }
+
+    public function mount()
+    {
+        $this->user = new User();
+    }
+
     public function save(){
         $this->validate([
             'name' => 'required',
             'password' => 'required|min:8',
             'password_confirmation' => 'required|min:8|same:password',
-            'username' => 'required|unique:users,username',
+            'username' => 'required|unique:users,username,'.$this?->user?->id ?? null,
             'phone' => 'required',
             'status' => 'required',
             'role' => 'required',
         ]);
 
-        $user = User::create([
-            'name' => $this->name,
+        $user = User::updateOrCreate([
             'username' => $this->username,
+        ],[
+            'name' => $this->name,
             'phone' => $this->phone,
             'password' => $this->password,
             'status' => $this->status,

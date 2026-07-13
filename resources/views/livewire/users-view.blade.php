@@ -8,7 +8,7 @@
     <x-card>
         <div class="row">
             <div class="col">
-                <livewire:table :heads="['ID','Nombre','Rol', 'Tienda', 'Estado','Opciones']">
+                <livewire:table :heads="$heads" wire:model.live="list">
                     @foreach($data ?? [] as $item)
                         <tr>
                             <td>{{ $item->id }}</td>
@@ -17,16 +17,19 @@
                             <td>{{ $item->store->name ?? '---' }}</td>
                             <td>{{ $item->status->name }}</td>
                             <td>
-                                <button class="btn btn-primary"><i class="fa fa-eye"></i></button>
+                                <button data-bs-toggle="modal" data-bs-target="#modal-users" wire:click="getUser({{ $item->id }})" class="btn btn-primary"><i class="fa fa-eye"></i></button>
                             </td>
                         </tr>
                     @endforeach
                 </livewire:table>
+                {{ $data->links() }}
             </div>
         </div>
     </x-card>
 
+    @island
     <x-modal id="modal-users" title="" class="modal-lg">
         <livewire:users-form></livewire:users-form>
     </x-modal>
+    @endisland
 </div>
