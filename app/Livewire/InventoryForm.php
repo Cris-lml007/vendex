@@ -32,6 +32,11 @@ class InventoryForm extends Component
         'sort_direction' => 'asc',
     ];
 
+    #[On('getBarcode')]
+    public function getBarcode($id){
+        $this->_id = $id;
+    }
+
     public function updatedQuantity(): void{
         $this->total = 0;
         $this->list = [];
@@ -71,7 +76,7 @@ class InventoryForm extends Component
     public function save(): void
     {
         $this->validate([
-            '_id' => 'required',
+            '_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
             'price' => 'required',
             'total' => 'required|integer|min:'.$this->quantity.'|max:'.$this->quantity
@@ -103,7 +108,6 @@ class InventoryForm extends Component
         $this->js('$("#modal-inventory").modal("hide")');
         $this->dispatch('refresh')->to(InventoryView::class);
     }
-
 
 
     public function render()

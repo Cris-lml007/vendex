@@ -7,7 +7,7 @@
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Ingrese Codigo de Producto"
                             wire:model="_id" @if($kardex?->id != null) disabled @endif>
-                        <button class="btn btn-secondary" @if($kardex?->id != null) disabled @endif><i class="fa fa-qrcode"></i></button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-scanner" class="btn btn-secondary" @if($kardex?->id != null) disabled @endif><i class="fa fa-qrcode"></i></button>
                     </div>
                     @error('_id')
                         <span class="text-danger">{{ $message }}</span>

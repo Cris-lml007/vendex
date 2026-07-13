@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\CatalogView;
 use App\Livewire\CategoryView;
 use App\Livewire\CustomersView;
 use App\Livewire\InventoryView;
@@ -24,6 +25,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::prefix('/dashboard')->middleware('auth')->group(function(){
+    Route::get('/catalog', CatalogView::class)->name('admin.catalog');
     Route::get('/products',ProductView::class)->name('admin.products');
     Route::get('/product/{id}',ProductForm::class)->name('admin.product.id');
 

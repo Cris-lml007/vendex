@@ -6,6 +6,6 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-secondary">Cerrar</button>
+        <button data-bs-dismiss="modal" class="btn btn-secondary">Cerrar</button>
     </div>
 </div>

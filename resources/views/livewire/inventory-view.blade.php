@@ -65,6 +65,12 @@
         <livewire:inventory-form></livewire:inventory-form>
     </x-modal>
     @endisland
+
+    @island
+    <x-modal id="modal-scanner" title="escaner">
+        <livewire:scanner wire:model.live="product_id"></livewire:scanner>
+    </x-modal>
+    @endisland
 </div>
 
 @script

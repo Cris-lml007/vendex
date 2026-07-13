@@ -312,11 +312,6 @@ return [
 
         // Sidebar items:
         [
-            'text' => 'Principal',
-            'url' => '#',
-            'icon' => 'fas fa-fw fa-home',
-        ],
-        [
             'text' => 'Registrar Venta',
             'route' => 'admin.sell',
             'icon' => 'fas fa-fw fa-shopping-basket',
@@ -328,7 +323,7 @@ return [
         ],
         [
             'text' => 'Catalogo',
-            'route' => 'admin.products',
+            'route' => 'admin.catalog',
             'icon' => 'fas fa-fw fa-book',
         ],
         [

@@ -25,10 +25,18 @@ class InventoryView extends Component
         'pages' => 1
     ];
 
+    public $product_id;
+
     public function updatedList(){
         if($this->list['pages'] != ''){
             $this->setPage($this->list['pages']);
         }
+    }
+
+    public function updatedProductId()
+    {
+        $this->dispatch('getBarcode', $this->product_id)->to(InventoryForm::class);
+        $this->js('$("#modal-scanner").modal("hide");$("#modal-inventory").modal("show")');
     }
 
     public function getKardex($id){
