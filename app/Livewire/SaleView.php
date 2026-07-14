@@ -2,10 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Enums\Role;
 use App\Enums\Type;
 use App\Models\Store;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,6 +17,7 @@ class SaleView extends Component
 
     public $store;
     #public $data;
+    public $lock = false;
 
     public $list = [
         'search' => '',
@@ -50,6 +53,10 @@ class SaleView extends Component
             'Fecha' => 'created_at',
             'Acciones' => null];
         $stores = Store::where('type', Type::STORE)->get();
+        if(Auth::user()->role == Role::SELLER){
+            $this->store = Auth::user()->store_id;
+            $this->lock = true;
+        }
 
         $search = $this->list['search'];
         if($search != ''){

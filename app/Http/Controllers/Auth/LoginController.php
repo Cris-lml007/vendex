@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\Role;
 use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -27,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/dashboard/products';
+    protected $redirectTo = '/dashboard/';
 
     /**
      * Create a new controller instance.
@@ -52,6 +53,18 @@ class LoginController extends Controller
      */
     protected function attemptLogin(Request $request)
     {
+        $user = \App\Models\User::where('username', $request->username)->first();
+
+        if (!$user) {
+            return false;
+        }
+
+        if($user->role == Role::SELLER){
+            if (!$user->store || $user->store->status != Status::ACTIVE) {
+                return false;
+            }
+        }
+
         return $this->guard()->attempt(
             array_merge(
                 $this->credentials($request),

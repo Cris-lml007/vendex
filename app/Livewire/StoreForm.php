@@ -24,6 +24,7 @@ class StoreForm extends Component
     public $phone;
     public $email;
 
+
     public function mount(Store $store = null){
         if($store->id != null){
             $this->edit = true;
@@ -49,7 +50,9 @@ class StoreForm extends Component
             'status' => 'required',
             'address' => 'required',
         ]);
-        $this->store = new Store();
+        if($this->store->id == null){
+            $this->store = new Store();
+        }
         $this->store->name = $this->name;
         $this->store->type = $this->type;
         $this->store->status = $this->status;
@@ -57,6 +60,10 @@ class StoreForm extends Component
         $this->store->phone = $this->phone;
         $this->store->email = $this->email;
         $this->store->save();
+
+        if($this->edit){
+            return $this->redirect(route('admin.stores'));
+        }
         $this->js('$("#modal-store").modal("hide")');
 
         $this->dispatch('refresh')->to(StoreView::class);

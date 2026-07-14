@@ -6,7 +6,7 @@
 
 <div>
     <div class="d-flex justify-content-end mb-2">
-        <select class="form-select w-25" wire:model.live="store">
+        <select class="form-select w-25" wire:model.live="store" @if($lock) disabled @endif>
             <option value="">Seleccione Tienda</option>
             @foreach($stores as $item)
                 <option value="{{ $item->id }}">{{ $item->name }}</option>

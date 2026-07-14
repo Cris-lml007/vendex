@@ -99,9 +99,17 @@
                 </div>
             @endif
         </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Guardar</button>
-            <button data-bs-dismiss="modal" type="reset" class="btn btn-secondary">Cancelar</button>
-        </div>
+        @if($edit)
+            <hr>
+            <div class="d-flex justify-content-end mb-3">
+                <button type="submit" class="btn btn-primary me-1">Guardar</button>
+                <a href="{{ route('admin.stores') }}" class="btn btn-secondary">Cerrar</a>
+            </div>
+            @else
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button data-bs-dismiss="modal" type="reset" class="btn btn-secondary">Cancelar</button>
+            </div>
+        @endif
     </form>
 </div>

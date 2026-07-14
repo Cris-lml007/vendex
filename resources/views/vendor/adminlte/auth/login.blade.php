@@ -29,7 +29,7 @@
         {{-- Email field --}}
         <div class="input-group mb-3">
             <input type="text" name="username" class="form-control @error('username') is-invalid @enderror"
-                value="{{ old('username') }}" placeholder="{{ __('adminlte::adminlte.email') }}" autofocus>
+                value="{{ old('username') }}" placeholder="Usuario" autofocus>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -37,7 +37,7 @@
                 </div>
             </div>
 
-            @error('email')
+            @error('username')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -87,7 +87,7 @@
 @section('auth_footer')
     {{-- Password reset link --}}
     @if($passResetUrl)
-        <p class="my-0">
+        <p class="my-0 d-none">
             <a href="{{ $passResetUrl }}">
                 {{ __('adminlte::adminlte.i_forgot_my_password') }}
             </a>
@@ -96,7 +96,7 @@
 
     {{-- Register link --}}
     @if($registerUrl)
-        <p class="my-0">
+        <p class="my-0 d-none">
             <a href="{{ $registerUrl }}">
                 {{ __('adminlte::adminlte.register_a_new_membership') }}
             </a>
