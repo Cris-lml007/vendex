@@ -6,6 +6,7 @@ use App\Livewire\CustomersView;
 use App\Livewire\InventoryView;
 use App\Livewire\ProductForm;
 use App\Livewire\ProductView;
+use App\Livewire\ReportView;
 use App\Livewire\SaleView;
 use App\Livewire\SellView;
 use App\Livewire\StoreForm;
@@ -22,24 +23,26 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::prefix('/dashboard')->middleware('auth')->group(function(){
-    Route::get('/catalog', CatalogView::class)->name('admin.catalog');
-    Route::get('/products',ProductView::class)->name('admin.products');
-    Route::get('/product/{id}',ProductForm::class)->name('admin.product.id');
+    Route::can('isSeller')->get('/catalog', CatalogView::class)->name('admin.catalog');
 
-    Route::get('/categories',CategoryView::class)->name('admin.categories');
-    Route::get('/kardex',InventoryView::class)->name('admin.kardex');
-    Route::get('/stores',StoreView::class)->name('admin.stores');
-    Route::get('/store/{store}',StoreForm::class)->name('admin.store.id');
+    Route::can('isPrivilegied')->get('/products',ProductView::class)->name('admin.products');
+    Route::can('isPrivilegied')->get('/product/{id}',ProductForm::class)->name('admin.product.id');
 
-    Route::get('/sell',SellView::class)->name('admin.sell');
+    Route::can('isPrivilegied')->get('/categories',CategoryView::class)->name('admin.categories');
+    Route::can('isPrivilegied')->get('/kardex',InventoryView::class)->name('admin.kardex');
+    Route::can('isAdmin')->get('/stores',StoreView::class)->name('admin.stores');
+    Route::can('isAdmin')->get('/store/{store}',StoreForm::class)->name('admin.store.id');
 
-    Route::get('/users',UsersView::class)->name('admin.users');
+    Route::get('/',SellView::class)->name('admin.sell');
+
+    Route::can('isAdmin')->get('/users',UsersView::class)->name('admin.users');
     Route::get('/customers',CustomersView::class)->name('admin.customers');
-    Route::get('/transfers',TransfersView::class)->name('admin.transfers');
+    Route::can('isPrivilegied')->get('/transfers',TransfersView::class)->name('admin.transfers');
     Route::get('/sales',SaleView::class)->name('admin.sales');
+    Route::can('isAdmin')->get('/reports',ReportView::class)->name('admin.reports');
 
     Route::get('/sell/{transaction}',function (\App\Models\Transaction $transaction){
 
