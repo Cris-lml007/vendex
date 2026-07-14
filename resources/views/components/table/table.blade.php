@@ -14,8 +14,9 @@
             <input type="text" class="form-control w-25" placeholder="Buscar...." wire:model.live="search">
     </div>
     @endif
-    <table class="table table-striped">
-        <thead>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
             @foreach ($heads as $item => $value)
                 <th style="cursor:pointer;" class="user-select-none"
                     @if ($value != null) style="cursor: pointer;" wire:click="sortBy('{{ $value }}')" @endif>
@@ -34,12 +35,13 @@
 
                 </th>
             @endforeach
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             {{ $slot }}
-        </tbody>
-        <tfoot>
+            </tbody>
+            <tfoot>
             {{ $slot['footer'] }}
-        </tfoot>
-    </table>
+            </tfoot>
+        </table>
+    </div>
 </div>
