@@ -64,3 +64,9 @@ Route::prefix('/dashboard')->middleware('auth')->group(function(){
         return $pdf->stream();
     })->name('admin.sell.id');
 });
+
+Route::domain('vendex.3306web.site')->group(function(){
+    Route::get('/',function (){
+        return response()->json(['message' => 'hola a vendex']);
+    });
+});
