@@ -5,8 +5,18 @@
                 <div class="col">
                     <label for="">Nombre</label>
                     <input type="text" class="form-control mb-3" wire:model.live="name">
+                    @error('name')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <label for="">Origen</label>
                     <input type="text" class="form-control mb-3" wire:model="made">
+                    @error('made')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
             <div class="row mb-3">

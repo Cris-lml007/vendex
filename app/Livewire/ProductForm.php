@@ -115,6 +115,19 @@ class ProductForm extends Component
     }
 
     public function save(){
+        $this->validate([
+            'name' => 'required',
+            'price' => 'required|numeric|min:0',
+            'category' => 'required',
+            'brand' => 'required',
+            'model' => 'required',
+            'description' => 'required',
+        ], attributes: [
+            'category' => 'Categoria',
+            'brand' => 'Marca',
+            'model' => 'Modelo',
+        ]);
+
         if($this->product->id == null){
             $this->product = new Product();
         }

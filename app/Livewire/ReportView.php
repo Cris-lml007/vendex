@@ -70,11 +70,11 @@ class ReportView extends Component
             })
 
             ->when($this->from, function (Builder $query) {
-                $query->whereDate('created_at', '>=', $this->from);
+                $query->whereDate('transactions.created_at', '>=', $this->from);
             })
 
             ->when($this->to, function (Builder $query) {
-                $query->whereDate('created_at', '<=', $this->to);
+                $query->whereDate('transactions.created_at', '<=', $this->to);
             });
     }
 
@@ -155,7 +155,7 @@ class ReportView extends Component
             ->orderByRaw('DATE(created_at)')
             ->get();
     }
-    
+
     public function getStoresChart()
     {
         return $this->query()

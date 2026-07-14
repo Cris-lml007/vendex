@@ -45,7 +45,7 @@ class BrandForm extends Component
         $this->validate([
             'name' => 'required',
             'made' => 'required',
-        ]);
+        ], attributes: ['made' => 'Origen']);
 
         if($this->brand?->id == null){
             $this->brand = new Brand();

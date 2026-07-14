@@ -30,6 +30,9 @@ class CategoryForm extends Component
     }
 
     public function save(){
+        $this->validate([
+            'name' => 'required',
+        ]);
         if($this->category?->id == null){
             $this->category = new Category();
         }

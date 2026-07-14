@@ -80,6 +80,8 @@ class InventoryForm extends Component
             'quantity' => 'required|integer|min:1',
             'price' => 'required',
             'total' => 'required|integer|min:'.$this->quantity.'|max:'.$this->quantity
+        ], attributes: [
+            '_id' => 'producto'
         ]);
         try{
             DB::transaction(function () {

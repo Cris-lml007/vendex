@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,5 +20,12 @@ class Product extends Model
 
     public function stocks(){
         return $this->hasMany(Stock::class,'product_id','id');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'status' => Status::class,
+        ];
     }
 }

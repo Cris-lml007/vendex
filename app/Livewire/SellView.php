@@ -96,6 +96,15 @@ class SellView extends Component
     }
 
     public function addProduct(){
+        if($this->product_id == '' || $this->quantity == '' || $this->quantity < 1 || $this->price < 1 || $this->price == ''){
+            $this->js('Swal.fire({
+            title: "Sin Productos?",
+            text: "Por favor Seleccione un Producto",
+            icon: "warning"
+            })');
+            return;
+        }
+
         $stock = Stock::where('store_id',$this->store)
             ->where('product_id',$this->product_id)
             ->first();
@@ -232,6 +241,9 @@ class SellView extends Component
 
     public function render()
     {
+        if(Auth::user()?->store?->status != Status::ACTIVE && Auth::user()->role == Role::SELLER){
+            return abort(403);
+        }
         $this->products = Product::where('status', Status::ACTIVE)->get();
         $this->stores = Store::where('type',Type::STORE)
             ->where('status', Status::ACTIVE)->get();

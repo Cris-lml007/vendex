@@ -5,6 +5,9 @@
                 <div class="col">
                     <label for="">Nombre</label>
                     <input type="text" class="form-control" placeholder="Ingrese Nombre" wire:model="name">
+                    @error('name')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
 
@@ -12,16 +15,25 @@
                 <div class="col">
                     <label for="">Celular</label>
                     <input type="text" class="form-control" placeholder="Ingrese Celular" wire:model="phone">
+                    @error('phone')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="col">
                     <label for="">Correo Electronico</label>
                     <input type="email" class="form-control" placeholder="Ingrese Correo Electronico" wire:model="email">
+                    @error('email')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label for="">Direccion</label>
                     <input type="text" class="form-control" placeholder="Ingrese Direccion" wire:model="address">
+                    @error('address')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
 
@@ -33,6 +45,9 @@
                         <option value="{{ \App\Enums\Type::STORE }}">{{ \App\Enums\Type::STORE->name  }}</option>
                         <option value="{{ \App\Enums\Type::WAREHOUSE }}">{{ \App\Enums\Type::WAREHOUSE->name }}</option>
                     </select>
+                    @error('type')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="col">
                     <label for="">Estado</label>
@@ -42,6 +57,9 @@
                             <option value="{{ $item->value }}">{{ $item->name }}</option>
                         @endforeach
                     </select>
+                    @error('status')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
             @if($edit)

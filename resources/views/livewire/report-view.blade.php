@@ -60,7 +60,7 @@
                         <input
                             type="date"
                             class="form-control"
-                            wire:model.live="from">
+                            wire:model="from">
                     </div>
 
                     <div class="col-md-2 mb-3">
@@ -69,7 +69,7 @@
                         <input
                             type="date"
                             class="form-control"
-                            wire:model.live="to">
+                            wire:model="to">
                     </div>
 
                     <div class="col-md-2 mb-3 d-flex align-items-end">

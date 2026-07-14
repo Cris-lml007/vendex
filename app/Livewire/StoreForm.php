@@ -43,6 +43,12 @@ class StoreForm extends Component
     }
 
     public function save(){
+        $this->validate([
+            'name' => 'required',
+            'type' => 'required',
+            'status' => 'required',
+            'address' => 'required',
+        ]);
         $this->store = new Store();
         $this->store->name = $this->name;
         $this->store->type = $this->type;
