@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'MY CELL',
+    'title' => 'Vendex| Sistema de Ventas',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>MY</b>Cell',
+    'logo' => '<b>V</b>endex',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
