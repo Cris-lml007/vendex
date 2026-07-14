@@ -60,7 +60,41 @@
     </div>
     <div class="modal-footer">
         <a class="btn btn-primary" href="{{ route('admin.sell.id',$transaction->id ?? 9999999) }}">Generar Recibo</a>
-        <button wire:click="remove" class="btn btn-danger" @if(!$verify) disabled @endif >Eliminar</button>
+        <button wire:click="$js.delete()" class="btn btn-danger" @if(!$verify) disabled @endif >Eliminar</button>
         <button data-bs-dismiss="modal" class="btn btn-secondary">Cerrar</button>
     </div>
 </div>
+
+@script
+<script>
+    this.$js.delete = () => {
+        $("#modal-sale").modal("hide");
+        window.Swal.fire({
+            icon: "warning",
+            title: "Eliminar?",
+            text: "Esta seguro que desea eliminar, este proceso puede dañar los registros",
+            input: "password",
+            confirmButtonText: "Eliminar",
+            confirmButtonColor: "gray",
+            background: "red",
+            color: "white",
+        }).then( async (result) => {
+            if(result.isConfirmed){
+                let r = await $wire.remove(result.value)
+                console.log(r)
+                if(r){
+                    window.Swal.fire({
+                        title: "Eliminado Correctamente",
+                        icon: "success"
+                    })
+                }else{
+                    window.Swal.fire({
+                        title: "No se pudo Eliminar",
+                        icon: "error"
+                    })
+                }
+            }
+        });
+    }
+</script>
+@endscript

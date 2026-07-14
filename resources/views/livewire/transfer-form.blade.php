@@ -51,7 +51,42 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-danger" wire:click="remove" @if(!$verify) disabled @endif>Eliminar</button>
+        <button class="btn btn-danger" wire:click="$js.delete()" @if(!$verify) disabled @endif>Eliminar</button>
         <button data-bs-dismiss="modal" class="btn btn-secondary">Cancelar</button>
     </div>
 </div>
+
+
+@script
+<script>
+    this.$js.delete = () => {
+        $("#modal-transfer").modal("hide");
+        window.Swal.fire({
+            icon: "warning",
+            title: "Eliminar?",
+            text: "Esta seguro que desea eliminar, este proceso puede dañar los registros",
+            input: "password",
+            confirmButtonText: "Eliminar",
+            confirmButtonColor: "gray",
+            background: "red",
+            color: "white",
+        }).then( async (result) => {
+            if(result.isConfirmed){
+                let r = await $wire.remove(result.value)
+                console.log(r)
+                if(r){
+                    window.Swal.fire({
+                        title: "Eliminado Correctamente",
+                        icon: "success"
+                    })
+                }else{
+                    window.Swal.fire({
+                        title: "No se pudo Eliminar",
+                        icon: "error"
+                    })
+                }
+            }
+        });
+    }
+</script>
+@endscript

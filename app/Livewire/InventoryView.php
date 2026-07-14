@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\Role;
 use App\Enums\Type;
 use App\Models\Kardex;
 use App\Models\Stock;
@@ -53,7 +54,7 @@ class InventoryView extends Component
             $this->last = Kardex::latest('id')->first()->id ?? null;
             return false;
         }
-        if(Hash::check($password, Auth::user()->password)){
+        if(Hash::check($password, Auth::user()->password) && Auth::user()->role == Role::ADMIN){
             $this->kardex = Kardex::find($id);
             $stock = Stock::where('product_id', $this->kardex->product_id)
                 ->where('store_id', $this->kardex->store_id)

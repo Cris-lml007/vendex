@@ -48,7 +48,7 @@
                 <div class="row">
                     <div class="col">
                         <h5>En Inventario</h5>
-                        <livewire:table :heads="['Nombre','Disponibles','Precio','Acciones']">
+                        <livewire:table :heads="$heads" :searchable="false">
                             @foreach($stock ?? [] as $item)
                                 <tr>
                                     <td>{{ $item->name }}</td>
@@ -65,7 +65,7 @@
                 <div class="row">
                     <div class="col">
                         <h5>Vendidos</h5>
-                        <livewire:table :heads="['Id','Producto','Cliente','Cantidad','Precio','Por']">
+                        <livewire:table :heads="$heads1" :searchable="false">
                             @foreach($sales ?? [] as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>

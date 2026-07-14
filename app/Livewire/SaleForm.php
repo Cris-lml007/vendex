@@ -2,10 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Enums\Role;
 use App\Models\Kardex;
 use App\Models\Stock;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -29,26 +32,28 @@ class SaleForm extends Component
         }
     }
 
-    public function remove()
+    public function remove($password)
     {
-        try {
-            DB::transaction(function () {
-                foreach ($this->transaction->details as $detail) {
-                    $stock = Stock::where('store_id', $this->transaction->store_id)
-                        ->where('product_id', $detail->product_id)
-                        ->lockForUpdate()
-                        ->first();
-                    $stock->quantity += $detail->quantity;
-                    $stock->save();
-                    $detail->kardex->delete();
-                    $detail->delete();
-                }
-                $this->transaction->delete();
-            });
+        if(Hash::check($password, Auth::user()->password) && Auth::user()->role == Role::ADMIN){
+            try {
+                DB::transaction(function () {
+                    foreach ($this->transaction->details as $detail) {
+                        $stock = Stock::where('store_id', $this->transaction->store_id)
+                            ->where('product_id', $detail->product_id)
+                            ->lockForUpdate()
+                            ->first();
+                        $stock->quantity += $detail->quantity;
+                        $stock->save();
+                        $detail->kardex->delete();
+                        $detail->delete();
+                    }
+                    $this->transaction->delete();
+                });
 
-            $this->redirect(route('admin.sales'));
-        } catch (\Throwable $e) {
-            $e->getMessage();
+                $this->redirect(route('admin.sales'));
+            } catch (\Throwable $e) {
+                $e->getMessage();
+            }
         }
     }
 
