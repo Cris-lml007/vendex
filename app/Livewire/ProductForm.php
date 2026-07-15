@@ -16,12 +16,16 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Milon\Barcode\Facades\DNS1DFacade;
 
 class ProductForm extends Component
 {
+    use WithFileUploads;
 
     public $name;
     public $price;
@@ -30,6 +34,11 @@ class ProductForm extends Component
     public $brand;
     public $model;
     public $barcode;
+
+    #[Validate('image|max:2048')]
+    public $photo;
+
+    public $photo_url;
 
     public Product $product;
 
@@ -103,6 +112,10 @@ class ProductForm extends Component
             $this->model = $this->product->model;
             $this->barcode_img = $this->generateBarcode($this->barcode);//  'data:image/png;base64,' . DNS1DFacade::getBarcodePNG($this->barcode, 'C128');
 
+            if (Storage::disk('local')->exists("products/{$this->product->id}.jpg")) {
+                $this->photo_url = Storage::disk('local')->get("products/{$this->product->id}.jpg");
+                $this->photo_url = "data:image/png;base64,". base64_encode($this->photo_url);
+            }
             $this->stores = Store::all();
             foreach ($this->stores as $store){
                 $this->stocks[$store->id] = $store->products()->where('product_id',$product->id)->first()?->pivot?->quantity ?? 0;
@@ -144,9 +157,13 @@ class ProductForm extends Component
             $this->product->id = str_pad($p->id, 10, "0", STR_PAD_LEFT);
         }
         $this->product->save();
+        if($this->photo != null){
+            $this->photo->storeAs('products', $this->product->id.'.jpg');
+        }
+
         if($this->edit){
             $q = $this->product?->stocks()->sum('quantity') ?? 0;
-            if(array_sum($this->stocks) > $q || array_sum($this->stocks) == 0){
+            if(array_sum($this->stocks) > $q || (array_sum($this->stocks) == 0 && $this->product->stocks()->sum('quantity') > 0) ){
                 $this->js('Swal.fire({
                 icon: "error",
                 title: "Oops...",

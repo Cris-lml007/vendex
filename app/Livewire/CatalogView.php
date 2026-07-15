@@ -19,6 +19,8 @@ class CatalogView extends Component
         'pages' => 1
     ];
 
+    public $search;
+
     public function updatedList(){
         if($this->list['pages'] != ''){
             $this->setPage($this->list['pages']);
@@ -48,7 +50,7 @@ class CatalogView extends Component
             "Acciones" => null
         ];
 
-        $search = $this->list['search'];
+        $search = $this->search;
         if($search != ''){
             $data = Product::where('status',Status::ACTIVE)
                 ->where(function($query) use ($search){

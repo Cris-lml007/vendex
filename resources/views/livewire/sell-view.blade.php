@@ -1,5 +1,7 @@
 <x-slot name="header">
-    <h1>Registrar Venta</h1>
+    <div class="container-fluid">
+        <h1>Registrar Venta</h1>
+    </div>
 </x-slot>
 
 <div>

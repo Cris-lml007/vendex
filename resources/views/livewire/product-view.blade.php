@@ -28,7 +28,7 @@
     </div>
 
     @island
-    <x-modal id="modal-product" title="Nuevo Producto">
+    <x-modal id="modal-product" title="Nuevo Producto" class="modal-lg">
         <livewire:product-form></livewire:product-form>
     </x-modal>
     @endisland

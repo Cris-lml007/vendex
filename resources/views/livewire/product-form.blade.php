@@ -65,7 +65,32 @@
                     @enderror
                 </div>
             </div>
-            <div class="row">
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label>Imagen de Producto</label>
+                    @if($photo)
+                        {{-- Vista previa de la nueva imagen --}}
+                        <div class="d-flex justify-content-center" style="height: 300px;">
+                            <img src="{{ $photo->temporaryUrl() }}" class="img-thumbnail">
+                        </div>
+                    @elseif($photo_url)
+                        {{-- Imagen guardada --}}
+                        <div class="d-flex justify-content-center" style="height: 300px;">
+                            <img src="{{ $photo_url }}" class="img-thumbnail">
+                        </div>
+                    @else
+                        {{-- Sin imagen --}}
+                        <div class="border rounded p-5 text-center">
+                            Sin imagen
+                        </div>
+                    @endif
+                    <input type="file" class="form-control" wire:model="photo">
+                </div>
+            </div>
+
+
+            <div class="row mb-3">
                 <div class="col">
                     <label for="">Barcode</label>
                     <div class="input-group" >
