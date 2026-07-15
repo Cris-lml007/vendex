@@ -139,7 +139,7 @@
                             <div class="col-md-6">
                             </div>
                             <div class="col-md-6 text-end">
-                                <h5 class="mb-2">
+                                <h5 class="mb-2 text-light">
                                     Total: {{ \Illuminate\Support\Number::format($total,2) }} Bs
                                 </h5>
                                 <div>

@@ -1,0 +1,722 @@
+/* ==========================================================
+   VENDEX UI THEME
+   Estilo moderno para AdminLTE 3/Bootstrap 5
+   ========================================================== */
+
+/* ==========================================================
+   VARIABLES
+   ========================================================== */
+:root {
+
+    /* Fondos */
+    --color-fondo-principal: #0F172A;
+    --color-fondo-sidebar: #111827;
+    --color-fondo-widgets: #1E293B;
+    --color-fondo-hover: #334155;
+
+    /* Bordes */
+    --color-bordes: #334155;
+
+    /* Texto */
+    --color-texto-principal: #F8FAFC;
+    --color-texto-secundario: #94A3B8;
+
+    /* Colores principales */
+    --color-acento: #4F46E5;
+    --color-acento-hover: #4338CA;
+    --color-acento-soft: rgba(79, 70, 229, .15);
+
+    /* Colores auxiliares */
+    --color-info: #06B6D4;
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
+
+}
+
+/* ==========================================================
+   BODY
+   ========================================================== */
+
+body{
+    background: var(--color-fondo-principal);
+    color: var(--color-texto-principal);
+}
+
+/* ==========================================================
+   NAVBAR
+   ========================================================== */
+
+.main-header{
+    background: var(--color-fondo-widgets);
+    border-bottom:1px solid var(--color-bordes);
+}
+
+.main-header .nav-link{
+    color:var(--color-texto-principal)!important;
+}
+
+.main-header .nav-link:hover{
+    color:var(--color-info)!important;
+}
+
+/* ==========================================================
+   SIDEBAR
+   ========================================================== */
+
+.main-sidebar{
+    background:var(--color-fondo-sidebar);
+    border-right:1px solid var(--color-bordes);
+}
+
+.brand-link{
+    background:var(--color-fondo-sidebar)!important;
+    border-bottom:1px solid var(--color-bordes);
+    text-decoration:none!important;
+}
+
+.brand-link .brand-text{
+    color:#fff!important;
+    font-weight:700;
+    letter-spacing:3px;
+}
+
+.brand-link .brand-image{
+    opacity:1;
+}
+
+.nav-header{
+    color:var(--color-info)!important;
+    font-size:.75rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    font-weight:bold;
+}
+
+.nav-sidebar .nav-link{
+    color:var(--color-texto-principal)!important;
+    margin:2px 8px;
+    border-radius:8px;
+    transition:.2s;
+}
+
+.nav-sidebar .nav-link i{
+    color:var(--color-texto-secundario);
+}
+
+.nav-sidebar .nav-link:hover{
+    background:var(--color-fondo-hover);
+}
+
+.nav-sidebar .nav-link:hover i{
+    color:var(--color-info);
+}
+
+.nav-sidebar .nav-item>.nav-link.active{
+    background:var(--color-acento-soft)!important;
+    color:#fff!important;
+    font-weight:600;
+}
+
+.nav-sidebar .nav-item>.nav-link.active i{
+    color:var(--color-info)!important;
+}
+
+/* ==========================================================
+   CONTENT
+   ========================================================== */
+
+.content-wrapper{
+    background:var(--color-fondo-principal);
+}
+
+.content-header h1{
+    color:#fff;
+    font-weight:700;
+}
+
+/* ==========================================================
+   CARDS
+   ========================================================== */
+
+.card{
+    background:var(--color-fondo-widgets);
+    border:1px solid var(--color-bordes);
+    border-radius:15px;
+    box-shadow:0 8px 24px rgba(0,0,0,.20);
+}
+
+.card-header{
+    background:transparent;
+    border-bottom:1px solid var(--color-bordes);
+    color:#fff;
+    font-weight:600;
+}
+
+.card-footer{
+    background:transparent;
+    border-top:1px solid var(--color-bordes);
+}
+
+.card-title{
+    color:#fff;
+}
+
+/* Hover para tarjetas de productos */
+
+.card:hover{
+    transform:translateY(-3px);
+    transition:.2s;
+}
+
+/* ==========================================================
+   FORMULARIOS
+   ========================================================== */
+
+label{
+    color:var(--color-texto-principal);
+    font-weight:500;
+}
+
+.form-control,
+.form-select{
+
+    background:#0F172A;
+    border:1px solid var(--color-bordes);
+    color:#fff;
+
+}
+
+.form-control::placeholder{
+    color:var(--color-texto-secundario);
+}
+
+.form-control:focus,
+.form-select:focus{
+
+    background:#0F172A;
+    color:#fff;
+    border-color:var(--color-acento);
+    box-shadow:0 0 0 .2rem rgba(79,70,229,.20);
+
+}
+
+/* ==========================================================
+   INPUTS DESHABILITADOS
+   ========================================================== */
+
+.form-control:disabled,
+.form-control[readonly],
+.form-select:disabled{
+
+    background-color: #273449 !important;
+    color: white !important;
+    border-color: var(--color-bordes) !important;
+    opacity: 1;
+
+}
+
+.form-control:disabled::placeholder{
+
+    color: #6B7280;
+
+}
+
+
+/* ==========================================================
+   INPUT GROUP
+   ========================================================== */
+
+.input-group-text{
+
+    background:var(--color-fondo-hover);
+    color:var(--color-texto-principal);
+    border:1px solid var(--color-bordes);
+
+}
+
+/* ==========================================================
+   BOTONES
+   ========================================================== */
+
+.btn{
+    border-radius:8px;
+    font-weight:600;
+}
+
+.btn-primary{
+
+    background:var(--color-acento);
+    border-color:var(--color-acento);
+
+}
+
+.btn-primary:hover{
+
+    background:var(--color-acento-hover);
+    border-color:var(--color-acento-hover);
+
+}
+
+.btn-success{
+
+    background:var(--color-success);
+    border-color:var(--color-success);
+
+}
+
+.btn-danger{
+
+    background:var(--color-danger);
+    border-color:var(--color-danger);
+
+}
+
+.btn-warning{
+
+    background:var(--color-warning);
+    border-color:var(--color-warning);
+    color:#fff;
+
+}
+
+.btn-info{
+
+    background:var(--color-info);
+    border-color:var(--color-info);
+    color:#fff;
+
+}
+
+/* ==========================================================
+   TABLAS
+   ========================================================== */
+
+.table{
+
+    color:var(--color-texto-principal);
+
+}
+
+.table thead{
+
+    background:var(--color-fondo-hover);
+
+}
+
+.table th,
+.table td{
+
+    border-color:var(--color-bordes);
+
+}
+
+.table-hover tbody tr:hover{
+
+    background:rgba(255,255,255,.03);
+
+}
+
+/* ==========================================================
+   PAGINACIÓN
+   ========================================================== */
+
+.page-link{
+
+    background:var(--color-fondo-widgets);
+    border-color:var(--color-bordes);
+    color:var(--color-texto-principal);
+
+}
+
+.page-link:hover{
+
+    background:var(--color-fondo-hover);
+    color:#fff;
+
+}
+
+.page-item.active .page-link{
+
+    background:var(--color-acento);
+    border-color:var(--color-acento);
+
+}
+
+/* ==========================================================
+   BADGES
+   ========================================================== */
+
+.badge.bg-primary{
+    background:var(--color-acento)!important;
+}
+
+.badge.bg-success{
+    background:var(--color-success)!important;
+}
+
+.badge.bg-warning{
+    background:var(--color-warning)!important;
+}
+
+.badge.bg-danger{
+    background:var(--color-danger)!important;
+}
+
+/* ==========================================================
+   DROPDOWN
+   ========================================================== */
+
+.dropdown-menu{
+
+    background:var(--color-fondo-widgets);
+    border:1px solid var(--color-bordes);
+
+}
+
+.dropdown-item{
+
+    color:var(--color-texto-principal);
+
+}
+
+.dropdown-item:hover{
+
+    background:var(--color-fondo-hover);
+    color:#fff;
+
+}
+
+/* ==========================================================
+   MODALES
+   ========================================================== */
+
+.modal-content{
+
+    background:var(--color-fondo-widgets);
+    border:1px solid var(--color-bordes);
+    color:#fff;
+
+}
+
+.modal-header{
+
+    border-bottom:1px solid var(--color-bordes);
+
+}
+
+.modal-footer{
+
+    border-top:1px solid var(--color-bordes);
+
+}
+
+/* ==========================================================
+   LOGIN
+   ========================================================== */
+
+body.login-page,
+body.register-page{
+
+    background:
+        linear-gradient(
+            135deg,
+            #0F172A 0%,
+            #111827 50%,
+            #1E293B 100%
+        );
+
+}
+
+.login-logo a,
+.register-logo a{
+
+    color:#fff!important;
+    font-weight:800;
+    letter-spacing:5px;
+
+}
+
+.login-page .card,
+.register-page .card{
+
+    background:var(--color-fondo-widgets);
+    border:1px solid var(--color-bordes);
+
+}
+
+.login-card-body,
+.register-card-body{
+
+    background:transparent;
+    color:#fff;
+
+}
+
+.login-page .login-box-msg,
+.register-page .register-box-msg{
+
+    color:var(--color-texto-secundario);
+
+}
+
+.login-page .input-group .form-control,
+.register-page .input-group .form-control{
+
+    background:#0F172A;
+    border-color:var(--color-bordes);
+    color:#fff;
+
+}
+
+.login-page .input-group .input-group-text,
+.register-page .input-group .input-group-text{
+
+    background:var(--color-fondo-hover);
+    border-color:var(--color-bordes);
+    color:#fff;
+
+}
+
+.login-page .btn-primary,
+.register-page .btn-primary{
+
+    background:var(--color-acento);
+    border-color:var(--color-acento);
+
+}
+
+.login-page .btn-primary:hover,
+.register-page .btn-primary:hover{
+
+    background:var(--color-acento-hover);
+    border-color:var(--color-acento-hover);
+
+}
+
+.login-page a,
+.register-page a{
+
+    color:var(--color-info);
+
+}
+
+.login-page a:hover,
+.register-page a:hover{
+
+    color:#fff;
+
+}
+
+/* ==========================================================
+   SCROLLBAR
+   ========================================================== */
+
+::-webkit-scrollbar{
+    width:10px;
+    height:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:var(--color-fondo-sidebar);
+}
+
+::-webkit-scrollbar-thumb{
+    background:var(--color-fondo-hover);
+    border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:var(--color-acento);
+}
+
+
+/* ==========================================================
+   TABLAS VENDEX
+   ========================================================== */
+
+.table{
+    color: var(--color-texto-principal) !important;
+    background: transparent;
+}
+
+.table thead,
+.table thead th{
+    background: var(--color-fondo-hover) !important;
+    color: #fff !important;
+    border-color: var(--color-bordes) !important;
+}
+
+.table tbody{
+    background: var(--color-fondo-widgets);
+}
+
+.table tbody tr{
+    background: transparent !important;
+}
+
+.table tbody td{
+    color: var(--color-texto-principal) !important;
+    border-color: var(--color-bordes) !important;
+}
+
+.table tfoot,
+.table tfoot th,
+.table tfoot td{
+    background: var(--color-fondo-hover) !important;
+    color: #fff !important;
+    border-color: var(--color-bordes) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd){
+    background: rgba(255,255,255,.03) !important;
+}
+
+.table-hover tbody tr:hover{
+    background: var(--color-fondo-hover) !important;
+}
+
+.table-bordered,
+.table-bordered td,
+.table-bordered th{
+    border: 1px solid var(--color-bordes) !important;
+}
+
+/* DataTables */
+
+table.dataTable{
+    color: var(--color-texto-principal) !important;
+}
+
+table.dataTable thead th{
+    background: var(--color-fondo-hover) !important;
+}
+
+table.dataTable tbody tr{
+    background: var(--color-fondo-widgets) !important;
+}
+
+table.dataTable tbody tr:hover{
+    background: var(--color-fondo-hover) !important;
+}
+
+.table > tbody > tr > td,
+.table > tbody > tr > th{
+
+    background-color: var(--color-fondo-widgets) !important;
+    color: var(--color-texto-principal) !important;
+    border-color: var(--color-bordes) !important;
+
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > *{
+
+    background-color: #243247 !important;
+
+}
+
+.table-hover > tbody > tr:hover > *{
+
+    background-color: var(--color-fondo-hover) !important;
+    color: #fff !important;
+
+}
+
+/* ===========================
+   PRELOADER VENDEX
+=========================== */
+
+#preloader{
+
+    position:fixed;
+    inset:0;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    background:#0F172A;
+
+    z-index:999999;
+
+    transition:.4s;
+
+}
+
+.loader{
+
+    position:relative;
+    width:140px;
+    height:140px;
+
+}
+
+.loader img{
+
+    position:absolute;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    width:80px;
+    height:80px;
+
+    z-index:2;
+
+}
+
+.spinner{
+
+    width:140px;
+    height:140px;
+
+    border-radius:50%;
+
+    border:5px solid rgba(255,255,255,.08);
+
+    border-top-color:#06B6D4;
+    border-right-color:#4F46E5;
+
+    animation:spin 1.1s linear infinite;
+
+}
+
+#preloader h3{
+
+    margin-top:35px;
+
+    color:white;
+
+    letter-spacing:5px;
+
+    font-weight:700;
+
+}
+
+#preloader p{
+
+    color:#94A3B8;
+
+    font-size:.9rem;
+
+}
+
+@keyframes spin{
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+#preloader.hide{
+
+    opacity:0;
+    visibility:hidden;
+
+}
