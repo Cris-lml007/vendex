@@ -225,10 +225,10 @@
                         plataforma rápida, intuitiva y segura.
                     </p>
 
-                    <a href="{{ route('login') }}"
+                    <a href="https://wa.me/59161813282?text=Quisiera%20una%20demo%20de%20Vendex"
                        class="btn btn-light btn-lg mt-3">
 
-                        Acceder al Sistema
+                        Obtener Demo
 
                     </a>
 
