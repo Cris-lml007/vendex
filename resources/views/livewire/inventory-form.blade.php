@@ -53,8 +53,8 @@
                     <div class="col">
                         <label for="">Tipo</label>
                         <select wire:model="store_type" class="form-select" disabled>
-                            <option value="{{ \App\Enums\Type::STORE }}">{{ \App\Enums\Type::STORE->name }}</option>
-                            <option value="{{ \App\Enums\Type::WAREHOUSE }}">{{ \App\Enums\Type::WAREHOUSE->name }}</option>
+                            <option value="{{ \App\Enums\Type::STORE }}">{{ __('messages.'.\App\Enums\Type::STORE->name) }}</option>
+                            <option value="{{ \App\Enums\Type::WAREHOUSE }}">{{ __('messages.'.\App\Enums\Type::WAREHOUSE->name) }}</option>
                         </select>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                             @foreach ($stores as $item)
                                 <tr>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->type->name }}</td>
+                                    <td>{{ __('messages.'.$item->type->name) }}</td>
                                     <td style="width: 200px;">
                                         <input type="number" class="form-control store-stock"
                                                placeholder="{{ ((int) $quantity - (int) $total) ?? 0 }}"

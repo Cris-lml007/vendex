@@ -30,7 +30,7 @@
                     <select name="" id="" class="form-select" wire:model="role">
                         <option value="">Seleccione un Rol</option>
                         @foreach(\App\Enums\Role::cases() as $item)
-                            <option value="{{ $item }}">{{ $item->name }}</option>
+                            <option value="{{ $item }}">{{ __('messages.'.$item->name) }}</option>
                         @endforeach
                     </select>
                     @error('role')
@@ -56,7 +56,7 @@
                     <select name="" id="" class="form-select" wire:model="status">
                         <option value="">Seleccione Estado</option>
                         @foreach(\App\Enums\Status::cases() as $item)
-                            <option value="{{ $item }}">{{ $item->name }}</option>
+                            <option value="{{ $item }}">{{ __('messages.'.$item->name) }}</option>
                         @endforeach
                     </select>
                     @error('status')

@@ -13,9 +13,9 @@
                         <tr>
                             <td>{{ $item->id }}</td>
                             <td>{{ $item->name }}</td>
-                            <td>{{ $item->role->name }}</td>
+                            <td>{{ __('messages.'.$item->role->name) }}</td>
                             <td>{{ $item->store->name ?? '---' }}</td>
-                            <td>{{ $item->status->name }}</td>
+                            <td>{{ __('messages.'.$item->status->name) }}</td>
                             <td>
                                 <button data-bs-toggle="modal" data-bs-target="#modal-users" wire:click="getUser({{ $item->id }})" class="btn btn-primary"><i class="fa fa-eye"></i></button>
                             </td>

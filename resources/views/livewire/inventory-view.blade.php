@@ -33,7 +33,7 @@
                             @endphp
                         @endif
                         <td>{{ $item->quantity }}</td>
-                        <td>{{ $item->type->name }}</td>
+                        <td>{{ __('messages.'.$item->type->name) }}</td>
                         <td>{{ $item->store->name }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>

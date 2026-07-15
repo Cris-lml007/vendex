@@ -27,7 +27,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col">
                     <label for="">Direccion</label>
                     <input type="text" class="form-control" placeholder="Ingrese Direccion" wire:model="address">
@@ -42,8 +42,8 @@
                     <label for="">Tipo</label>
                     <select class="form-select" wire:model="type">
                         <option value="">Seleccione un Tipo</option>
-                        <option value="{{ \App\Enums\Type::STORE }}">{{ \App\Enums\Type::STORE->name  }}</option>
-                        <option value="{{ \App\Enums\Type::WAREHOUSE }}">{{ \App\Enums\Type::WAREHOUSE->name }}</option>
+                        <option value="{{ \App\Enums\Type::STORE }}">{{ __('messages.'.\App\Enums\Type::STORE->name)  }}</option>
+                        <option value="{{ \App\Enums\Type::WAREHOUSE }}">{{ __('messages.'.\App\Enums\Type::WAREHOUSE->name) }}</option>
                     </select>
                     @error('type')
                     <span class="text-danger">{{ $message }}</span>
@@ -54,7 +54,7 @@
                     <select class="form-select" wire:model="status">
                         <option value="">Seleccione un Estado</option>
                         @foreach (App\Enums\Status::cases() as $item)
-                            <option value="{{ $item->value }}">{{ $item->name }}</option>
+                            <option value="{{ $item->value }}">{{ __('messages.'.$item->name) }}</option>
                         @endforeach
                     </select>
                     @error('status')
@@ -71,7 +71,7 @@
                                 <tr>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->pivot->quantity }}</td>
-                                    <td>{{ $item->price }}</td>
+                                    <td>{{ Number::format($item->price,2) }}</td>
                                     <td>
                                         <a href="{{ route('admin.product.id', $item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                                     </td>
@@ -90,7 +90,7 @@
                                     <td>{{ $item->product->name }}</td>
                                     <td>{{ $item->referenceable?->customer?->name ?? '---'}}</td>
                                     <td>{{ $item->quantity }}</td>
-                                    <td>{{ $item->price }}</td>
+                                    <td>{{ Number::format($item->price,2) }}</td>
                                     <td>{{ $item->user->name }}</td>
                                 </tr>
                             @endforeach
