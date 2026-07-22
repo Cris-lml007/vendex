@@ -185,6 +185,7 @@
                         </div>
                     </div>
                 </div>
+            @if(!$product->is_serialize)
                 <div class="row">
                     <div class="col">
                         <table class="table table-striped">
@@ -255,7 +256,7 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-primary"><i class="fa fa-eye"></i></button>
+                                                    <a href="{{ route('admin.product.id', $item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -285,6 +286,7 @@
                         </table>
                     </div>
                 </div>
+            @endif
             @endif
         </div>
         @if(!$edit)

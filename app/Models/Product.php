@@ -45,9 +45,9 @@ class Product extends Model
     }
 
     public function kardex(){
-        if($this->is_serialize)
-            return $this->hasOne(Kardex::class,'product_id','id');
-        else
+        //if($this->is_serialize)
+        //    return $this->hasOne(Kardex::class,'product_id','id');
+        //else
             return $this->hasMany(Kardex::class,'product_id','id');
     }
 

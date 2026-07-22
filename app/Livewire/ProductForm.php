@@ -187,6 +187,10 @@ class ProductForm extends Component
             $this->barcode = $this->product->id;
             $this->name = $this->product->name;
             $this->price = $this->product->price;
+
+            $this->price_purchase = $this->product?->kardex()?->first()?->price ?? null;
+            $this->store_id = $this->product?->store_id ?? null;
+
             $this->category = $this->product->category_id;
             $this->description = $this->product->description;
             #$this->barcode = $this->product->id;
