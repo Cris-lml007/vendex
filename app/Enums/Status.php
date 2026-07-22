@@ -4,9 +4,8 @@ namespace App\Enums;
 
 enum Status: int
 {
-    CASE DISABLE = 0;
-    CASE ACTIVE = 1;
-    CASE BLOCKED = 2;
+    CASE DISABLE = 1;
+    CASE ACTIVE = 2;
+    CASE BLOCKED = 3;
 
-    CASE SALE = 3;
 }

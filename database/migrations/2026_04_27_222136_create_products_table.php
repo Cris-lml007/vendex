@@ -23,6 +23,7 @@ return new class extends Migration
 
             $table->boolean('is_serialize')->default(false);
             $table->string('parent_id')->nullable();
+            $table->unsignedBigInteger('store_id')->nullable();
 
             $table->enum('status',Status::cases())->default(Status::ACTIVE);
             $table->unsignedBigInteger('category_id')->nullable();

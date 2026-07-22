@@ -229,7 +229,7 @@
                                         <thead>
                                         <tr>
                                             <th></th>
-                                            <th colspan="2" class="text-center"><strong>SERIALIZADOS</strong></th>
+                                            <th colspan="3" class="text-center"><strong>SERIALIZADOS</strong></th>
                                             <th></th>
                                         </tr>
                                         <tr>
@@ -237,6 +237,7 @@
                                             <th>Nombre</th>
                                             <th>Precio</th>
                                             <th>Locación</th>
+                                            <th>Acciones</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -245,7 +246,17 @@
                                                 <td>{{ $item->id }}</td>
                                                 <td>{{ $item->name }}</td>
                                                 <td>{{ $item->price }}</td>
-                                                <td>{{ $item->kardex->store->name }}</td>
+                                                <td>
+                                                    <select class="form-select" wire:model="product_serials[{{$item->store_id}}]">
+                                                        <option value="{{ $item->store_id }}">{{ $item->store->name }}</option>
+                                                        @foreach($stores as $item1)
+                                                            <option value="{{ $item1->id }}">{{ $item1->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary"><i class="fa fa-eye"></i></button>
+                                                </td>
                                             </tr>
                                         @endforeach
                                         </tbody>

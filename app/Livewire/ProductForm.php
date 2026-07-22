@@ -68,6 +68,8 @@ class ProductForm extends Component
     public $store_id;
     public $stores_list;
 
+    public $product_serials = [];
+
     public function updatedIsSerial()
     {
         if($this->is_serial == 0){
@@ -215,7 +217,7 @@ class ProductForm extends Component
     }
 
     public function save(){
-        //dd($this->product);
+        //dd($this->product_serials);
         //dd($this->store_id);
         $r = [
             'name' => 'required',
@@ -262,6 +264,7 @@ class ProductForm extends Component
 
             $this->product->is_serialize = $this->is_serial;
             $this->product->parent_id = $this->product_id;
+            $this->product->store_id = $this->store_id ?? null;
             $this->product->save();
 
             if($this->product->is_serialize){
@@ -297,7 +300,7 @@ class ProductForm extends Component
 
         if($this->edit){
             $q = $this->product?->stocks()->sum('quantity') ?? 0;
-            if($q > 0){
+            if($q > 0 || !empty($this->product_serials)){
                 if(array_sum($this->stocks) > $q || (array_sum($this->stocks) == 0 && $this->product->stocks()->sum('quantity') > 0) ){
                     $this->js('Swal.fire({
                 icon: "error",
@@ -345,6 +348,46 @@ class ProductForm extends Component
                                 ]);
                             }
                         }
+
+                        foreach ($this->product_serials as $id => $value){
+                            $kk = Kardex::find($id);
+
+                            $kk->product->update([
+                                'store_id' => $value,
+                            ]);
+
+                            $k1 = Kardex::create([
+                                'product_id' => $kk->product_id,
+                                'store_id' => $kk->store_id,
+                                'quantity' => 0,
+                                'price' => 0,
+                                'type' => Type::TRANSFER,
+                                'user_id' => Auth::user()->id
+                            ]);
+                            $k2 = Kardex::create([
+                                'product_id' => $kk->product_id,
+                                'store_id' => $value,
+                                'quantity' => 1,
+                                'price' => 0,
+                                'type' => Type::TRANSFER,
+                                'user_id' => Auth::user()->id
+                            ]);
+                            $transfer = DetailTransfer::create([
+                                'transfer_id' => $t->id,
+                                'product_id' => $kk->product_id,
+                                'store_id' => $kk->store_id,
+                                'quantity' => 1,
+                                'kardex_id' => $k1->id,
+                            ]);
+                            $transfer = DetailTransfer::create([
+                                'transfer_id' => $t->id,
+                                'product_id' => $kk->product_id,
+                                'store_id' => $value,
+                                'quantity' => 0,
+                                'kardex_id' => $k2->id,
+                            ]);
+                        }
+
                         if($t->details()->count() == 0){
                             $t->delete();
                         }
