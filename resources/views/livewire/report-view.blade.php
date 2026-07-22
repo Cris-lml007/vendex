@@ -1,3 +1,9 @@
+<x-slot name="header">
+    <div class="container-fluid">
+        <h1>Reportes</h1>
+    </div>
+</x-slot>
+
 <div>
     <div class="container-fluid">
 
@@ -99,9 +105,9 @@
 
                     <div class="card-body">
 
-                        <small>Total Ventas</small>
+                        <small class="text-white">Total Ventas</small>
 
-                        <h3 class="mb-0">
+                        <h3 class="mb-0 text-white">
                             {{ $totalSales ?? 0 }}
                         </h3>
 
@@ -117,9 +123,9 @@
 
                     <div class="card-body">
 
-                        <small>Ingreso Total</small>
+                        <small class="text-white">Ingreso Total</small>
 
-                        <h3 class="mb-0">
+                        <h3 class="mb-0 text-white">
 
                             Bs.
                             {{ number_format($totalAmount,2) }}
@@ -138,9 +144,9 @@
 
                     <div class="card-body">
 
-                        <small>Productos Vendidos</small>
+                        <small class="text-white">Productos Vendidos</small>
 
-                        <h3 class="mb-0">
+                        <h3 class="mb-0 text-white">
 
                             {{ $productsSold ?? 0 }}
 
@@ -158,9 +164,9 @@
 
                     <div class="card-body">
 
-                        <small>Ticket Promedio</small>
+                        <small class="text-white">Ticket Promedio</small>
 
-                        <h3 class="mb-0">
+                        <h3 class="mb-0 text-white">
 
                             Bs.
                             {{ number_format($averageSale ?? 0,2) }}

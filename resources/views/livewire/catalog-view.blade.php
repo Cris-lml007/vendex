@@ -53,7 +53,7 @@
                                         {{ $product->brand->name }}
                                     </div>
                                     <h5 class="text-success mt-2">
-                                        Bs {{ number_format($product->price,2) }}
+                                        <strong>Bs {{ number_format($product->price,2) }}</strong>
                                     </h5>
                                     <div class="mt-auto">
                                         <button wire:click="getProduct('{{ $product->id }}')" data-bs-toggle="modal" data-bs-target="#modal-product" class="btn btn-primary w-100">

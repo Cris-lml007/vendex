@@ -28,4 +28,27 @@ class Product extends Model
             'status' => Status::class,
         ];
     }
+    public function tags(){
+        return $this->hasMany(TagProduct::class,'product_id','id');
+    }
+
+    public function parent(){
+        return $this->belongsTo(Product::class,'parent_id','id');
+    }
+
+    public function children(){
+        return $this->hasMany(Product::class,'parent_id','id');
+    }
+
+    public function kardex(){
+        if($this->is_serialize)
+            return $this->hasOne(Kardex::class,'product_id','id');
+        else
+            return $this->hasMany(Kardex::class,'product_id','id');
+    }
+
+    public function details()
+    {
+        return $this->hasMany(DetailTransaction::class,'product_id','id');
+    }
 }

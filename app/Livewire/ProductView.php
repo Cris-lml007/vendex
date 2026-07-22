@@ -47,19 +47,22 @@ class ProductView extends Component
 
         $search = $this->list['search'];
         if($search != ''){
-            $products = Product::where('name', 'like', '%'.$search.'%')
-                ->orWhere('model', 'like', '%'.$search.'%')
-                ->orWhereHas('brand', function ($query) use ($search) {
-                    $query->where('name', 'like', '%'.$search.'%');
-                })
-                ->orWhereHas('category', function ($query) use ($search) {
-                    $query->where('name', 'like', '%'.$search.'%');
-                })
-                ->orWhere('price', 'like', '%'.$search.'%')
-                ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
+            $products = Product::where('parent_id', null)
+                ->where(function ($query) use ($search) {
+                    $query->where('name', 'like', '%'.$search.'%')
+                        ->orWhere('model', 'like', '%'.$search.'%')
+                        ->orWhereHas('brand', function ($query) use ($search) {
+                            $query->where('name', 'like', '%'.$search.'%');
+                        })
+                        ->orWhereHas('category', function ($query) use ($search) {
+                            $query->where('name', 'like', '%'.$search.'%');
+                        })
+                        ->orWhere('price', 'like', '%'.$search.'%');
+                })->orderBy($this->list['sort_field'],$this->list['sort_direction'])
                 ->paginate();
         }else{
-            $products = Product::orderBy($this->list['sort_field'],$this->list['sort_direction'])
+            $products = Product::where('parent_id',null)
+                ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
                 ->paginate();
         }
         $this->list['pages_max'] = $products->lastPage();

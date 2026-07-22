@@ -20,6 +20,10 @@ return new class extends Migration
             $table->string('model');
             $table->string('description')->nullable();
             $table->decimal('price');
+
+            $table->boolean('is_serialize')->default(false);
+            $table->string('parent_id')->nullable();
+
             $table->enum('status',Status::cases())->default(Status::ACTIVE);
             $table->unsignedBigInteger('category_id')->nullable();
             $table->timestamps();

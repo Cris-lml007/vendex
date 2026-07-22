@@ -7,6 +7,29 @@
         <div class="modal-body">
             <div class="row mb-3">
                 <div class="col">
+                    <label for="">Producto Serializado</label>
+                    <select class="form-select" wire:model.live="is_serial">
+                        <option value="0">No</option>
+                        <option value="1">Si</option>
+                    </select>
+                </div>
+            </div>
+            @if($is_serial == 1)
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="">Producto</label>
+                        <select class="form-select" wire:model.live="product_id">
+                            <option value="">Seleccione Producto</option>
+                            @foreach($products as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            @endif
+
+            <div class="row mb-3">
+                <div class="col">
                     <label for="">Nombre</label>
                     <input type="text" class="form-control" wire:model="name" placeholder="Ingrese Nombre">
                     @error('name')
@@ -14,6 +37,29 @@
                     @enderror
                 </div>
             </div>
+            @if($is_serial == 1)
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="">Precio Adquisición</label>
+                        <input type="text" class="form-control" placeholder="Ingrese Precio de Adquisición" wire:model="price_purchase">
+                        @error('price_purchase')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="col">
+                        <label for="">Tienda/Almacén</label>
+                        <select class="form-select" wire:model="store_id">
+                            <option value="">Seleccione Tienda o Almacén</option>
+                            @foreach($stores_list ?? [] as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('store_id')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+            @endif
             <div class="row mb-3">
                 <div class="col">
                     <label for="">Marca</label>
@@ -66,6 +112,26 @@
                 </div>
             </div>
 
+            @for($i = 0; $i<$number_labels; $i++)
+                <div class="row mb-3">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Ingrese Etiqueta" wire:model="labels[{{$i}}]">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Ingrese Valor" wire:model="values[{{$i}}]">
+                    </div>
+                    <div class="col-1">
+                        <button type="button" class="btn btn-danger" wire:click="removeTag({{$i}})"><i class="fa fa-trash"></i></button>
+                    </div>
+                </div>
+
+            @endfor
+            <div class="row mb-3">
+                <div class="col">
+                    <button type="button" wire:click="addLabel" class="btn btn-primary w-100">Añadir Etiqueta</button>
+                </div>
+            </div>
+
             <div class="row mb-3">
                 <div class="col">
                     <label>Imagen de Producto</label>
@@ -89,7 +155,6 @@
                 </div>
             </div>
 
-
             <div class="row mb-3">
                 <div class="col">
                     <label for="">Barcode</label>
@@ -97,17 +162,21 @@
                         <input type="text" class="form-control" wire:model.live="barcode" placeholder="Ingrese Barcode">
                         <button type="button" data-bs-target="#modal-scanner" data-bs-toggle="modal" class="btn btn-primary input-group-text"><i class="fa fa-qrcode"></i></button>
                     </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div>
                     <div class="d-flex justify-content-center mb-3">
                         <img class="img-fluid img-thumbnail" src="{{ $barcode_img }}" alt="Barcode">
                     </div>
                     @error('barcode')
-                        <span class="text-danger">{{ $message }}</span>
+                    <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
             @if($edit)
                 <h5>Generar Etiquetas</h5>
-                <div class="row">
+                <div class="row mb-3">
                     <div class="col">
                         <label for="">Cantidad</label>
                         <input type="number" class="form-control mb-3" placeholder="Ingrese Cantidad" wire:model="tags">
@@ -116,31 +185,91 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex justify-content-between my-3">
-                    <h5>En Inventario</h5>
-                </div>
                 <div class="row">
                     <div class="col">
                         <table class="table table-striped">
                             <thead>
-                            <th>Nombre</th>
-                            <th>Tipo</th>
-                            <th>Cantidad</th>
+                            <th colspan="2" class="text-center"><strong>EN INVENTARIO</strong></th>
                             </thead>
                             <tbody>
-                            @foreach($stores ?? [] as $item)
-                                <tr>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->type->name }}</td>
-                                    <td>
-                                        <input wire:blur="setStock({{$item->id}}, $event.target.value)" type="number" class="form-control" value="{{ $stocks[$item->id]}}"/>
-                                    </td>
-                                </tr>
-                            @endforeach
+                            <tr>
+                                <td colspan="2">
+                                    <table class="table mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th colspan="3" class="text-center"><strong>NO SERIALIZADOS</strong></th>
+                                        </tr>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Tipo</th>
+                                            <th>Cantidad</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($stores ?? [] as $item)
+                                            <tr>
+                                                <td>{{ $item->name }}</td>
+                                                <td>{{ __('messages.'.$item->type->name) }}</td>
+                                                <td>
+                                                    <input wire:blur="setStock({{$item->id}}, $event.target.value)" type="number" class="form-control" value="{{ $stocks[$item->id]}}"/>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>SUBTOTAL</strong></td>
+                                <td><strong @class(['text-success', 'text-danger' => $total != $total_origin])>{{ $total }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th colspan="2" class="text-center"><strong>SERIALIZADOS</strong></th>
+                                            <th></th>
+                                        </tr>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Nombre</th>
+                                            <th>Precio</th>
+                                            <th>Locación</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($product->children as $item)
+                                            <tr>
+                                                <td>{{ $item->id }}</td>
+                                                <td>{{ $item->name }}</td>
+                                                <td>{{ $item->price }}</td>
+                                                <td>{{ $item->kardex->store->name }}</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>SUBTOTAL</strong></td>
+                                <td>{{ $this->product->children()->where('is_serialize',true)
+                        ->whereNotExists(function ($query){
+                            $query->select(DB::raw(1))
+                                ->from('detail_transactions')
+                                ->where('product_id',$this->product->id);
+                        })->count() }}</td>
+                            </tr>
                             </tbody>
                             <tfoot>
-                            <th colspan="2">TOTAL</th>
-                            <th @class(['text-success', 'text-danger' => $total != $total_origin])>{{ $total }}</th>
+                            <th>TOTAL</th>
+                            <th>{{ $total + $this->product->children()->where('is_serialize',true)
+                        ->whereNotExists(function ($query){
+                            $query->select(DB::raw(1))
+                                ->from('detail_transactions')
+                                ->where('product_id',$this->product->id);
+                        })->count() }}</th>
                             </tfoot>
                         </table>
                     </div>
