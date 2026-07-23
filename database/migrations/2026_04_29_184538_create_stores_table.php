@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->float('lat')->nullable();
             $table->float('long')->nullable();
+            $table->float('radius')->nullable();
             $table->enum('status',Status::cases())->default(Status::ACTIVE);
             $table->enum('type',Type::cases())->default(Type::STORE);
             $table->timestamps();

@@ -24,6 +24,10 @@ class StoreForm extends Component
     public $phone;
     public $email;
 
+    public $lat;
+    public $long;
+    public $radius;
+
 
     public function mount(Store $store = null){
         if($store->id != null){
@@ -35,6 +39,9 @@ class StoreForm extends Component
             $this->address = $store->address;
             $this->phone = $store->phone;
             $this->email = $store->email;
+            $this->lat = $store->lat;
+            $this->long = $store->long;
+            $this->radius = $store->radius;
 
             $this->stock = $this->store->products;
             $this->sales = Kardex::where('store_id', $this->store->id)->where('type',Type::OUT)->get();
@@ -59,6 +66,9 @@ class StoreForm extends Component
         $this->store->address = $this->address;
         $this->store->phone = $this->phone;
         $this->store->email = $this->email;
+        $this->store->lat = $this->lat;
+        $this->store->long = $this->long;
+        $this->store->radius = $this->radius;
         $this->store->save();
 
         if($this->edit){

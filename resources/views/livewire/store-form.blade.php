@@ -1,4 +1,5 @@
 <div>
+
     <form wire:submit="save">
         <div class="modal-body">
             <div class="row mb-3">
@@ -62,6 +63,23 @@
                     @enderror
                 </div>
             </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div id="map" style="height: 400px;width: 100%;"></div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="">Latitud</label>
+                    <input type="text" class="form-control" wire:model="lat" readonly>
+                </div>
+                <div class="col">
+                    <label for="">Longitud</label>
+                    <input type="text" class="form-control" wire:model="long" readonly>
+                </div>
+            </div>
+
+
             @if($edit)
                 <div class="row">
                     <div class="col">
@@ -113,3 +131,93 @@
         @endif
     </form>
 </div>
+
+@script
+    <script>
+
+        const modalElement = document.getElementById('modal-store');
+        let map;
+
+
+        map = L.map('map').setView([-17.9833, -67.15], 13);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+
+
+        const drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+
+        const drawControl = new L.Control.Draw({
+            draw: {
+                marker: false,
+                polyline: false,
+                rectangle: false,
+                circlemarker: false,
+
+                circle: true,
+                polygon: false
+            },
+            edit: {
+                featureGroup: drawnItems
+            }
+        });
+
+        map.addControl(drawControl);
+
+        let geofence = null;
+
+        if($wire.lat != null){
+            geofence = {
+                "lat": $wire.lat,
+                "lng": $wire.long,
+                "radius": $wire.radius
+            }
+        }
+
+        if (geofence) {
+
+            circle = L.circle(
+                [geofence.lat, geofence.lng],
+                {
+                    radius: geofence.radius,
+                    color: '#0d6efd',
+                    fillColor: '#0d6efd',
+                    fillOpacity: 0.25
+                }
+            ).addTo(map);
+
+            map.fitBounds(circle.getBounds());
+        }
+
+        map.on(L.Draw.Event.CREATED, function (e) {
+
+            // Eliminar el círculo anterior
+            if (geofence) {
+                drawnItems.removeLayer(geofence);
+            }
+
+            geofence = e.layer;
+
+            drawnItems.addLayer(geofence);
+
+            console.log(geofence.getLatLng().lng);
+            console.log(geofence.getRadius());
+
+            $wire.lat = geofence.getLatLng().lat;
+            $wire.long = geofence.getLatLng().lng;
+            $wire.radius = geofence.getRadius();
+
+        });
+
+        if(modalElement){
+            modalElement.addEventListener('shown.bs.modal', function () {
+                map.invalidateSize();
+            });
+        }
+
+    </script>
+@endscript
