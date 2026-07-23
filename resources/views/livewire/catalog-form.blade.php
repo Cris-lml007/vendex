@@ -50,6 +50,16 @@
                 @enderror
             </div>
         </div>
+        @foreach($product->tags ?? [] as $item)
+            <div class="row mb-3">
+                <div class="col">
+                    <input type="text" class="form-control" value="{{ $item->name }}" disabled >
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" value="{{ $item->value }}" disabled >
+                </div>
+            </div>
+        @endforeach
     </div>
     <div class="modal-footer">
         <button data-bs-dismiss="modal" class="btn btn-secondary">Cerrar</button>

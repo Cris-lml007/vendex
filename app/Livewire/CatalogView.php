@@ -52,17 +52,38 @@ class CatalogView extends Component
 
         $search = $this->search;
         if($search != ''){
-            $data = Product::where('status',Status::ACTIVE)
-                ->where(function($query) use ($search){
-                    $query->where('name', 'like', '%'.$search.'%')
-                        ->orWhere('model', 'like', '%'.$search.'%')
-                        ->orWhereHas('brand', function($query) use ($search){
-                            $query->where('name', 'like', '%'.$search.'%');
-                        })
-                        ->orWhere('price', 'like', '%'.$search.'%');
+            $terms = preg_split('/\s+/', trim($search));
+
+            $data = Product::where('status', Status::ACTIVE)
+                ->where(function ($query) use ($terms) {
+
+                    foreach ($terms as $term) {
+
+                        $query->where(function ($q) use ($term) {
+
+                            $q->where('name', 'like', "%{$term}%")
+                                ->orWhere('model', 'like', "%{$term}%")
+                                ->orWhere('price', 'like', "%{$term}%")
+
+                                ->orWhereHas('brand', function ($brand) use ($term) {
+                                    $brand->where('name', 'like', "%{$term}%");
+                                })
+
+                                ->orWhereHas('tags', function ($tag) use ($term) {
+                                    $tag->where('name', 'like', "%{$term}%")
+                                        ->orWhere('value', 'like', "%{$term}%");
+                                });
+
+                        });
+
+                    }
+
                 })
-                ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
+                ->orderBy($this->list['sort_field'], $this->list['sort_direction'])
                 ->paginate();
+
+
+
         }else {
             $data = Product::where('status', Status::ACTIVE)
                 ->orderBy($this->list['sort_field'],$this->list['sort_direction'])

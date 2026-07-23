@@ -15,6 +15,7 @@ class CatalogForm extends Component
     public $description;
     public $brand;
     public $model;
+    public $product;
 
     #[On('getProduct')]
     public function getProduct($id)
@@ -26,6 +27,8 @@ class CatalogForm extends Component
         $this->description = $product->description;
         $this->brand = $product->brand->name;
         $this->model = $product->model;
+
+        $this->product = $product;
     }
 
     public function render()

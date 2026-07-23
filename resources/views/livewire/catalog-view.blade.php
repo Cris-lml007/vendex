@@ -67,7 +67,7 @@
                 </div>
             </div>
         </div>
-        <div class="border-top bg-white py-3">
+        <div class="border-top py-3">
             <div class="container d-flex justify-content-end">
                 {{ $data->links() }}
             </div>
