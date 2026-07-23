@@ -13,6 +13,7 @@ use App\Models\Stock;
 use App\Models\Store;
 use App\Models\Transaction;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -38,6 +39,14 @@ class SellView extends Component
     public $stores;
 
     public Transaction $transaction;
+
+    public $search;
+    public $is_search = false;
+
+    public function searchOn()
+    {
+        $this->is_search = !$this->is_search;
+    }
 
     public function mount(){
         $this->store = Auth::user()->store->id ?? null;
@@ -273,15 +282,54 @@ class SellView extends Component
             return abort(403);
         }
 
-        $this->products = Product::where('status', Status::ACTIVE)
-            ->where(function ($query) {
-                $query->whereHas('stocks', function($q){
-                    $q->where('store_id',$this->store);
-                })->orWhere(function($qq){
-                    $qq->where('store_id',$this->store)
-                        ->where('store_id','!=',null);
-                });
-            })->get();
+        if($this->search != ''){
+            $terms = preg_split('/\s+/', trim($this->search));
+
+            $this->products = Product::where('status', Status::ACTIVE)
+                ->where(function ($query) {
+                    $query->whereHas('stocks', function($q){
+                        $q->where('store_id',$this->store);
+                    })->orWhere(function($qq){
+                        $qq->where('store_id',$this->store)
+                            ->where('store_id','!=',null);
+                    });
+                })
+                ->where(function ($query) use ($terms) {
+
+                    foreach ($terms as $term) {
+
+                        $query->where(function ($q) use ($term) {
+
+                            $q->where('name', 'like', "%{$term}%")
+                                ->orWhere('id', 'like', "%{$term}%")
+                                ->orWhere('model', 'like', "%{$term}%")
+                                ->orWhere('price', 'like', "%{$term}%")
+
+                                ->orWhereHas('brand', function ($brand) use ($term) {
+                                    $brand->where('name', 'like', "%{$term}%");
+                                })
+
+                                ->orWhereHas('tags', function ($tag) use ($term) {
+                                    $tag->where('name', 'like', "%{$term}%")
+                                        ->orWhere('value', 'like', "%{$term}%");
+                                });
+
+                        });
+
+                    }
+
+                })->get();
+        }else{
+            $this->products = Product::where('status', Status::ACTIVE)
+                ->where(function ($query) {
+                    $query->whereHas('stocks', function($q){
+                        $q->where('store_id',$this->store);
+                    })->orWhere(function($qq){
+                        $qq->where('store_id',$this->store)
+                            ->where('store_id','!=',null);
+                    });
+                })->get();
+        }
 
         $this->stores = Store::where('type',Type::STORE)
             ->where('status', Status::ACTIVE)->get();
