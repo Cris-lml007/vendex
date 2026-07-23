@@ -13,6 +13,31 @@ class Profile extends Component
     public $lat;
     public $lng;
 
+    private function isInsideGeofence(): bool {
+
+        $earthRadius = 6371000; // metros
+
+        $latFrom = deg2rad($this->user->store->lat);
+        $lonFrom = deg2rad($this->user->store->long);
+
+        $latTo = deg2rad($this->lat);
+        $lonTo = deg2rad($this->Lng);
+
+        $latDelta = $latTo - $latFrom;
+        $lonDelta = $lonTo - $lonFrom;
+
+        $angle = 2 * asin(sqrt(
+                pow(sin($latDelta / 2), 2) +
+                cos($latFrom) * cos($latTo) *
+                pow(sin($lonDelta / 2), 2)
+            ));
+
+        $distance = $angle * $earthRadius;
+
+        return $distance <= $this->user->store->radius;
+    }
+
+
     public function entry()
     {
         $exists = Attendance::where('user_id', auth()->id())
@@ -25,6 +50,17 @@ class Profile extends Component
             Swal.fire({
                 icon: 'warning',
                 title: 'Ya registró su ingreso de hoy'
+            });
+        ");
+
+            return;
+        }
+
+        if(!$this->isInsideGeofence()){
+            $this->js("
+            Swal.fire({
+                icon: 'warning',
+                title: 'No se puede Registrar'
             });
         ");
 
@@ -50,6 +86,17 @@ class Profile extends Component
             Swal.fire({
                 icon: 'warning',
                 title: 'Ya registró su salida de hoy'
+            });
+        ");
+
+            return;
+        }
+
+        if(!$this->isInsideGeofence()){
+            $this->js("
+            Swal.fire({
+                icon: 'warning',
+                title: 'No se puede Registrar'
             });
         ");
 

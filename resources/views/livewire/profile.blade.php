@@ -118,11 +118,8 @@
 
             function(position) {
 
-                @this.sale(
-                    position.coords.latitude,
-                    position.coords.longitude
-                );
-
+                $wire.lat = position.coords.latitude;
+                $wire.lng = position.coords.longitude;
             },
 
             function(error) {
