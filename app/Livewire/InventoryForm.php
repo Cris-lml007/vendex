@@ -23,7 +23,7 @@ class InventoryForm extends Component
     public $list;
 
     public $store_name;
-    public $store_type;
+    public $kardex_type;
     public Kardex $kardex;
 
     public $actions = [
@@ -59,7 +59,7 @@ class InventoryForm extends Component
         $this->price = $this->kardex->price;
         $store = Store::find($this->kardex->store_id);
         $this->store_name = $store->name;
-        $this->store_type = $store->type;
+        $this->kardex_type = $this->kardex->type;
     }
 
     public function restart()
@@ -69,7 +69,7 @@ class InventoryForm extends Component
         $this->price = 0;
         $this->list = [];
         $this->store_name = null;
-        $this->store_type = null;
+        $this->kardex_type = null;
         $this->kardex = new Kardex();
     }
 

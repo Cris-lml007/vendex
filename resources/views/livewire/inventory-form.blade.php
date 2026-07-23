@@ -36,7 +36,7 @@
                     @enderror
                 </div>
                 <div class="col">
-                    <label for="">Precio de Adquisición (Unidad)</label>
+                    <label for="">Precio de Adquisición/Venta (Unidad)</label>
                     <input type="text" class="form-control" placeholder="Ingrese Precio de Adquisición"
                         wire:model="price" @if($kardex?->id != null) disabled @endif>
                     @error('price')
@@ -52,9 +52,10 @@
                     </div>
                     <div class="col">
                         <label for="">Tipo</label>
-                        <select wire:model="store_type" class="form-select" disabled>
-                            <option value="{{ \App\Enums\Type::STORE }}">{{ __('messages.'.\App\Enums\Type::STORE->name) }}</option>
-                            <option value="{{ \App\Enums\Type::WAREHOUSE }}">{{ __('messages.'.\App\Enums\Type::WAREHOUSE->name) }}</option>
+                        <select wire:model="kardex_type" class="form-select" disabled>
+                            @foreach(\App\Enums\Type::cases() as $item)
+                                <option value="{{ $item->value }}">{{ __('messages.'.$item->name) }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

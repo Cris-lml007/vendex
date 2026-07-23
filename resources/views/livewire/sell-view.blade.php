@@ -64,7 +64,7 @@
                                     <select name="" id="" class="form-select" wire:model.live="product_id">
                                         <option value="">Seleccione Producto</option>
                                         @foreach($products ?? [] as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            <option value="{{ $item->id }}">{{ $item->name }}@if($item->is_serialize) ({{ $item->id }}) @endif</option>
                                         @endforeach
                                     </select>
                                     <button data-bs-toggle="modal" data-bs-target="#modal-scanner" class="btn btn-primary"><i class="fa fa-qrcode"></i></button>

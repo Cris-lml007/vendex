@@ -59,12 +59,16 @@ class InventoryView extends Component
             $stock = Stock::where('product_id', $this->kardex->product_id)
                 ->where('store_id', $this->kardex->store_id)
                 ->first();
-            if($this->kardex->type == Type::IN){
-                $stock->quantity -= $this->kardex->quantity;
+            if(!$this->kardex->product->is_serialize){
+                if($this->kardex->type == Type::IN){
+                    $stock->quantity -= $this->kardex->quantity;
+                }else{
+                    $stock->quantity += $this->kardex->quantity;
+                }
+                $stock->save();
             }else{
-                $stock->quantity += $this->kardex->quantity;
+                $this->kardex->product->delete();
             }
-            $stock->save();
             $this->kardex->delete();
             $this->last = Kardex::latest('id')->first()->id ?? null;
             return true;

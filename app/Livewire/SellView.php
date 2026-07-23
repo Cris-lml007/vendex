@@ -57,6 +57,11 @@ class SellView extends Component
         $p = Product::find($this->product_id);
         if($p?->id != null && $p->status == Status::ACTIVE){
             if($this->store == ''){
+                $this->product_price = '';
+                $this->product_quantity = '';
+                $this->quantity = '';
+                $this->price = '';
+
                 $this->js('Swal.fire({
             title: "Sin Tienda?",
             text: "Por favor Seleccione una Tienda",
@@ -65,10 +70,16 @@ class SellView extends Component
                 return;
             }
             $this->product_price = $p->price;
-            $this->product_quantity = Stock::where('store_id',$this->store)
-                ->where('product_id',$this->product_id)
-                ->first()
-                ->quantity ?? 0;
+
+            $p = Product::find($this->product_id);
+            if($p->is_serialize && $p->status == Status::ACTIVE){
+                $this->product_quantity = 1;
+            }else{
+                $this->product_quantity = Stock::where('store_id',$this->store)
+                    ->where('product_id',$this->product_id)
+                    ->first()
+                    ->quantity ?? 0;
+            }
         }else{
             $this->product_price = '';
             $this->product_quantity = '';
@@ -105,10 +116,15 @@ class SellView extends Component
             return;
         }
 
-        $stock = Stock::where('store_id',$this->store)
-            ->where('product_id',$this->product_id)
-            ->first();
-        if(($stock->quantity ?? 0) < $this->quantity){
+        $p = Product::find($this->product_id);
+        if($p->is_serialize && $p->status == Status::ACTIVE){
+            $value = 1;
+        }else{
+            $value = Stock::where('store_id',$this->store)
+                ->where('product_id',$this->product_id)
+                ->first()->quantity ?? 0;
+        }
+        if($value < $this->quantity){
             $this->js('Swal.fire({title: "Ups...",icon: "error",showCancelButton: false, text: "Parace no haber Unidades Disponibles"})');
             $this->updatedProductId();
             return;
@@ -163,16 +179,25 @@ class SellView extends Component
                 ]);
 
                 foreach ($this->list as $item) {
-                    $stock = Stock::where('store_id',$this->store)
-                        ->where('product_id',$item['product_id'])
-                        ->first();
+                    $p = Product::find($item['product_id']);
+                    $stock = null;
+                    if($p->is_serialize && $p->status == Status::ACTIVE){
+                        $value = 1;
+                    }else{
+                        $stock = Stock::where('store_id',$this->store)
+                            ->where('product_id',$item['product_id'])
+                            ->first();
+                        $value =  $stock->quantity ?? 0;
+                    }
 
-                    if($stock->quantity < $item['quantity']){
+                    if($value < $item['quantity']){
                         throw new \Exception('Cantidad no disponible');
                     }
 
-                    $stock->quantity = $stock->quantity - $item['quantity'];
-                    $stock->save();
+                    if($stock != null){
+                        $stock->quantity = $stock->quantity - $item['quantity'];
+                        $stock->save();
+                    }
 
                     $detail = DetailTransaction::create([
                         'transaction_id' => $transaction->id,
@@ -193,6 +218,9 @@ class SellView extends Component
                     $register->referenceable_type = DetailTransaction::class;
                     $register->referenceable_id = $detail->id;
                     $register->save();
+                    $p->store_id = null;
+                    $p->status = Status::SALE;
+                    $p->save();
                 }
 
                 $this->transaction = $transaction;
@@ -244,7 +272,17 @@ class SellView extends Component
         if(Auth::user()?->store?->status != Status::ACTIVE && Auth::user()->role == Role::SELLER){
             return abort(403);
         }
-        $this->products = Product::where('status', Status::ACTIVE)->get();
+
+        $this->products = Product::where('status', Status::ACTIVE)
+            ->where(function ($query) {
+                $query->whereHas('stocks', function($q){
+                    $q->where('store_id',$this->store);
+                })->orWhere(function($qq){
+                    $qq->where('store_id',$this->store)
+                        ->where('store_id','!=',null);
+                });
+            })->get();
+
         $this->stores = Store::where('type',Type::STORE)
             ->where('status', Status::ACTIVE)->get();
         return view('livewire.sell-view');

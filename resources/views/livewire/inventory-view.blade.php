@@ -18,7 +18,7 @@
                 @foreach($data as $item)
                     <tr>
                         <td>{{ $item->id }}</td>
-                        <td>{{ $item->product->name }}</td>
+                        <td><a href="{{ route('admin.product.id', $item->product->id) }}">{{ $item->product->name }}@if($item->product->is_serialize) ({{ $item->product->id }})@endif</a></td>
                         @if($item->type == \App\Enums\Type::IN)
                             <td>{{ \Illuminate\Support\Number::format($item->price*$item->quantity,2) }}</td>
                             <td>---</td>

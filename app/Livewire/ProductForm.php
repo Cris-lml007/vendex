@@ -268,8 +268,9 @@ class ProductForm extends Component
 
             $this->product->is_serialize = $this->is_serial;
             $this->product->parent_id = $this->product_id;
-            #dd($this->store_id, $this->product->store_id);
-            if($this->store_id != $this->product->store_id) {
+            #$this->product->store_id = $this->store_id;
+            //dd($this->store_id, $this->product->store_id);
+            if($this->store_id != $this->product->store_id && $this->edit) {
                 $t = new Transfer();
                 $t->user_id = Auth::id();
                 $t->save();

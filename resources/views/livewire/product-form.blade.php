@@ -242,14 +242,14 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($product->children as $item)
+                                        @foreach($product->children()->where('status',\App\Enums\Status::ACTIVE)->get() as $item)
                                             <tr>
                                                 <td>{{ $item->id }}</td>
                                                 <td>{{ $item->name }}</td>
                                                 <td>{{ $item->price }}</td>
                                                 <td>
                                                     <select class="form-select" wire:model="product_serials[{{$item->store_id}}]">
-                                                        <option value="{{ $item->store_id }}">{{ $item->store->name }}</option>
+                                                        <option value="{{ $item->store_id }}">{{ $item?->store?->name ?? '' }}</option>
                                                         @foreach($stores as $item1)
                                                             <option value="{{ $item1->id }}">{{ $item1->name }}</option>
                                                         @endforeach
@@ -266,7 +266,7 @@
                             </tr>
                             <tr>
                                 <td><strong>SUBTOTAL</strong></td>
-                                <td>{{ $this->product->children()->where('is_serialize',true)
+                                <td>{{ $this->product->children()->where('is_serialize',true)->where('status',\App\Enums\Status::ACTIVE)
                         ->whereNotExists(function ($query){
                             $query->select(DB::raw(1))
                                 ->from('detail_transactions')
@@ -276,7 +276,7 @@
                             </tbody>
                             <tfoot>
                             <th>TOTAL</th>
-                            <th>{{ $total + $this->product->children()->where('is_serialize',true)
+                            <th>{{ $total + $this->product->children()->where('is_serialize',true)->where('status',\App\Enums\Status::ACTIVE)
                         ->whereNotExists(function ($query){
                             $query->select(DB::raw(1))
                                 ->from('detail_transactions')
