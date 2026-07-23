@@ -18,6 +18,8 @@ class UsersForm extends Component
     public $status;
     public $role;
     public $store_id;
+    public $entry_time;
+    public $exit_time;
 
     public User $user;
 
@@ -31,6 +33,8 @@ class UsersForm extends Component
         $this->role = $user->role;
         $this->store_id = $user->store_id;
         $this->phone = $user->phone;
+        $this->entry_time = $user->entry_time;
+        $this->exit_time = $user->exit_time;
     }
 
     public function mount()
@@ -57,7 +61,9 @@ class UsersForm extends Component
             'password' => $this->password,
             'status' => $this->status,
             'role' => $this->role,
-            'store_id' => $this->store_id
+            'store_id' => $this->store_id,
+            'entry_time' => $this->entry_time,
+            'exit_time' => $this->exit_time,
         ]);
 
         $this->redirect(route('admin.users'));

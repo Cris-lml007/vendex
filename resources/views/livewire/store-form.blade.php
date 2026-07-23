@@ -55,7 +55,9 @@
                     <select class="form-select" wire:model="status">
                         <option value="">Seleccione un Estado</option>
                         @foreach (App\Enums\Status::cases() as $item)
-                            <option value="{{ $item->value }}">{{ __('messages.'.$item->name) }}</option>
+                            @if($item != \App\Enums\Status::SALE)
+                                <option value="{{ $item->value }}">{{ __('messages.'.$item->name) }}</option>
+                            @endif
                         @endforeach
                     </select>
                     @error('status')

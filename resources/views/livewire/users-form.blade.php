@@ -56,12 +56,24 @@
                     <select name="" id="" class="form-select" wire:model="status">
                         <option value="">Seleccione Estado</option>
                         @foreach(\App\Enums\Status::cases() as $item)
-                            <option value="{{ $item }}">{{ __('messages.'.$item->name) }}</option>
+                            @if($item != \App\Enums\Status::SALE)
+                                <option value="{{ $item }}">{{ __('messages.'.$item->name) }}</option>
+                            @endif
                         @endforeach
                     </select>
                     @error('status')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="">Hora de Ingreso</label>
+                    <input type="time" class="form-control" wire:model="entry_time">
+                </div>
+                <div class="col">
+                    <label for="">Hora de Ingreso</label>
+                    <input type="time" class="form-control" wire:model="exit_time">
                 </div>
             </div>
             <div class="row mb-3">

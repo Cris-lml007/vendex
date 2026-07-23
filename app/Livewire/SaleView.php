@@ -53,27 +53,44 @@ class SaleView extends Component
             'Fecha' => 'created_at',
             'Acciones' => null];
         $stores = Store::where('type', Type::STORE)->get();
+
+
+        $search = $this->list['search'];
         if(Auth::user()->role == Role::SELLER){
             $this->store = Auth::user()->store_id;
             $this->lock = true;
+
+            if($search != ''){
+                $data = Auth::user()->sales()->where('store_id',$this->store)
+                    ->where(function (Builder $builder) use ($search) {
+                        $builder->whereHas('customer', function (Builder $builder) use ($search) {
+                            $builder->where('name', 'like', '%' . $search . '%');
+                        })->orWhere('created_at', 'like', '%' . $search . '%');
+                    })->orderBy($this->list['sort_field'],$this->list['sort_direction'])
+                    ->paginate();
+            }else{
+                $data = Auth::user()->sales()->where('store_id',$this->store)
+                    ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
+                    ->paginate();
+            }
+        }else{
+            if($search != ''){
+                $data = Transaction::where('store_id',$this->store)
+                    ->where(function (Builder $builder) use ($search) {
+                        $builder->whereHas('customer', function (Builder $builder) use ($search) {
+                            $builder->where('name', 'like', '%' . $search . '%');
+                        })->orWhereHas('user', function (Builder $builder) use ($search) {
+                            $builder->where('name', 'like', '%' . $search . '%');
+                        })->orWhere('created_at', 'like', '%' . $search . '%');
+                    })->orderBy($this->list['sort_field'],$this->list['sort_direction'])
+                    ->paginate();
+            }else{
+                $data = Transaction::where('store_id',$this->store)
+                    ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
+                    ->paginate();
+            }
         }
 
-        $search = $this->list['search'];
-        if($search != ''){
-            $data = Transaction::where('store_id',$this->store)
-                ->where(function (Builder $builder) use ($search) {
-                    $builder->whereHas('customer', function (Builder $builder) use ($search) {
-                        $builder->where('name', 'like', '%' . $search . '%');
-                    })->orWhereHas('user', function (Builder $builder) use ($search) {
-                        $builder->where('name', 'like', '%' . $search . '%');
-                    })->orWhere('created_at', 'like', '%' . $search . '%');
-                })->orderBy($this->list['sort_field'],$this->list['sort_direction'])
-                ->paginate();
-        }else{
-            $data = Transaction::where('store_id',$this->store)
-            ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
-            ->paginate();
-        }
 
         $this->list['pages_max'] = $data->lastPage();
         return view('livewire.sale-view', compact(['heads', 'stores', 'data']));

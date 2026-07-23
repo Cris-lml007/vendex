@@ -27,7 +27,9 @@ class User extends Authenticatable
         'status',
         'phone',
         'username',
-        'store_id'
+        'store_id',
+        'entry_time',
+        'exit_time',
     ];
 
     /**
@@ -58,5 +60,13 @@ class User extends Authenticatable
     public function store()
     {
         return $this->belongsTo(Store::class, 'store_id','id');
+    }
+
+    public function attendances(){
+        return $this->hasMany(Attendance::class, 'user_id', 'id');
+    }
+
+    public function sales(){
+        return $this->hasMany(Transaction::class,'user_id','id');
     }
 }

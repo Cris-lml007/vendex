@@ -23,6 +23,10 @@ return new class extends Migration
             $table->enum('role',Role::cases());
             $table->unsignedBigInteger('store_id')->nullable();
             $table->integer('phone')->nullable();
+
+            $table->time('entry_time')->nullable();
+            $table->time('exit_time')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });

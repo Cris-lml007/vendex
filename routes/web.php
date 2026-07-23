@@ -30,6 +30,8 @@ Auth::routes([
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::prefix('/dashboard')->middleware('auth')->group(function(){
+    Route::get('/profile', \App\Livewire\Profile::class)->name('admin.profile');
+
     Route::can('isSeller')->get('/catalog', CatalogView::class)->name('admin.catalog');
 
     Route::can('isPrivilegied')->get('/products',ProductView::class)->name('admin.products');

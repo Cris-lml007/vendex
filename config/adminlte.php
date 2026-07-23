@@ -368,6 +368,11 @@ return [
             'route' => 'admin.reports',
             'icon' => 'fas fa-fw fa-chart-area',
         ],
+        [
+            'text' => 'Perfil',
+            'route' => 'admin.profile',
+            'icon' => 'fas fa-fw fa-user',
+        ],
     ],
 
     /*
