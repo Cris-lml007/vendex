@@ -15,6 +15,8 @@ class Profile extends Component
 
     private function isInsideGeofence(): bool {
 
+        if($this->user->store_id == null) return true;
+
         if($this->user->store->lat == null || $this->user->store->long == null) {
             return true;
         }
