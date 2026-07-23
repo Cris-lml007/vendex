@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="row align-items-end">
+                        <div class="row align-items-end mb-3">
                             <div class="col-md-5">
                                 <label class="form-label">Producto</label>
                                 <div class="input-group">
@@ -67,6 +67,7 @@
                                             <option value="{{ $item->id }}">{{ $item->name }}@if($item->is_serialize) ({{ $item->id }}) @endif</option>
                                         @endforeach
                                     </select>
+                                    <button wire:click="searchOn" class="btn btn-primary"><i class="fa fa-search"></i></button>
                                     <button data-bs-toggle="modal" data-bs-target="#modal-scanner" class="btn btn-primary"><i class="fa fa-qrcode"></i></button>
                                 </div>
                             </div>
@@ -85,7 +86,12 @@
                                 <button wire:click="addProduct" class="btn btn-primary w-100">Agregar</button>
                             </div>
                         </div>
-
+                        <div @class(['row','mb-3','d-none' => !$is_search])>
+                            <div class="col">
+                                <label for="">Busqueda</label>
+                                <input wire:model.live="search" type="text" class="form-control" placeholder="Ingrese Busqueda">
+                            </div>
+                        </div>
                     </div>
                 </div>
 

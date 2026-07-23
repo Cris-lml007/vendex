@@ -43,7 +43,7 @@
                     <tbody>
                     @foreach($transaction->details ?? [] as $item)
                         <tr>
-                            <td>{{ $item->product->name }}</td>
+                            <td><a href="{{ route('admin.product.id', $item->product->id) }}">{{ $item->product->name }}@if($item->product->is_serialize)({{ $item->product->id }})@endif</a> </td>
                             <td>{{ $item->quantity }}</td>
                             <td>{{ Number::format($item->price,2) }}</td>
                             <td>{{ Number::format($item->subtotal,2) }}</td>
