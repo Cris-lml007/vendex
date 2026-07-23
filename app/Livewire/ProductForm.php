@@ -268,18 +268,57 @@ class ProductForm extends Component
 
             $this->product->is_serialize = $this->is_serial;
             $this->product->parent_id = $this->product_id;
+            #dd($this->store_id, $this->product->store_id);
+            if($this->store_id != $this->product->store_id) {
+                $t = new Transfer();
+                $t->user_id = Auth::id();
+                $t->save();
+
+                $k1 = Kardex::create([
+                    'product_id' => $this->product->id,
+                    'store_id' => $this->product->store_id,
+                    'quantity' => 0,
+                    'price' => 0,
+                    'type' => Type::TRANSFER,
+                    'user_id' => Auth::user()->id
+                ]);
+                $k2 = Kardex::create([
+                    'product_id' => $this->product->id,
+                    'store_id' => $this->store_id,
+                    'quantity' => 1,
+                    'price' => 0,
+                    'type' => Type::TRANSFER,
+                    'user_id' => Auth::user()->id
+                ]);
+                $transfer = DetailTransfer::create([
+                    'transfer_id' => $t->id,
+                    'product_id' => $this->product->id,
+                    'store_id' => $this->product->store_id,
+                    'quantity' => 1,
+                    'kardex_id' => $k1->id,
+                ]);
+                $transfer = DetailTransfer::create([
+                    'transfer_id' => $t->id,
+                    'product_id' => $this->product->id,
+                    'store_id' => $this->store_id,
+                    'quantity' => 0,
+                    'kardex_id' => $k2->id,
+                ]);
+            }
             $this->product->store_id = $this->store_id ?? null;
             $this->product->save();
 
-            if($this->product->is_serialize){
-                Kardex::create([
-                    'product_id' => $this->product->id,
-                    'quantity' => 1,
-                    'price' => $this->price_purchase,
-                    'type' => Type::IN,
-                    'user_id' => auth()->id(),
-                    'store_id' => $this->store_id,
-                ]);
+            if(!$this->edit){
+                if($this->product->is_serialize){
+                    Kardex::create([
+                        'product_id' => $this->product->id,
+                        'quantity' => 1,
+                        'price' => $this->price_purchase,
+                        'type' => Type::IN,
+                        'user_id' => auth()->id(),
+                        'store_id' => $this->store_id,
+                    ]);
+                }
             }
 
             if($this->number_labels > 0){
