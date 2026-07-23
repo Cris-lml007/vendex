@@ -15,6 +15,10 @@ class Profile extends Component
 
     private function isInsideGeofence(): bool {
 
+        if($this->user->store->lat == null || $this->user->store->long == null) {
+            return true;
+        }
+
         $earthRadius = 6371000; // metros
 
         $latFrom = deg2rad($this->user->store->lat);
