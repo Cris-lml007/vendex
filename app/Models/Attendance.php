@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Type;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Attendance extends Model
@@ -10,6 +11,8 @@ class Attendance extends Model
     public $fillable = [
         'user_id',
         'type',
+        'lat',
+        'lng'
     ];
 
     public function user(){

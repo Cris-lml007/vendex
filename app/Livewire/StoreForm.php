@@ -6,10 +6,15 @@ use App\Enums\Type;
 use App\Models\Kardex;
 use App\Models\Stock;
 use App\Models\Store;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class StoreForm extends Component
 {
+
+    use WithFileUploads;
 
     public $name;
     public $type;
@@ -29,6 +34,12 @@ class StoreForm extends Component
     public $radius;
 
 
+    #[Validate('image|max:1024')]
+    public $photo;
+
+    public $photo_url;
+
+
     public function mount(Store $store = null){
         if($store->id != null){
             $this->edit = true;
@@ -45,6 +56,14 @@ class StoreForm extends Component
 
             $this->stock = $this->store->products;
             $this->sales = Kardex::where('store_id', $this->store->id)->where('type',Type::OUT)->get();
+
+
+            if (Storage::disk('local')->exists("stores/{$this->store->id}.jpg")) {
+                $this->photo_url = Storage::disk('local')
+                    ->temporaryUrl("stores/{$this->store->id}.jpg",
+                        now()->addMinutes(5)
+                    );
+            }
         }else{
             $this->store = new Store();
         }
@@ -70,6 +89,11 @@ class StoreForm extends Component
         $this->store->long = $this->long;
         $this->store->radius = $this->radius;
         $this->store->save();
+
+
+        if($this->photo != null){
+            $this->photo->storeAs('stores', $this->store->id.'.jpg');
+        }
 
         if($this->edit){
             return $this->redirect(route('admin.stores'));

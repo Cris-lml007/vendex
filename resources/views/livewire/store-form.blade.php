@@ -81,6 +81,30 @@
                 </div>
             </div>
 
+            <div class="row mb-3">
+                <div class="col">
+                    <label>Imagen de Producto</label>
+                    @if($photo)
+                        {{-- Vista previa de la nueva imagen --}}
+                        <div class="d-flex justify-content-center" style="height: 300px;">
+                            <img src="{{ $photo->temporaryUrl() }}" class="img-thumbnail">
+                        </div>
+                    @elseif($photo_url)
+                        {{-- Imagen guardada --}}
+                        <div class="d-flex justify-content-center" style="height: 300px;">
+                            <img src="{{ $photo_url }}" class="img-thumbnail">
+                        </div>
+                    @else
+                        {{-- Sin imagen --}}
+                        <div class="border rounded p-5 text-center">
+                            Sin imagen
+                        </div>
+                    @endif
+                    <input type="file" class="form-control" wire:model="photo" id="photo">
+                </div>
+            </div>
+
+
 
             @if($edit)
                 <div class="row">
@@ -136,6 +160,48 @@
 
 @script
     <script>
+
+        const input = document.querySelector('#photo');
+
+        input.addEventListener('change', (evento) => {
+            const archivo = evento.target.files[0];
+            if (!archivo) return;
+
+            const lector = new FileReader();
+            lector.readAsDataURL(archivo);
+
+            lector.onload = (e) => {
+                const imagen = new Image();
+                imagen.src = e.target.result;
+
+                imagen.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // Ajusta el ancho y alto máximo deseado
+                    const anchoMaximo = 800;
+                    const escala = anchoMaximo / imagen.width;
+                    canvas.width = anchoMaximo;
+                    canvas.height = imagen.height * escala;
+
+                    // Dibuja la imagen redimensionada en el canvas
+                    ctx.drawImage(imagen, 0, 0, canvas.width, canvas.height);
+
+                    // Convierte el canvas a un Blob comprimido (calidad 0.7 = 70%)
+                    canvas.toBlob((blob) => {
+                        const imagenOptimizado = new File([blob], archivo.name, {
+                            type: 'image/jpeg',
+                            lastModified: Date.now(),
+                        });
+                        console.log('Imagen lista:', imagenOptimizado);
+                        @this.upload('photo', imagenOptimizado);
+                    }, 'image/jpeg', 0.7);
+                };
+            };
+        });
+
+
+
 
         const modalElement = document.getElementById('modal-store');
         let map;

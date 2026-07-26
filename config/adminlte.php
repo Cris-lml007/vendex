@@ -358,6 +358,10 @@ return [
             'text' => 'Reportes',
             'route' => 'admin.reports',
             'icon' => 'fas fa-fw fa-chart-area',
+        ],[
+            'text' => 'Asistencias',
+            'route' => 'admin.attendances',
+            'icon' => 'fas fa-fw fa-list-alt',
         ],
         [
             'text' => 'Perfil',

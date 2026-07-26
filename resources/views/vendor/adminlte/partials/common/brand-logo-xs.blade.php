@@ -1,5 +1,16 @@
 @inject('layoutHelper', 'JeroenNoten\LaravelAdminLte\Helpers\LayoutHelper')
 
+@php
+    if(\Illuminate\Support\Facades\Storage::disk('local')->exists("stores/".\Illuminate\Support\Facades\Auth::user()->store_id .".jpg")){
+        $url = \Illuminate\Support\Facades\Storage::disk('local')
+        ->temporaryUrl("stores/".\Illuminate\Support\Facades\Auth::user()->store_id .".jpg","2027-12-12");
+    }else{
+        $url = asset(config('adminlte.logo_img', 'vendor/adminlte/dist/img/AdminLTELogo.png'));
+    }
+@endphp
+
+
+
 @php( $dashboard_url = View::getSection('dashboard_url') ?? config('adminlte.dashboard_url', 'home') )
 
 @if (config('adminlte.use_route_url', false))
@@ -16,7 +27,7 @@
     @endif>
 
     {{-- Small brand logo --}}
-    <img src="{{ asset(config('adminlte.logo_img', 'vendor/adminlte/dist/img/AdminLTELogo.png')) }}"
+    <img src="{{ $url }}"
          alt="{{ config('adminlte.logo_img_alt', 'AdminLTE') }}"
          class="{{ config('adminlte.logo_img_class', 'brand-image img-circle elevation-3') }}"
          style="opacity:.8">

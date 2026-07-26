@@ -75,6 +75,8 @@ Route::prefix('/dashboard')->middleware('auth')->group(function(){
         ];
     })->name('admin.notifications.get');
 
+    Route::get('/attendances', \App\Livewire\AttendancesView::class)->name('admin.attendances');
+
     Route::get('/profile', \App\Livewire\Profile::class)->name('admin.profile');
 
     Route::can('isSeller')->get('/catalog', CatalogView::class)->name('admin.catalog');
