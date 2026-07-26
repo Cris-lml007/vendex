@@ -2,8 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Enums\Role;
 use App\Models\Brand;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -51,6 +54,27 @@ class CategoryView extends Component
     public function categories(){
     }
 
+    public function removeCategory($password,$id)
+    {
+        if(Hash::check($password, Auth::user()->password) && Auth::user()->role == Role::ADMIN){
+            Category::destroy($id);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function removeBrand($password,$id)
+    {
+        if(Hash::check($password, Auth::user()->password) && Auth::user()->role == Role::ADMIN){
+            Brand::destroy($id);
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
     #[On('refresh')]
     public function render()
     {
@@ -63,6 +87,7 @@ class CategoryView extends Component
         $heads_brand = [
             'Id' => 'id',
             'Nombre' => 'name',
+            'Origen' => 'made',
             'Acciones' => null
         ];
 

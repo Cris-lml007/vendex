@@ -2,7 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Enums\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -26,6 +29,19 @@ class UsersView extends Component
     public function getUser($id)
     {
         $this->dispatch('getUser',$id)->to(UsersForm::class);
+    }
+
+    public function remove($password, $id)
+    {
+        if(Hash::check($password, Auth::user()->password) && Auth::user()->role == Role::ADMIN){
+            $user = User::find($id);
+            if($user->sales()->count() > 0 || $user->attendances()->count() > 0){
+                return false;
+            }
+            $user->delete();
+        }else{
+            return false;
+        }
     }
 
     public function render()

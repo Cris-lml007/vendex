@@ -245,8 +245,8 @@ class ProductForm extends Component
         $r = [
             'name' => 'required',
             'price' => 'required|numeric|min:0',
-            'category' => 'required',
-            'brand' => 'required',
+            //'category' => 'required',
+            //'brand' => 'required',
             'model' => 'required',
             'barcode' => 'unique:products,id,'. $this?->product?->id ?? '',
         ];

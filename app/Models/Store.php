@@ -20,4 +20,20 @@ class Store extends Model
     public function products(){
         return $this->belongstomany(Product::class,'stocks')->withPivot('quantity');
     }
+
+    public function products_serial(){
+        return $this->hasMany(Product::class);
+    }
+
+    public function transactions(){
+        return $this->hasmany(Transaction::class);
+    }
+
+    public function kardex(){
+        return $this->hasMany(Kardex::class);
+    }
+
+    public function stocks(){
+        return $this->hasMany(Stock::class);
+    }
 }

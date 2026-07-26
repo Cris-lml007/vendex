@@ -19,6 +19,7 @@
                             <button data-bs-toggle="modal" data-bs-target="#modal-category"
                                 wire:click="getCategory({{ $item->id }})" class="btn btn-primary"><i
                                     class="fa fa-eye"></i></button>
+                            <button wire:click="$js.deleteCategory({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></button>
                         </td>
                     </tr>
                 @endforeach
@@ -40,6 +41,7 @@
                             <button data-bs-toggle="modal" data-bs-target="#modal-brand"
                                     wire:click="getBrand({{ $item->id }})" class="btn btn-primary"><i
                                     class="fa fa-eye"></i></button>
+                            <button wire:click="$js.deleteBrand({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></button>
                         </td>
                     </tr>
                 @endforeach
@@ -59,3 +61,65 @@
         </x-modal>
     @endisland
 </div>
+
+@script
+<script>
+    this.$js.deleteCategory = (id) => {
+        window.Swal.fire({
+            icon: "warning",
+            title: "Eliminar?",
+            text: "Esta seguro que desea eliminar, este proceso puede dañar los registros",
+            input: "password",
+            confirmButtonText: "Eliminar",
+            confirmButtonColor: "gray",
+            background: "red",
+            color: "white",
+        }).then( async (result) => {
+            if(result.isConfirmed){
+                let r = await $wire.removeBrand(result.value,id)
+                console.log(r)
+                if(r){
+                    window.Swal.fire({
+                        title: "Eliminado Correctamente",
+                        icon: "success"
+                    })
+                }else{
+                    window.Swal.fire({
+                        title: "No se pudo Eliminar",
+                        icon: "error"
+                    })
+                }
+            }
+        });
+    }
+
+    this.$js.deleteBrand = (id) => {
+        window.Swal.fire({
+            icon: "warning",
+            title: "Eliminar?",
+            text: "Esta seguro que desea eliminar, este proceso puede dañar los registros",
+            input: "password",
+            confirmButtonText: "Eliminar",
+            confirmButtonColor: "gray",
+            background: "red",
+            color: "white",
+        }).then( async (result) => {
+            if(result.isConfirmed){
+                let r = await $wire.removeBrand(result.value,id)
+                console.log(r)
+                if(r){
+                    window.Swal.fire({
+                        title: "Eliminado Correctamente",
+                        icon: "success"
+                    })
+                }else{
+                    window.Swal.fire({
+                        title: "No se pudo Eliminar",
+                        icon: "error"
+                    })
+                }
+            }
+        });
+    }
+</script>
+@endscript

@@ -14,7 +14,11 @@
                     <tr>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->model }}</td>
-                        <td><strong style="color: {{ $item->brand->color_fg }}; background: {{ $item->brand->color_bg }}">{{ $item->brand->name }}</strong></td>
+                        @if($item->brand)
+                            <td><strong style="color: {{ $item->brand->color_fg }}; background: {{ $item->brand->color_bg }}">{{ $item->brand->name }}</strong></td>
+                        @else
+                            <td><strong>---</strong></td>
+                        @endif
                         <td>{{ $item?->category?->name ?? '---' }}</td>
                         <td>{{ Number::format($item->price, precision: 2) }}</td>
                     <td>
