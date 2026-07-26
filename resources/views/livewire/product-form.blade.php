@@ -151,7 +151,7 @@
                             Sin imagen
                         </div>
                     @endif
-                    <input type="file" class="form-control" wire:model="photo">
+                    <input type="file" class="form-control" wire:model="photo" id="photo">
                 </div>
             </div>
 
@@ -302,3 +302,47 @@
         @endif
     </form>
 </div>
+
+@script
+    <script>
+        const input = document.querySelector('#photo');
+
+        input.addEventListener('change', (evento) => {
+            const archivo = evento.target.files[0];
+            if (!archivo) return;
+
+            const lector = new FileReader();
+            lector.readAsDataURL(archivo);
+
+            lector.onload = (e) => {
+                const imagen = new Image();
+                imagen.src = e.target.result;
+
+                imagen.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // Ajusta el ancho y alto máximo deseado
+                    const anchoMaximo = 800;
+                    const escala = anchoMaximo / imagen.width;
+                    canvas.width = anchoMaximo;
+                    canvas.height = imagen.height * escala;
+
+                    // Dibuja la imagen redimensionada en el canvas
+                    ctx.drawImage(imagen, 0, 0, canvas.width, canvas.height);
+
+                    // Convierte el canvas a un Blob comprimido (calidad 0.7 = 70%)
+                    canvas.toBlob((blob) => {
+                        const imagenOptimizado = new File([blob], archivo.name, {
+                            type: 'image/jpeg',
+                            lastModified: Date.now(),
+                        });
+                        console.log('Imagen lista:', imagenOptimizado);
+                        @this.upload('photo', imagenOptimizado);
+                    }, 'image/jpeg', 0.7);
+                };
+            };
+        });
+
+    </script>
+@endscript

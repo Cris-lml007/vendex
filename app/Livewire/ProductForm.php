@@ -37,7 +37,7 @@ class ProductForm extends Component
     public $model;
     public $barcode;
 
-    #[Validate('image|max:2048')]
+    #[Validate('image|max:1024')]
     public $photo;
 
     public $photo_url;
@@ -205,8 +205,14 @@ class ProductForm extends Component
             $this->barcode_img = $this->generateBarcode($this->barcode);//  'data:image/png;base64,' . DNS1DFacade::getBarcodePNG($this->barcode, 'C128');
 
             if (Storage::disk('local')->exists("products/{$this->product->id}.jpg")) {
-                $this->photo_url = Storage::disk('local')->get("products/{$this->product->id}.jpg");
-                $this->photo_url = "data:image/png;base64,". base64_encode($this->photo_url);
+                //$this->photo_url = Storage::disk('local')->get("products/{$this->product->id}.jpg");
+
+                $this->photo_url = Storage::disk('local')
+                    ->temporaryUrl("products/{$this->product->id}.jpg",
+                        now()->addMinutes(5)
+                    );
+
+                //$this->photo_url = "data:image/png;base64,". base64_encode($this->photo_url);
             }
             $this->stores = Store::all();
             foreach ($this->stores as $store){
@@ -223,6 +229,7 @@ class ProductForm extends Component
     public function save(){
         //dd($this->product_serials);
         //dd($this->store_id);
+        //dd($this->photo);
         $r = [
             'name' => 'required',
             'price' => 'required|numeric|min:0',
