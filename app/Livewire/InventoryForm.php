@@ -120,7 +120,7 @@ class InventoryForm extends Component
             'Cantidad' => 'quantity',
         ];
         $stores = Store::all();
-        $products = Product::all();
+        $products = Product::where('is_serialize',false)->get();
         return view('livewire.inventory-form',compact('stores','products','heads'));
     }
 }
