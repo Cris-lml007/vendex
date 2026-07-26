@@ -328,40 +328,48 @@ return [
             'text' => 'Categoria',
             'route' => 'admin.categories',
             'icon' => 'fas fa-fw fa-layer-group',
+            'can' => 'isPrivilegied',
         ],
         [
             'text' => 'Productos',
             'route' => 'admin.products',
             'icon' => 'fas fa-fw fa-cubes',
+            'can' => 'isPrivilegied',
         ],
         [
             'text' => 'Registros de Movimientos',
             'route' => 'admin.kardex',
             'icon' => 'fas fa-fw fa-book-open',
+            'can' => 'isPrivilegied',
         ],
         [
             'text' => 'Transferencias',
             'route' => 'admin.transfers',
             'icon' => 'fas fa-fw fa-share',
+            'can' => 'isPrivilegied',
         ],
         [
             'text' => 'Tiendas y Almacenes',
             'route' => 'admin.stores',
             'icon' => 'fas fa-fw fa-building',
+            'can' => 'isPrivilegied',
         ],
         [
             'text' => 'Gestion de Usuarios',
             'route' => 'admin.users',
             'icon' => 'fas fa-fw fa-lock',
+            'can' => 'isAdmin',
         ],
         [
             'text' => 'Reportes',
             'route' => 'admin.reports',
             'icon' => 'fas fa-fw fa-chart-area',
+            'can' => 'isPrivilegied',
         ],[
             'text' => 'Asistencias',
             'route' => 'admin.attendances',
             'icon' => 'fas fa-fw fa-list-alt',
+            'can' => 'isPrivilegied',
         ],
         [
             'text' => 'Perfil',
