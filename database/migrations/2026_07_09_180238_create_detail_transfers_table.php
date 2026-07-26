@@ -20,6 +20,10 @@ return new class extends Migration
             $table->unsignedBigInteger('store_id');
             $table->timestamps();
 
+            $table->foreign('transfer_id')->references('id')->on('transfers')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('kardex_id')->references('id')->on('kardexes')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('store_id')->references('id')->on('stores')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('product_id')->references('id')->on('products')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

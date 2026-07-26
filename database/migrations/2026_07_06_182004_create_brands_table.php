@@ -22,7 +22,9 @@ return new class extends Migration
 
         Schema::table('products', function (Blueprint $table) {
            $table->dropColumn('brand');
-           $table->unsignedBigInteger('brand_id');
+           $table->unsignedBigInteger('brand_id')->nullable();
+
+           $table->foreign('brand_id')->references('id')->on('brands')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 

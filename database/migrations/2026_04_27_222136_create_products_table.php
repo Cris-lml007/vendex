@@ -28,6 +28,8 @@ return new class extends Migration
             $table->enum('status',Status::cases())->default(Status::ACTIVE);
             $table->unsignedBigInteger('category_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('category_id')->references('id')->on('categories')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 

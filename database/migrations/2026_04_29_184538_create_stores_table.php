@@ -26,6 +26,11 @@ return new class extends Migration
             $table->enum('type',Type::cases())->default(Type::STORE);
             $table->timestamps();
         });
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->foreign('store_id')->references('id')->on('stores')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreign('parent_id')->references('id')->on('products')->cascadeOnUpdate()->nullOnDelete();
+        });
     }
 
     /**

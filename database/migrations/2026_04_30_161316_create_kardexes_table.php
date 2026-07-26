@@ -23,6 +23,10 @@ return new class extends Migration
             $table->unsignedBigInteger('referenceable_id')->nullable();
             $table->string('referenceable_type')->nullable();
             $table->timestamps();
+
+            $table->foreign('product_id')->references('id')->on('products')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreign('store_id')->references('id')->on('stores')->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->restrictOnDelete();
         });
     }
 
