@@ -159,8 +159,8 @@
                 <div class="col">
                     <label for="">Barcode</label>
                     <div class="input-group" >
-                        <input type="text" class="form-control" wire:model.live="barcode" placeholder="Ingrese Barcode">
-                        <button type="button" data-bs-target="#modal-scanner" data-bs-toggle="modal" class="btn btn-primary input-group-text"><i class="fa fa-qrcode"></i></button>
+                        <input type="text" class="form-control" wire:model.live="barcode" placeholder="Ingrese Barcode" @if($edit) readonly @endif>
+                        <button type="button" data-bs-target="#modal-scanner" data-bs-toggle="modal" class="btn btn-primary input-group-text" @if($edit) disabled @endif><i class="fa fa-qrcode"></i></button>
                     </div>
                 </div>
             </div>
@@ -297,6 +297,9 @@
         @else
             <div class="d-flex justify-content-end mb-3">
                 <button type="submit" class="btn btn-primary me-1">Guargar</button>
+                @if($product->details()->count() < 1 && $product->kardex()->count() < 1)
+                    <button wire:click="remove" type="button" class="btn btn-danger me-1">Eliminar</button>
+                @endif
                 <a href="{{route('admin.products')}}" class="btn btn-secondary">Cerrar</a>
             </div>
         @endif

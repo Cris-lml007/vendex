@@ -226,6 +226,18 @@ class ProductForm extends Component
         }
     }
 
+    public function remove()
+    {
+        if($this->product->id != null){
+            if( $this->product->details()->count() < 1 && $this->product->kardex()->count() < 1){
+                Stock::where('product_id',$this->product->id)->delete();
+                Storage::disk('local')->delete("products/{$this->product->id}.jpg");
+                $this->product->delete();
+                $this->redirect(route('admin.products'));
+            }
+        }
+    }
+
     public function save(){
         //dd($this->product_serials);
         //dd($this->store_id);
@@ -236,7 +248,6 @@ class ProductForm extends Component
             'category' => 'required',
             'brand' => 'required',
             'model' => 'required',
-            'description' => 'required',
             'barcode' => 'unique:products,id,'. $this?->product?->id ?? '',
         ];
 
