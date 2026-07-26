@@ -198,11 +198,12 @@
                                     <table class="table mb-0">
                                         <thead>
                                         <tr>
-                                            <th colspan="3" class="text-center"><strong>NO SERIALIZADOS</strong></th>
+                                            <th colspan="4" class="text-center"><strong>NO SERIALIZADOS</strong></th>
                                         </tr>
                                         <tr>
                                             <th>Nombre</th>
                                             <th>Tipo</th>
+                                            <th>Stock Minimo</th>
                                             <th>Cantidad</th>
                                         </tr>
                                         </thead>
@@ -212,7 +213,10 @@
                                                 <td>{{ $item->name }}</td>
                                                 <td>{{ __('messages.'.$item->type->name) }}</td>
                                                 <td>
-                                                    <input wire:blur="setStock({{$item->id}}, $event.target.value)" type="number" class="form-control" value="{{ $stocks[$item->id]}}"/>
+                                                    <input wire:blur="setMinQuantity({{$item->id}}, $event.target.value)" type="number" class="form-control" value="{{ $min_quantity[$item->id]}}">
+                                                </td>
+                                                <td>
+                                                    <input wire:blur="setStock({{$item->id}}, $event.target.value)" type="number" @class(['form-control', 'bg-warning' => $min_quantity[$item->id] >= $stocks[$item->id] ?? 0])  value="{{ $stocks[$item->id]}}"/>
                                                 </td>
                                             </tr>
                                         @endforeach

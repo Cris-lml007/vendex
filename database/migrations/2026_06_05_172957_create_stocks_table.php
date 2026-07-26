@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('product_id');
             $table->unsignedBigInteger('store_id');
-            $table->integer('quantity');
+            $table->integer('quantity')->default(0);
+            $table->integer('min_quantity')->default(0);
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products')->cascadeOnUpdate()->cascadeOnDelete();

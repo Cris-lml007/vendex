@@ -70,6 +70,8 @@ class ProductForm extends Component
 
     public $product_serials = [];
 
+    public $min_quantity = [];
+
     public function updatedIsSerial()
     {
         if($this->is_serial == 0){
@@ -129,8 +131,13 @@ class ProductForm extends Component
 
     public function setStock($id, $stock){
         $this->total = $this->total - $this->stocks[$id];
-        $this->stocks[$id] = $stock;
-        $this->total = $this->total + $stock;
+        $this->stocks[$id] = $stock == '' ? 0 : $stock;
+        $this->total = $this->total + ($stock == '' ? 0 : $stock);
+    }
+
+    public function setMinQuantity($id, $quantity)
+    {
+        $this->min_quantity[$id] = $quantity;
     }
 
     #[On('getBarcode')]
@@ -217,6 +224,7 @@ class ProductForm extends Component
             $this->stores = Store::all();
             foreach ($this->stores as $store){
                 $this->stocks[$store->id] = $store->products()->where('product_id',$product->id)->first()?->pivot?->quantity ?? 0;
+                $this->min_quantity[$store->id] = $store->stocks()->where('product_id',$product->id)->first()?->min_quantity ?? 0;
                 $this->total = $this->total + $this->stocks[$store->id];
                 $this->total_origin = $this->total_origin + $this->stocks[$store->id];
             }
@@ -361,6 +369,22 @@ class ProductForm extends Component
         }
 
         if($this->edit){
+
+            try{
+                DB::transaction(function () {
+                    foreach ($this->min_quantity as $id => $value){
+                        Stock::updateOrCreate([
+                            'product_id' => $this->product->id,
+                            'store_id' => $id,
+                        ],[
+                            'min_quantity' => $value
+                        ]);
+                    }
+                });
+            }catch (\Exception $exception){
+                dd($exception);
+            }
+
             $q = $this->product?->stocks()->sum('quantity') ?? 0;
             if($q > 0 || !empty($this->product_serials)){
                 if(array_sum($this->stocks) > $q || (array_sum($this->stocks) == 0 && $this->product->stocks()->sum('quantity') > 0) ){

@@ -10,5 +10,6 @@ class Stock extends Model
         'product_id',
         'store_id',
         'quantity',
+        'min_quantity',
     ];
 }
