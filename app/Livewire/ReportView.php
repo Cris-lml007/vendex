@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Customer;
+use App\Models\Product;
 use App\Models\Store;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -148,30 +149,113 @@ class ReportView extends Component
 
     public function getSalesChart()
     {
-        return $this->query()
-            ->selectRaw('DATE(created_at) as date')
-            ->selectRaw('COUNT(*) as sales')
-            ->groupByRaw('DATE(created_at)')
-            ->orderByRaw('DATE(created_at)')
+        $query = $this->query();
+
+        $query->getQuery()->columns = null;
+
+        return $query
+            ->selectRaw('DATE(transactions.created_at) as date, COUNT(*) as sales')
+            ->groupByRaw('DATE(transactions.created_at)')
+            ->orderByRaw('DATE(transactions.created_at)')
             ->get();
     }
 
     public function getStoresChart()
     {
-        return $this->query()
+        $query = $this->query();
+
+        $query->getQuery()->columns = null;
+        return $query
             ->join('stores', 'transactions.store_id', '=', 'stores.id')
-            ->selectRaw('stores.name as store')
-            ->selectRaw('COUNT(*) as sales')
+            ->selectRaw('stores.name as store, COUNT(*) as sales')
             ->groupBy('stores.id', 'stores.name')
             ->orderBy('stores.name')
             ->get();
     }
+
+    public function getProductsChart()
+    {
+        return Transaction::query()
+            ->join('detail_transactions', 'transactions.id', '=', 'detail_transactions.transaction_id')
+            ->join('products', 'detail_transactions.product_id', '=', 'products.id')
+
+            ->when($this->store, fn($q) => $q->where('transactions.store_id', $this->store))
+            ->when($this->customer, fn($q) => $q->where('transactions.customer_id', $this->customer))
+            ->when($this->user, fn($q) => $q->where('transactions.user_id', $this->user))
+            ->when($this->from, fn($q) => $q->whereDate('transactions.created_at', '>=', $this->from))
+            ->when($this->to, fn($q) => $q->whereDate('transactions.created_at', '<=', $this->to))
+
+            ->selectRaw('products.name as product')
+            ->selectRaw('SUM(detail_transactions.quantity) as sold')
+
+            ->groupBy('products.id', 'products.name')
+
+            ->orderByDesc('sold')
+
+            ->limit(10)
+
+            ->get();
+    }
+
+    public function getStockChart()
+    {
+        return Product::query()
+
+            ->leftJoin('stocks', function ($join) {
+                $join->on('products.id', '=', 'stocks.product_id');
+
+                if ($this->store) {
+                    $join->where('stocks.store_id', $this->store);
+                }
+            })
+
+            ->leftJoin('products as serials', function ($join) {
+                $join->on('products.id', '=', 'serials.parent_id');
+
+                if ($this->store) {
+                    $join->where('serials.store_id', $this->store);
+                }
+            })
+
+            ->select(
+                'products.id',
+                'products.name'
+            )
+
+            ->selectRaw('
+            COALESCE(SUM(stocks.quantity),0)
+            +
+            COUNT(DISTINCT serials.id)
+            AS stock
+        ')
+
+            ->whereNull('products.parent_id')
+
+            ->groupBy(
+                'products.id',
+                'products.name'
+            )
+
+            ->orderByDesc('stock')
+
+            ->limit(10)
+
+            ->get();
+    }
+
+
+
+
 
     public function render()
     {
         $this->calculateResume();
         $salesChart = $this->getSalesChart();
         $storesChart = $this->getStoresChart();
+        $productsChart = $this->getProductsChart();
+
+        $stockChart = $this->getStockChart();
+
         return view('livewire.report-view', [
 
             'transactions' => $this->query()
@@ -188,6 +272,11 @@ class ReportView extends Component
             'series' => $salesChart->pluck('sales'),
             'storeLabels' => $storesChart->pluck('store'),
             'storeSeries' => $storesChart->pluck('sales'),
+            'productLabels' => $productsChart->pluck('product'),
+            'productSeries' => $productsChart->pluck('sold'),
+
+            'stockLabels' => $stockChart->pluck('name'),
+            'stockSeries' => $stockChart->pluck('stock'),
         ]);
     }
 }

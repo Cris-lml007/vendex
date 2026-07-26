@@ -5,6 +5,12 @@
 </x-slot>
 
 <div>
+    <style>
+        .apexcharts-legend-text {
+            color: white !important;
+        }
+    </style>
+
     <div class="container-fluid">
 
         {{-- FILTROS --}}
@@ -225,6 +231,50 @@
 
         </div>
 
+        <div class="row mb-3">
+
+            <div class="col-lg-8">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        Stock de Productos
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="stocks-chart"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        Productos mas Vendidos
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="product-chart"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
 
 
         {{-- TABLA --}}
@@ -248,102 +298,104 @@
 
             <div class="card-body p-0">
 
-                <table class="table table-hover table-striped mb-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped mb-0">
 
-                    <thead>
-
-                    <tr>
-
-                        <th>#</th>
-
-                        <th>Fecha</th>
-
-                        <th>Tienda</th>
-
-                        <th>Cliente</th>
-
-                        <th>Vendedor</th>
-
-                        <th class="text-center">
-
-                            Productos
-
-                        </th>
-
-                        <th class="text-end">
-
-                            Total
-
-                        </th>
-
-                    </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    @forelse($transactions ?? [] as $transaction)
+                        <thead>
 
                         <tr>
 
-                            <td>
+                            <th>#</th>
 
-                                {{ $transaction->id }}
+                            <th>Fecha</th>
 
-                            </td>
+                            <th>Tienda</th>
 
-                            <td>
+                            <th>Cliente</th>
 
-                                {{ $transaction->created_at->format('d/m/Y H:i') }}
+                            <th>Vendedor</th>
 
-                            </td>
+                            <th class="text-center">
 
-                            <td>
+                                Productos
 
-                                {{ $transaction->store->name }}
+                            </th>
 
-                            </td>
+                            <th class="text-end">
 
-                            <td>
+                                Total
 
-                                {{ $transaction?->customer?->name ?? '---'}}
-
-                            </td>
-
-                            <td>
-
-                                {{ $transaction->user->name }}
-
-                            </td>
-
-                            <td class="text-center">
-
-                                {{ $transaction->details()->sum('quantity') }}
-
-                            </td>
-
-                            <td class="text-end">
-
-                                Bs.
-                                {{ number_format($transaction->total,2) }}
-
-                            </td>
+                            </th>
 
                         </tr>
 
-                    @empty
+                        </thead>
 
-                        <tr>
+                        <tbody>
 
-                            <td
-                                colspan="7"
-                                class="text-center">
-                                No existen registros.
-                            </td>
-                        </tr>
-                    @endforelse
-                    </tbody>
-                </table>
+                        @forelse($transactions ?? [] as $transaction)
+
+                            <tr>
+
+                                <td>
+
+                                    {{ $transaction->id }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $transaction->created_at->format('d/m/Y H:i') }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $transaction->store->name }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $transaction?->customer?->name ?? '---'}}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $transaction->user->name }}
+
+                                </td>
+
+                                <td class="text-center">
+
+                                    {{ $transaction->details()->sum('quantity') }}
+
+                                </td>
+
+                                <td class="text-end">
+
+                                    Bs.
+                                    {{ number_format($transaction->total,2) }}
+
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="text-center">
+                                    No existen registros.
+                                </td>
+                            </tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="card-footer">
                 {{ $transactions->links() }}
@@ -403,6 +455,68 @@
             );
 
             storeChart.render();
+
+            const productOptions = {
+                chart: {
+                    type: 'donut',
+                    height: 365
+                },
+
+                series: @json($productSeries).map(Number),
+
+                labels: @json($productLabels),
+
+                legend: {
+                    position: 'bottom'
+                },
+
+                dataLabels: {
+                    enabled: true
+                },
+
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val + " unidades";
+                        }
+                    }
+                }
+            };
+
+            const productChart = new ApexCharts(
+                document.querySelector("#product-chart"),
+                productOptions
+            );
+
+            productChart.render();
+
+            const stocksOptions = {
+                chart: {
+                    type: 'bar',
+                    height: 350
+                },
+                series: [{
+                    name: 'Stock',
+                    data: @json($stockSeries)
+                }],
+                xaxis: {
+                    categories: @json($stockLabels)
+                },
+                plotOptions: {
+                        bar: {
+                            borderRadius: 4,
+                            borderRadiusApplication: 'end',
+                            horizontal: true,
+                        },
+                    },
+            };
+
+            const stocksChart = new ApexCharts(
+                document.querySelector("#stocks-chart"),
+                stocksOptions
+            );
+
+            stocksChart.render();
 
         });
 
