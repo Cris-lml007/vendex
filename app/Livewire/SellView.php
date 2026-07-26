@@ -227,9 +227,11 @@ class SellView extends Component
                     $register->referenceable_type = DetailTransaction::class;
                     $register->referenceable_id = $detail->id;
                     $register->save();
-                    $p->store_id = null;
-                    $p->status = Status::SALE;
-                    $p->save();
+                    if($p->is_serialize){
+                        $p->store_id = null;
+                        $p->status = Status::SALE;
+                        $p->save();
+                    }
                 }
 
                 $this->transaction = $transaction;
