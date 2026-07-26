@@ -301,15 +301,6 @@ return [
 
     'menu' => [
         // Navbar items:
-        [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
-        [
-            'type' => 'fullscreen-widget',
-            'topnav_right' => true,
-        ],
 
         // Sidebar items:
         [
@@ -379,12 +370,12 @@ return [
         'icon_color' => 'warning',                // The initial icon color (optional).
         'label' => 0,                             // The initial label for the badge (optional).
         'label_color' => 'danger',                // The initial badge color (optional).
-        'url' => 'notifications/show',            // The url to access all notifications/elements (required).
+        'url' => 'dashboard/notifications/show',            // The url to access all notifications/elements (required).
         'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
         'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
-        'dropdown_flabel' => 'All notifications', // The label for the dropdown footer link (optional).
+        'dropdown_flabel' => 'Notificaciones', // The label for the dropdown footer link (optional).
         'update_cfg' => [
-            'url' => 'notifications/get',         // The url to periodically fetch new data (optional).
+            'url' => 'dashboard/notifications/get',         // The url to periodically fetch new data (optional).
             'period' => 30,                       // The update period for get new data (in seconds, optional).
         ],
     ],

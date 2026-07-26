@@ -14,6 +14,7 @@ use App\Livewire\StoreView;
 use App\Livewire\TransfersView;
 use App\Livewire\UsersView;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,50 @@ Auth::routes([
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::prefix('/dashboard')->middleware('auth')->group(function(){
+
+    Route::get('/notifications/get',function (Request $request){
+        $stocks = \App\Models\Stock::where('quantity','<=','min_quantity')
+            ->where('min_quantity','!=',0)
+            ->get();
+
+        $notifications = [
+        ];
+
+        foreach ($stocks as $stock){
+            $notifications[] = [
+                'icon' => 'fas fa-bell',
+                'text' => 'Stock bajo de '. $stock->product->name. ' en '. $stock->store->name,
+                'url' => route('admin.product.id',$stock->product_id),
+            ];
+        }
+
+        // Now, we create the notification dropdown main content.
+
+        $dropdownHtml = '';
+
+        foreach ($notifications as $key => $not) {
+            $icon = "<i class='mr-2 {$not['icon']}'></i>";
+            $url = $not['url'];
+
+            $dropdownHtml .= "<a href='{$url}' class='dropdown-item'>
+                            {$icon}{$not['text']}
+                          </a>";
+
+            if ($key < count($notifications) - 1) {
+                $dropdownHtml .= "<div class='dropdown-divider'></div>";
+            }
+        }
+
+        // Return the new notification data.
+
+        return [
+            'label' => count($notifications),
+            'label_color' => 'danger',
+            'icon_color' => 'dark',
+            'dropdown' => $dropdownHtml,
+        ];
+    })->name('admin.notifications.get');
+
     Route::get('/profile', \App\Livewire\Profile::class)->name('admin.profile');
 
     Route::can('isSeller')->get('/catalog', CatalogView::class)->name('admin.catalog');
