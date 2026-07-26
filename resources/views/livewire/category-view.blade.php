@@ -76,7 +76,7 @@
             color: "white",
         }).then( async (result) => {
             if(result.isConfirmed){
-                let r = await $wire.removeBrand(result.value,id)
+                let r = await $wire.removeCategory(result.value,id)
                 console.log(r)
                 if(r){
                     window.Swal.fire({
