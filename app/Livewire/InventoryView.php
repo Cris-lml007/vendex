@@ -27,6 +27,7 @@ class InventoryView extends Component
     ];
 
     public $product_id;
+    public $current = 2;
 
     public function updatedList(){
         if($this->list['pages'] != ''){

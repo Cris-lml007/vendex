@@ -41,7 +41,17 @@
                 <div class="row mb-3">
                     <div class="col">
                         <label for="">Precio Adquisición</label>
-                        <input type="text" class="form-control" placeholder="Ingrese Precio de Adquisición" wire:model="price_purchase">
+                        <div class="input-group">
+                            @if($edit)
+                                <div class="input-group-text">Bs({{ Number::format($product->kardex()?->first()?->exchange_rate?->usd_to_bs ?? 0,2) }})</div>
+                            @else
+                                <div class="input-group-text">Bs({{ Number::format(\App\Models\ExchangeRate::orderBy('id','desc')->first()->usd_to_bs,2) }})</div>
+                            @endif
+                            <input type="number" step="any" class="form-control" wire:model.live="bs1">
+                            <div class="input-group-text"><i class="fa fa-share"></i></div>
+                            <input type="number" step="any" class="form-control" wire:model.live="usd1">
+                            <div class="input-group-text">Usd(1.00)</div>
+                        </div>
                         @error('price_purchase')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -84,7 +94,14 @@
             <div class="row mb-3">
                 <div class="col">
                     <label for="">Precio (Bs)</label>
-                    <input type="text" class="form-control" wire:model="price" placeholder="Ingrese Precio">
+                    <div class="input-group">
+                        <div class="input-group-text">Bs({{ Number::format(\App\Models\ExchangeRate::orderBy('id','desc')->first()->usd_to_bs,2) }})</div>
+                        <input type="text" class="form-control" wire:model.live="bs">
+                        <div class="input-group-text"><i class="fa fa-share"></i></div>
+                        <input type="text" class="form-control" wire:model.live="usd">
+                        <div class="input-group-text">Usd(1.00)</div>
+                    </div>
+
                     @error('price')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror

@@ -3,6 +3,7 @@
 use App\Livewire\CatalogView;
 use App\Livewire\CategoryView;
 use App\Livewire\CustomersView;
+use App\Livewire\ExchangeView;
 use App\Livewire\InventoryView;
 use App\Livewire\ProductForm;
 use App\Livewire\ProductView;
@@ -33,6 +34,8 @@ Auth::routes([
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::prefix('/dashboard')->middleware('auth')->group(function(){
+
+    Route::can('isAdmin')->get('/exchange',ExchangeView::class)->name('admin.exchange');
 
     Route::get('/notifications/get',function (Request $request){
         $stocks = \App\Models\Stock::where('quantity','<=','min_quantity')

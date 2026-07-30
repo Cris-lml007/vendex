@@ -108,6 +108,7 @@ class StoreForm extends Component
     {
         $heads = ['Nombre'=> 'name','Disponibles' =>null,'Precio' => null,'Acciones' => null];
         $heads1 = ['Id' => null,'Producto' => null,'Cliente' => null,'Cantidad' => null,'Precio' => null,'Por' => null];
+        $this->stock = $this->store->products;
         return view('livewire.store-form',compact('heads','heads1'));
     }
 }

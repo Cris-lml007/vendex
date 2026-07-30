@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('store_id');
             $table->enum('type',Type::cases());
             $table->integer('quantity');
-            $table->decimal('price');
+            $table->decimal('price',15,8);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('referenceable_id')->nullable();
             $table->string('referenceable_type')->nullable();

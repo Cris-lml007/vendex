@@ -114,7 +114,7 @@
                             @foreach($stock ?? [] as $item)
                                 <tr>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->pivot->quantity }}</td>
+                                    <td>{{ $item->pivot->quantity ?? 0 }}</td>
                                     <td>{{ Number::format($item->price,2) }}</td>
                                     <td>
                                         <a href="{{ route('admin.product.id', $item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>

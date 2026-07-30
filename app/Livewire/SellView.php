@@ -7,6 +7,7 @@ use App\Enums\Status;
 use App\Enums\Type;
 use App\Models\Customer;
 use App\Models\DetailTransaction;
+use App\Models\ExchangeRate;
 use App\Models\Kardex;
 use App\Models\Product;
 use App\Models\Stock;
@@ -43,6 +44,8 @@ class SellView extends Component
     public $search;
     public $is_search = false;
 
+    public $method_payment = Type::CASH;
+
     public function searchOn()
     {
         $this->is_search = !$this->is_search;
@@ -66,7 +69,7 @@ class SellView extends Component
         $p = Product::find($this->product_id);
         if($p?->id != null && $p->status == Status::ACTIVE){
             if($this->store == ''){
-                $this->product_price = '';
+                $this->product_price = 0;
                 $this->product_quantity = '';
                 $this->quantity = '';
                 $this->price = '';
@@ -78,7 +81,7 @@ class SellView extends Component
             ');
                 return;
             }
-            $this->product_price = $p->price;
+            $this->product_price = $p->price * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
 
             $p = Product::find($this->product_id);
             if($p->is_serialize && $p->status == Status::ACTIVE){
@@ -90,7 +93,7 @@ class SellView extends Component
                     ->quantity ?? 0;
             }
         }else{
-            $this->product_price = '';
+            $this->product_price = 0;
             $this->product_quantity = '';
             $this->js('Swal.fire({
             title: "Upss...",
@@ -149,8 +152,8 @@ class SellView extends Component
         $this->total += $this->price * $this->quantity;
 
         $this->product_id = '';
-        $this->product_price = '';
-        $this->price = '';
+        $this->product_price = '0';
+        $this->price = '0';
         $this->quantity = '';
         $this->product_quantity = '';
     }
@@ -185,6 +188,7 @@ class SellView extends Component
                     'customer_id' => $this->customer_id ?? null,
                     'user_id' => Auth::user()->id,
                     'store_id' => $this->store,
+                    'payment_method' => $this->method_payment
                 ]);
 
                 foreach ($this->list as $item) {
@@ -212,16 +216,18 @@ class SellView extends Component
                         'transaction_id' => $transaction->id,
                         'product_id' => $item['product_id'],
                         'quantity' => $item['quantity'],
-                        'price' => $item['price'],
+                        'price' => $item['price']/ExchangeRate::orderBy('id','desc')->first()->usd_to_bs,
+                        'exchange_rate_id' => ExchangeRate::orderBy('id','desc')->first()->id,
                     ]);
 
                     $register = Kardex::create([
                         'product_id' => $item['product_id'],
                         'quantity' => $item['quantity'],
-                        'price' => $item['price'],
+                        'price' => $item['price']/ExchangeRate::orderBy('id','desc')->first()->usd_to_bs,
                         'store_id' => $this->store,
                         'type' => Type::OUT,
-                        'user_id' => Auth::user()->id
+                        'user_id' => Auth::user()->id,
+                        'exchange_rate_id' => ExchangeRate::orderBy('id','desc')->first()->id,
                     ]);
 
                     $register->referenceable_type = DetailTransaction::class;

@@ -37,8 +37,17 @@
                 </div>
                 <div class="col">
                     <label for="">Precio de Adquisición/Venta (Unidad)</label>
-                    <input type="text" class="form-control" placeholder="Ingrese Precio de Adquisición"
-                        wire:model="price" @if($kardex?->id != null) disabled @endif>
+                    <div class="input-group">
+                        @if($kardex?->id != null)
+                            <div class="input-group-text">Bs({{ Number::format($kardex->exchange_rate->usd_to_bs,2) }})</div>
+                        @else
+                            <div class="input-group-text">Bs({{ Number::format(\App\Models\ExchangeRate::orderBy('id','desc')->first()->usd_to_bs,2) }})</div>
+                        @endif
+                        <input type="text" class="form-control" wire:model.live="bs">
+                        <div class="input-group-text"><i class="fa fa-share"></i></div>
+                        <input type="text" class="form-control" wire:model.live="usd">
+                        <div class="input-group-text">Usd(1.00)</div>
+                    </div>
                     @error('price')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror

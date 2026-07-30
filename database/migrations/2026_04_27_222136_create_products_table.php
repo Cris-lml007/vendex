@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('brand');
             $table->string('model');
             $table->string('description')->nullable();
-            $table->decimal('price');
+            $table->decimal('price',15,8);
 
             $table->boolean('is_serialize')->default(false);
             $table->string('parent_id')->nullable();

@@ -20,16 +20,33 @@
                         <td>{{ $item->id }}</td>
                         <td><a href="{{ route('admin.product.id', $item->product->id) }}">{{ $item->product->name }}@if($item->product->is_serialize) ({{ $item->product->id }})@endif</a></td>
                         @if($item->type == \App\Enums\Type::IN)
-                            <td>{{ \Illuminate\Support\Number::format($item->price*$item->quantity,2) }}</td>
+                            @if($current == 1)
+                                <td>{{ \Illuminate\Support\Number::format(($item->price*$item->exchange_rate->usd_to_bs)*$item->quantity,2) }}</td>
+                            @else
+                                <td>{{ \Illuminate\Support\Number::format($item->price*$item->quantity,2) }}</td>
+                            @endif
                             <td>---</td>
                             @php
+                                if($current == 1){
+                                    $income+= ($item->price*$item->exchange_rate->usd_to_bs)*$item->quantity;
+                                }else{
                                 $income+= $item->price*$item->quantity;
+                                }
                             @endphp
                         @else
                             <td>---</td>
-                            <td>{{ \Illuminate\Support\Number::format($item->price*$item->quantity,2) }}</td>
+
+                            @if($current == 1)
+                                <td>{{ \Illuminate\Support\Number::format(($item->price*$item->exchange_rate->usd_to_bs)*$item->quantity,2) }}</td>
+                            @else
+                                <td>{{ \Illuminate\Support\Number::format($item->price*$item->quantity,2) }}</td>
+                            @endif
                             @php
-                                $expense+= $item->price*$item->quantity;
+                                if($current == 1){
+                                    $expense+= ($item->price*$item->exchange_rate->usd_to_bs)*$item->quantity;
+                                }else{
+                                    $expense+= $item->price*$item->quantity;
+                                }
                             @endphp
                         @endif
                         <td>{{ $item->quantity }}</td>
@@ -52,7 +69,12 @@
                     </tr>
                     <tr>
                         <th colspan="2">TOTAL</th>
-                        <th colspan="2" class="text-center">{{ \Illuminate\Support\Number::format($expense-$income,2) }} Bs</th>
+                        <th colspan="2" class="text-center">{{ \Illuminate\Support\Number::format($expense-$income,2) }}
+                            <select wire:model.live="current" class="form-select d-inline" style="width: 80px;">
+                                <option value="1">Bs</option>
+                                <option value="2">Usd</option>
+                            </select>
+                        </th>
                     </tr>
                 </livewire:slot>
             </livewire:table>

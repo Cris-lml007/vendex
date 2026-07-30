@@ -375,7 +375,13 @@ return [
             'text' => 'Perfil',
             'route' => 'admin.profile',
             'icon' => 'fas fa-fw fa-user',
-        ],[
+        ],
+        [
+            'text' => 'Tipo de Cambio',
+            'route' => 'admin.exchange',
+            'icon' => 'fas fa-fw fa-dollar-sign',
+        ]
+        ,[
         'type' => 'navbar-notification',
         'id' => 'my-notification',                // An ID attribute (required).
         'icon' => 'fas fa-bell',                  // A font awesome icon (required).

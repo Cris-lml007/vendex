@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Enums\Role;
+use App\Enums\Status;
 use App\Models\Kardex;
 use App\Models\Stock;
 use App\Models\Transaction;
@@ -38,12 +39,19 @@ class SaleForm extends Component
             try {
                 DB::transaction(function () {
                     foreach ($this->transaction->details as $detail) {
-                        $stock = Stock::where('store_id', $this->transaction->store_id)
-                            ->where('product_id', $detail->product_id)
-                            ->lockForUpdate()
-                            ->first();
-                        $stock->quantity += $detail->quantity;
-                        $stock->save();
+                        if($detail->product->is_serialize){
+                            $p = $detail->product;
+                            $p->status = Status::ACTIVE;
+                            $p->store_id = $detail->kardex->store_id;
+                            $p->save();
+                        }else{
+                            $stock = Stock::where('store_id', $this->transaction->store_id)
+                                ->where('product_id', $detail->product_id)
+                                ->lockForUpdate()
+                                ->first();
+                            $stock->quantity += $detail->quantity;
+                            $stock->save();
+                        }
                         $detail->kardex->delete();
                         $detail->delete();
                     }

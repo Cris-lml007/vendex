@@ -41,7 +41,7 @@ class ProductView extends Component
             'Modelo' => 'model',
             'Marca' => 'brand_id',
             'Categoria' => 'category_id',
-            'Precio (Bs)' => 'price',
+            'Precio (Usd)' => 'price',
             'Acciones' => null
         ];
 

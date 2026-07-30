@@ -20,7 +20,7 @@
                     <td>{{ $item->id }}</td>
                     <td>{{ $item->customer->name ?? '---' }}</td>
                     <td>{{ $item->user->name }}</td>
-                    <td>{{ \Illuminate\Support\Number::format($item->total,2) }}</td>
+                    <td>{{ \Illuminate\Support\Number::format($item->total*$item?->details[0]?->exchange_rate?->usd_to_bs ?? 0 ,2) }}</td>
                     <td>{{ $item->created_at }}</td>
                     <td>
                         <button data-bs-toggle="modal" data-bs-target="#modal-sale" wire:click="getTransaction({{ $item->id }})" class="btn btn-primary"><i class="fa fa-eye"></i></button>

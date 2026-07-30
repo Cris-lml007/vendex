@@ -7,6 +7,7 @@ use App\Enums\Type;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\DetailTransfer;
+use App\Models\ExchangeRate;
 use App\Models\Kardex;
 use App\Models\Product;
 use App\Models\ProductSequense;
@@ -72,6 +73,70 @@ class ProductForm extends Component
 
     public $min_quantity = [];
 
+    public $bs;
+    public $usd;
+    public $bs1;
+    public $usd1;
+
+    public $rate;
+
+
+    public function updatedBs(){
+        if($this->bs != ''){
+            $this->usd = $this->bs / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+            $this->price = $this->usd;
+            $this->usd = round($this->usd,2);
+        }else{
+            $this->usd = 0;
+            $this->price = 0;
+        }
+    }
+
+    public function updatedUsd()
+    {
+        if($this->usd != ''){
+            $this->bs = $this->usd * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+            $this->price = $this->usd;
+            $this->bs = round($this->bs,2);
+            $this->usd = round($this->usd,2);
+        }else{
+            $this->bs = 0;
+            $this->price = 0;
+        }
+    }
+
+    public function updatedBs1(){
+        if($this->bs1 != ''){
+            if($this->edit){
+                $this->usd1 = $this->bs1 / $this->product->kardex()->first()->exchange_rate->usd_to_bs;
+            }else{
+                $this->usd1 = $this->bs1 / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+            }
+            $this->price_purchase = $this->usd1;
+            $this->usd1 = round($this->usd1,2);
+        }else{
+            $this->usd1 = 0;
+            $this->price_purchase = 0;
+        }
+    }
+
+    public function updatedUsd1()
+    {
+        if($this->usd1 != ''){
+            if($this->edit){
+                $this->bs1 = $this->usd1 * $this->product->kardex()->first()->exchange_rate->usd_to_bs;
+            }else{
+                $this->bs1 = $this->usd1 * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+            }
+            $this->price_purchase = $this->usd1;
+            $this->bs1 = round($this->bs1,2);
+            $this->usd1 = round($this->usd1,2);
+        }else{
+            $this->bs1 = 0;
+            $this->price_purchase = 0;
+        }
+    }
+
     public function updatedIsSerial()
     {
         if($this->is_serial == 0){
@@ -95,6 +160,8 @@ class ProductForm extends Component
             $p = Product::find($this->product_id);
             $this->name = $p->name;
             $this->price = $p->price;
+            $this->usd = $this->price;
+            $this->updatedUsd();
             $this->category = $p->category_id;
             $this->description = $p->description;
             $this->brand = $p->brand_id;
@@ -106,6 +173,8 @@ class ProductForm extends Component
             $this->name = '';
             $this->barcode = '';
             $this->price = '';
+            $this->usd = 0;
+            $this->updatedUsd();
             $this->description = '';
             $this->category = '';
             $this->brand = '';
@@ -194,8 +263,12 @@ class ProductForm extends Component
             $this->barcode = $this->product->id;
             $this->name = $this->product->name;
             $this->price = $this->product->price;
+            $this->usd = $this->product->price;
+            $this->updatedUsd();
 
             $this->price_purchase = $this->product?->kardex()?->first()?->price ?? null;
+            $this->usd1 = $this->price_purchase;
+            $this->updatedUsd1();
             $this->store_id = $this->product?->store_id ?? null;
 
             $this->category = $this->product->category_id;
@@ -259,7 +332,8 @@ class ProductForm extends Component
             'barcode' => 'unique:products,id,'. $this?->product?->id ?? '',
         ];
 
-        if($this->is_serial == "true"){
+        if($this->is_serial == 1){
+            $this->price_purchase = $this->usd1;
             $r['price_purchase'] = 'required|numeric|min:0';
             $r['store_id'] = 'required';
         }else{
@@ -307,7 +381,8 @@ class ProductForm extends Component
                     'quantity' => 0,
                     'price' => 0,
                     'type' => Type::TRANSFER,
-                    'user_id' => Auth::user()->id
+                    'user_id' => Auth::user()->id,
+                    'exchange_rate_id' => ExchangeRate::orderBy('id', 'desc')->first()->id,
                 ]);
                 $k2 = Kardex::create([
                     'product_id' => $this->product->id,
@@ -315,7 +390,8 @@ class ProductForm extends Component
                     'quantity' => 1,
                     'price' => 0,
                     'type' => Type::TRANSFER,
-                    'user_id' => Auth::user()->id
+                    'user_id' => Auth::user()->id,
+                    'exchange_rate_id' => ExchangeRate::orderBy('id', 'desc')->first()->id,
                 ]);
                 $transfer = DetailTransfer::create([
                     'transfer_id' => $t->id,
@@ -344,6 +420,7 @@ class ProductForm extends Component
                         'type' => Type::IN,
                         'user_id' => auth()->id(),
                         'store_id' => $this->store_id,
+                        'exchange_rate_id' => ExchangeRate::orderBy('id', 'desc')->first()->id,
                     ]);
                 }
             }
@@ -416,7 +493,8 @@ class ProductForm extends Component
                                     'quantity' => $value,
                                     'price' => 0,
                                     'type' => Type::TRANSFER,
-                                    'user_id' => Auth::user()->id
+                                    'user_id' => Auth::user()->id,
+                                    'exchange_rate_id' => ExchangeRate::orderBy('id', 'desc')->first()->id,
                                 ]);
                                 Stock::updateOrCreate([
                                     'product_id' => $this->product->id,
@@ -448,7 +526,8 @@ class ProductForm extends Component
                                 'quantity' => 0,
                                 'price' => 0,
                                 'type' => Type::TRANSFER,
-                                'user_id' => Auth::user()->id
+                                'user_id' => Auth::user()->id,
+                                'exchange_rate_id' => ExchangeRate::orderBy('id', 'desc')->first()->id,
                             ]);
                             $k2 = Kardex::create([
                                 'product_id' => $kk->product_id,
@@ -456,7 +535,8 @@ class ProductForm extends Component
                                 'quantity' => 1,
                                 'price' => 0,
                                 'type' => Type::TRANSFER,
-                                'user_id' => Auth::user()->id
+                                'user_id' => Auth::user()->id,
+                                'exchange_rate_id' => ExchangeRate::orderBy('id', 'desc')->first()->id,
                             ]);
                             $transfer = DetailTransfer::create([
                                 'transfer_id' => $t->id,

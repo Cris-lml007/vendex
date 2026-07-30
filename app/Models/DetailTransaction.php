@@ -12,6 +12,7 @@ class DetailTransaction extends Model
         'product_id',
         'quantity',
         'price',
+        'exchange_rate_id',
     ];
 
     public function kardex(){
@@ -32,5 +33,10 @@ class DetailTransaction extends Model
                 return $this->price*$this->quantity;
             }
         );
+    }
+
+    public function exchange_rate()
+    {
+        return $this->belongsTo(ExchangeRate::class, 'exchange_rate_id', 'id');
     }
 }

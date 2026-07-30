@@ -2,6 +2,16 @@
     <div class="modal-body">
         <div class="row mb-3">
             <div class="col">
+                <label for="">Numero de Recibo</label>
+                <input type="text" class="form-control" value="{{ str_pad($transaction->id ?? '', 8, '0', STR_PAD_LEFT)}}" disabled>
+            </div>
+            <div class="col">
+                <label for="">Metodo de Pago</label>
+                <input type="text" class="form-control" disabled value="{{ __('messages.'.$transaction?->payment_method?->name ?? '') }}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
                 <label for="">CI</label>
                 <input type="text" class="form-control" value="{{ $customer->ci ?? '' }}" disabled>
             </div>
@@ -45,14 +55,14 @@
                         <tr>
                             <td><a href="{{ route('admin.product.id', $item->product->id) }}">{{ $item->product->name }}@if($item->product->is_serialize)({{ $item->product->id }})@endif</a> </td>
                             <td>{{ $item->quantity }}</td>
-                            <td>{{ Number::format($item->price,2) }}</td>
-                            <td>{{ Number::format($item->subtotal,2) }}</td>
+                            <td>{{ Number::format($item->price*$item->exchange_rate->usd_to_bs,2) }}</td>
+                            <td>{{ Number::format($item->subtotal*$item->exchange_rate->usd_to_bs,2) }}</td>
                         </tr>
                     @endforeach
                     </tbody>
                     <tfoot>
                     <th colspan="3">TOTAL</th>
-                    <th>{{ Number::format($transaction->total ?? 0,2) }} Bs</th>
+                    <th>{{ Number::format(($transaction->total ?? 0) * ($transaction?->details[0]?->exchange_rate?->usd_to_bs ?? 0),2) }} Bs</th>
                     </tfoot>
                 </table>
             </div>

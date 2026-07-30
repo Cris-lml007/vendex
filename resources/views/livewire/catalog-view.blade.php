@@ -49,11 +49,11 @@
                                     <h6 class="card-title text-truncate">
                                         <strong>{{ $product->name }}</strong>
                                     </h6>
-                                    <div class="badge" style="background: {{ $product->brand->color_bg }};color: {{ $product->brand->color_fg }};">
-                                        {{ $product->brand->name }}
+                                    <div class="badge" style="background: {{ $product->brand?->color_bg ?? 'white' }};color: {{ $product->brand?->color_fg ?? 'black' }};">
+                                        {{ $product->brand?->name ?? 'Ninguno'}}
                                     </div>
                                     <h5 class="text-success mt-2">
-                                        <strong>Bs {{ number_format($product->price,2) }}</strong>
+                                        <strong>Bs {{ number_format($product->price*$rate,2) }}</strong>
                                     </h5>
                                     <div class="mt-auto">
                                         <button wire:click="getProduct('{{ $product->id }}')" data-bs-toggle="modal" data-bs-target="#modal-product" class="btn btn-primary w-100">

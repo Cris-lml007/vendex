@@ -77,12 +77,12 @@
                                 <input type="number" min="1" class="form-control" wire:model="quantity" placeholder="{{ $product_quantity ?? 'Ingrese Cantidad' }}">
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <label class="form-label">Precio</label>
-                                <input type="number" step="0.01" class="form-control" wire:model="price" placeholder="{{ $product_price ?? 'Ingrese Precio' }}">
+                                <input data-bs-toggle="tooltip" data-bs-title="adad" type="number" step="0.01" class="form-control" wire:model="price" placeholder="{{ Number::format($product_price ?? 0,2) ?? '0' }}">
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <button wire:click="addProduct" class="btn btn-primary w-100">Agregar</button>
                             </div>
                         </div>
@@ -139,10 +139,14 @@
                     </div>
 
                     <div class="card-footer">
-
-                        <hr>
                         <div class="row">
                             <div class="col-md-6">
+                                <label for="">Metodo de Pago</label>
+                                <select class="form-select" wire:model="method_payment">
+                                    <option value="{{ \App\Enums\Type::CASH }}">Efectivo</option>
+                                    <option value="{{ \App\Enums\Type::QR }}">Qr</option>
+                                    <option value="{{ \App\Enums\Type::MIXED }}">Mixto</option>
+                                </select>
                             </div>
                             <div class="col-md-6 text-end">
                                 <h5 class="mb-2 text-light">

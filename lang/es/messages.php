@@ -13,4 +13,7 @@ return [
     'OUT' => 'Salida',
     'TRANSFER' => 'Transferencia',
     'RETURN' => 'Retorno',
+    'QR' => 'QR',
+    'CASH' => 'Efectivo',
+    'MIXED' => 'Mixto'
 ];

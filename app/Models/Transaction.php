@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Type;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,8 +11,16 @@ class Transaction extends Model
     public $fillable = [
         'customer_id',
         'user_id',
-        'store_id'
+        'store_id',
+        'payment_method',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'payment_method' => Type::class
+        ];
+    }
 
     public function user(){
         return $this->belongsTo(User::class);

@@ -94,32 +94,63 @@
 </head>
 <body>
 
-<div class="title">
-    {{ $transaction->store->name }}
-</div>
 
-<div class="subtitle">
-    {{ $transaction->store->address ?? '' }}
-</div>
+@php
+    if(\Illuminate\Support\Facades\Storage::disk('local')->exists("stores/".$transaction->store_id .".jpg"))
+        $url = base64_encode(\Illuminate\Support\Facades\Storage::disk('local')
+        ->get("stores/".$transaction->store_id .".jpg"));
+    else{
+        $url = '';
+    }
+@endphp
 
-<div class="subtitle">
-    Teléfono: {{ $transaction->store->phone ?? '' }} &nbsp;&nbsp;&nbsp; Email: {{ $transaction->store->email ?? '' }}
-</div>
+<table style="width:100%; border-bottom:1px solid #000; padding-bottom:10px;">
+    <tr>
 
-<br>
+        <!-- Logo -->
+        <td style="width:30%; text-align:left; vertical-align:top;">
+            @if($url != '')
+            <img src="data:image/png;base64,{{ $url }}"
+                 style="height:70px;">
+            @endif
+        </td>
+        <!-- Título -->
+        <td style="width:34%; text-align:center; vertical-align:middle;">
+            <div style="font-size:22px; font-weight:bold;">
+                RECIBO DE VENTA
+            </div>
 
-<div class="title" style="font-size:16px">
-    RECIBO DE VENTA
-</div>
+            <div style="font-size:11px;">
+                N° {{ str_pad($transaction->id, 8, '0', STR_PAD_LEFT) }}
+            </div>
+        </td>
+
+        <!-- Datos de la tienda -->
+        <td style="width:33%; text-align:right; font-size:11px;">
+
+            <strong>{{ $transaction->store->name }}</strong><br>
+
+            {{ $transaction->store->address }}<br>
+
+            Cel: {{ $transaction->store->cellphone }}<br>
+
+            {{ $transaction->store->email }}
+
+        </td>
+
+    </tr>
+</table>
+
 
 <table class="header section">
 
     <tr>
-        <td width="20%"><strong>N° Venta:</strong></td>
-        <td width="30%">{{ $transaction->id }}</td>
-
         <td width="20%"><strong>Fecha:</strong></td>
         <td width="30%">{{ $transaction->created_at->format('d/m/Y H:i') }}</td>
+        <td width="20%"><strong>Vendedor:</strong></td>
+        <td width="30%">
+            {{ $transaction->user->name }}
+        </td>
     </tr>
 
     <tr>
@@ -137,12 +168,9 @@
         <td><strong>Email:</strong></td>
         <td>{{ $transaction->customer->email ?? '---'}}</td>
     </tr>
-
     <tr>
-        <td><strong>Vendedor:</strong></td>
-        <td colspan="3">
-            {{ $transaction->user->name }}
-        </td>
+        <td><strong>Metodo de Pago:</strong></td>
+        <td>{{ __('messages.'.$transaction->payment_method->name) ?? '' }}</td>
     </tr>
 
 </table>
@@ -182,15 +210,15 @@
             </td>
 
             <td>
-                {{ $detail->product->name }}
+                {{ $detail->product->name }} ({{ $detail->product->id }})
             </td>
 
             <td class="text-right">
-                {{ number_format($detail->price,2) }}
+                {{ number_format($detail->price * $detail->exchange_rate->usd_to_bs,2) }}
             </td>
 
             <td class="text-right">
-                {{ number_format($detail->quantity * $detail->price,2) }}
+                {{ number_format($detail->quantity * $detail->price * $detail->exchange_rate->usd_to_bs,2) }}
             </td>
 
         </tr>
@@ -204,7 +232,7 @@
         </td>
 
         <td class="text-right total">
-            Bs. {{ number_format($transaction->total,2) }}
+            Bs. {{ number_format($transaction->total * $transaction->details[0]->exchange_rate->usd_to_bs,2) }}
         </td>
 
     </tr>
@@ -216,7 +244,7 @@
 <div class="literal">
 
     <strong>SON:</strong>
-    {{ strtoupper($format->format($transaction->total)) }} BOLIVIANOS
+    {{ strtoupper($format->format($transaction->total * $transaction->details[0]->exchange_rate->usd_to_bs)) }} BOLIVIANOS
 
 </div>
 

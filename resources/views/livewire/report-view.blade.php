@@ -133,7 +133,7 @@
 
                         <h3 class="mb-0 text-white">
 
-                            Bs.
+                            Usd.
                             {{ number_format($totalAmount,2) }}
 
                         </h3>
@@ -174,7 +174,7 @@
 
                         <h3 class="mb-0 text-white">
 
-                            Bs.
+                            Usd.
                             {{ number_format($averageSale ?? 0,2) }}
 
                         </h3>
@@ -375,7 +375,7 @@
 
                                 <td class="text-end">
 
-                                    Bs.
+                                    Usd.
                                     {{ number_format($transaction->total,2) }}
 
                                 </td>

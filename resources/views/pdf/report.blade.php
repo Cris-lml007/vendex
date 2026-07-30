@@ -113,7 +113,7 @@
 
         <td class="text-right">
 
-            Bs. {{ number_format($totalAmount,2) }}
+            Usd. {{ number_format($totalAmount,2) }}
 
         </td>
 
@@ -125,7 +125,7 @@
 
         <td class="text-right">
 
-            Bs. {{ number_format($averageSale,2) }}
+            Usd. {{ number_format($averageSale,2) }}
 
         </td>
 
@@ -203,7 +203,7 @@
 
             <td class="text-right">
 
-                Bs.
+                Usd.
 
                 {{ number_format(
                     $transaction->details->sum(fn($d)=>$d->quantity*$d->price),

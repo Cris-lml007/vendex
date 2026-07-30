@@ -11,4 +11,8 @@ enum Type: int
     CASE OUT = 4;
     CASE TRANSFER = 5;
     CASE RETURN = 6;
+
+    CASE CASH = 7;
+    CASE QR = 8;
+    CASE MIXED = 9;
 }

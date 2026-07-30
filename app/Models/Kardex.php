@@ -14,7 +14,8 @@ class Kardex extends Model
         'quantity',
         'price',
         'type',
-        'user_id'
+        'user_id',
+        'exchange_rate_id',
     ];
 
     public function product(){
@@ -31,6 +32,11 @@ class Kardex extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function exchange_rate()
+    {
+        return $this->belongsTo(ExchangeRate::class,'exchange_rate_id','id');
     }
 
     protected function casts(): array

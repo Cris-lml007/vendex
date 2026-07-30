@@ -61,7 +61,8 @@ class CatalogView extends Component
 
                         $query->where(function ($q) use ($term) {
 
-                            $q->where('name', 'like', "%{$term}%")
+                            $q->where('id', 'like', "%{$term}%")
+                                ->orWhere('name', 'like', "%{$term}%")
                                 ->orWhere('model', 'like', "%{$term}%")
                                 ->orWhere('price', 'like', "%{$term}%")
 
@@ -91,6 +92,7 @@ class CatalogView extends Component
         }
 
         $this->list['pages_max'] = $data->lastPage();
-        return view('livewire.catalog-view', compact(['data','heads']));
+        $rate = \App\Models\ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+        return view('livewire.catalog-view', compact(['data','heads','rate']));
     }
 }

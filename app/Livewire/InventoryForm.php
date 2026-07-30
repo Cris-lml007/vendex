@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Enums\Type;
+use App\Models\ExchangeRate;
 use App\Models\Kardex;
 use App\Models\Product;
 use App\Models\Stock;
@@ -25,6 +26,41 @@ class InventoryForm extends Component
     public $store_name;
     public $kardex_type;
     public Kardex $kardex;
+
+    public $bs;
+    public $usd;
+
+    public function updatedBs(){
+        if($this->bs != ''){
+            if($this?->kardex?->id != null){
+                $this->usd = $this->bs / $this->kardex->exchange_rate->usd_to_bs;
+            }else{
+                $this->usd = $this->bs / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+            }
+            $this->price = $this->usd;
+            $this->usd = round($this->usd,2);
+        }else{
+            $this->usd = 0;
+            $this->price = 0;
+        }
+    }
+
+    public function updatedUsd()
+    {
+        if($this->usd != ''){
+            if($this?->kardex?->id != null){
+                $this->bs = $this->usd * $this->kardex->exchange_rate->usd_to_bs;
+            }else{
+                $this->bs = $this->usd * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+            }
+            $this->price = $this->usd;
+            $this->bs = round($this->bs,2);
+            $this->usd = round($this->usd,2);
+        }else{
+            $this->bs = 0;
+            $this->price = 0;
+        }
+    }
 
     public $actions = [
         'search' => '',
@@ -51,12 +87,18 @@ class InventoryForm extends Component
         }
     }
 
+    public function mount()
+    {
+        $this->kardex = new Kardex();
+    }
     #[On('getKardex')]
     public function getKardex($id){
         $this->kardex = Kardex::find($id);
         $this->_id = $this->kardex->product_id;
         $this->quantity = $this->kardex->quantity;
         $this->price = $this->kardex->price;
+        $this->usd = $this->price;
+        $this->updatedUsd();
         $store = Store::find($this->kardex->store_id);
         $this->store_name = $store->name;
         $this->kardex_type = $this->kardex->type;
@@ -92,7 +134,8 @@ class InventoryForm extends Component
                         'quantity' => $value,
                         'price' => $this->price,
                         'type' => Type::IN,
-                        'user_id' => Auth::user()->id
+                        'user_id' => Auth::user()->id,
+                        'exchange_rate_id' => ExchangeRate::orderBy('id','desc')->first()->id,
                     ]);
 
                     Stock::updateOrCreate([
