@@ -114,6 +114,8 @@ class Profile extends Component
         Attendance::create([
             'user_id' => auth()->id(),
             'type' => Type::OUT,
+            'lat' => $this->lat,
+            'lng' => $this->lng,
         ]);
         $this->redirect(route('admin.profile'));
     }
