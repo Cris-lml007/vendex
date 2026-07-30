@@ -14,7 +14,6 @@
                     </select>
                 </div>
             </div>
-            @if($is_serial == 1)
                 <div class="row mb-3">
                     <div class="col">
                         <label for="">Producto</label>
@@ -26,7 +25,6 @@
                         </select>
                     </div>
                 </div>
-            @endif
 
             <div class="row mb-3">
                 <div class="col">
