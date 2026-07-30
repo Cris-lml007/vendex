@@ -568,6 +568,7 @@ class ProductForm extends Component
         $this->reset();
         $this->js('$("#modal-product").modal("hide")');
         $this->dispatch('refresh')->to(ProductView::class);
+        $this->redirect(route('admin.products'));
     }
 
     public function render()
