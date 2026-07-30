@@ -80,6 +80,11 @@ class ProductForm extends Component
 
     public $rate;
 
+    public $search;
+
+    public function updatedSearch(){
+    }
+
 
     public function updatedBs(){
         if($this->bs != ''){
@@ -575,7 +580,13 @@ class ProductForm extends Component
     {
         $categories = Category::all();
         $brands = Brand::all();
-        $products = Product::where('parent_id',null)->get();
+        if($this->search != ''){
+            $products = Product::where('name', 'like', '%'.$this->search.'%')
+                ->where('is_serialize',false)
+                ->get();
+        }else{
+            $products = Product::where('parent_id',null)->get();
+        }
         return view('livewire.product-form')
             ->with('categories',$categories)
             ->with('brands',$brands)

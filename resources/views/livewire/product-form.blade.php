@@ -16,6 +16,10 @@
             </div>
                 <div class="row mb-3">
                     <div class="col">
+                        <label for="">Buscar Producto</label>
+                        <input type="text" class="form-control" wire:model.live="search" placeholder="Buscar Producto">
+                    </div>
+                    <div class="col">
                         <label for="">Producto</label>
                         <select class="form-select" wire:model.live="product_id">
                             <option value="">Seleccione Producto</option>
