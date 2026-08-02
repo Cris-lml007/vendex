@@ -299,6 +299,23 @@ class ProductForm extends Component
 
                 //$this->photo_url = "data:image/png;base64,". base64_encode($this->photo_url);
             }
+            $v = false;
+            $p = $this?->product?->parent;
+            do{
+                if($p?->id != null){
+                    if(Storage::disk('local')->exists("products/{$p->id}.jpg")) {
+                        $this->photo_url = Storage::disk('local')
+                            ->temporaryUrl("products/{$p->id}.jpg",
+                                now()->addMinutes(5)
+                            );
+                        $v = true;
+                    }
+                }else{
+                    $v = true;
+                }
+                $p = $p?->parent ?? null;
+            }while(!$v);
+
             $this->stores = Store::all();
             foreach ($this->stores as $store){
                 $this->stocks[$store->id] = $store->products()->where('product_id',$product->id)->first()?->pivot?->quantity ?? 0;
@@ -585,7 +602,7 @@ class ProductForm extends Component
                 ->where('is_serialize',false)
                 ->get();
         }else{
-            $products = Product::where('parent_id',null)->get();
+            $products = Product::where('is_serialize',false)->get();
         }
         return view('livewire.product-form')
             ->with('categories',$categories)

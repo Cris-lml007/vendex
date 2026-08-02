@@ -34,10 +34,37 @@
                         <div class="col-6 col-md-4 col-lg-3 col-xl-3">
 
                             <div class="card h-100 shadow-sm">
+                                @php
 
-                                @if(\Illuminate\Support\Facades\Storage::disk('local')->exists("products/{$product->id}.jpg"))
+                                    $photo_url = null;
+                                    if (Storage::disk('local')->exists("products/{$product->id}.jpg")) {
+                                        $photo_url = Storage::disk('local')
+                                            ->temporaryUrl("products/{$product->id}.jpg",
+                                                now()->addMinutes(5)
+                                            );
+                                    }else{
+                                        $v = false;
+                                        $p = $product?->parent;
+                                        do{
+                                            if($p?->id != null){
+                                                if(Storage::disk('local')->exists("products/{$p->id}.jpg")) {
+                                                    $photo_url = Storage::disk('local')
+                                                        ->temporaryUrl("products/{$p->id}.jpg",
+                                                            now()->addMinutes(5)
+                                                        );
+                                                    $v = true;
+                                                }
+                                            }else{
+                                                $v = true;
+                                            }
+                                            $p = $p?->parent ?? null;
+                                        }while(!$v);
+                                    }
+                                @endphp
+
+                                @if($photo_url != null)
                                     <img
-                                        src="{{ 'data:image/png;base64,'.base64_encode(\Illuminate\Support\Facades\Storage::disk('local')->get("products/{$product->id}.jpg"))}}"
+                                        src="{{ $photo_url }}"
                                         class="card-img-top product-image"
                                         alt="{{ $product->name }}">
                                 @else

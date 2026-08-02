@@ -247,14 +247,44 @@
                                 <td><strong>SUBTOTAL</strong></td>
                                 <td><strong @class(['text-success', 'text-danger' => $total != $total_origin])>{{ $total }}</strong></td>
                             </tr>
+
                             <tr>
                                 <td colspan="2">
                                     <table class="table table-striped mb-0">
                                         <thead>
                                         <tr>
-                                            <th></th>
-                                            <th colspan="3" class="text-center"><strong>SERIALIZADOS</strong></th>
-                                            <th></th>
+                                            <th colspan="4" class="text-center"><strong>HEREDADOS</strong></th>
+                                        </tr>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Nombre</th>
+                                            <th>Precio</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($product->children()->where('is_serialize',false)->where('status',\App\Enums\Status::ACTIVE)->get() as $item)
+                                            <tr>
+                                                <td>{{ $item->id }}</td>
+                                                <td>{{ $item->name }}</td>
+                                                <td>{{ Number::format($item->price,2) }}</td>
+                                                <td>
+                                                    <a href="{{ route('admin.product.id', $item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td colspan="2">
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th colspan="5" class="text-center"><strong>SERIALIZADOS</strong></th>
                                         </tr>
                                         <tr>
                                             <th>Id</th>
@@ -265,11 +295,11 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($product->children()->where('status',\App\Enums\Status::ACTIVE)->get() as $item)
+                                        @foreach($product->children()->where('is_serialize',true)->where('status',\App\Enums\Status::ACTIVE)->get() as $item)
                                             <tr>
                                                 <td>{{ $item->id }}</td>
                                                 <td>{{ $item->name }}</td>
-                                                <td>{{ $item->price }}</td>
+                                                <td>{{ Number::format($item->price,2) }}</td>
                                                 <td>
                                                     <select class="form-select" wire:model="product_serials[{{$item->store_id}}]">
                                                         <option value="{{ $item->store_id }}">{{ $item?->store?->name ?? '' }}</option>
