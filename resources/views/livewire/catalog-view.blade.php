@@ -25,7 +25,7 @@
         <div class="flex-grow-1">
             <div class="container">
                 <div class="d-flex justify-content-end mb-3">
-                    <input type="text" class="form-control w-25" placeholder="Buscar..." wire:model.live="search">
+                    <input type="text" class="form-control w-25" placeholder="Buscar..." wire:model.blur.live="search">
                 </div>
                 <div class="row g-3">
 
