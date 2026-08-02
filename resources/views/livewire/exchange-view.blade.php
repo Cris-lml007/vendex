@@ -35,7 +35,7 @@
                 @foreach($exchange_rates ?? [] as $item)
                     <tr>
                         <td>{{ $item->created_at }}</td>
-                        <td>{{ $item->usd_to_bs }}</td>
+                        <td>{{ Number::format($item->usd_to_bs,2) }}</td>
                     </tr>
                 @endforeach
                 </tbody>
