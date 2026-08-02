@@ -293,7 +293,9 @@ class ProductForm extends Component
                 //$this->photo_url = Storage::disk('local')->get("products/{$this->product->id}.jpg");
 
                 $this->photo_url = Storage::disk('local')
-                    ->url("products/{$this->product->id}.jpg");
+                    ->temporaryUrl("products/{$this->product->id}.jpg",
+                        now()->addMinutes(5)
+                    );
 
                 //$this->photo_url = "data:image/png;base64,". base64_encode($this->photo_url);
             }
@@ -303,7 +305,9 @@ class ProductForm extends Component
                 if($p?->id != null){
                     if(Storage::disk('local')->exists("products/{$p->id}.jpg")) {
                         $this->photo_url = Storage::disk('local')
-                            ->url("products/{$p->id}.jpg");
+                            ->temporaryUrl("products/{$p->id}.jpg",
+                                now()->addMinutes(5)
+                            );
                         $v = true;
                     }
                 }else{
@@ -474,6 +478,13 @@ class ProductForm extends Component
                         ],[
                             'min_quantity' => $value
                         ]);
+                    }
+
+                    foreach ($this->product->children ?? [] as $child){
+                        if($child->is_serialize){
+                            $child->price = $this->price;
+                            $child->save();
+                        }
                     }
                 });
             }catch (\Exception $exception){
