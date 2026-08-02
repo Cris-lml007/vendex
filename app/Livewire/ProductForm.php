@@ -483,6 +483,11 @@ class ProductForm extends Component
                     foreach ($this->product->children ?? [] as $child){
                         if($child->is_serialize){
                             $child->price = $this->price;
+                            $child->name = $this->name;
+                            $child->description = $this->description;
+                            $child->brand_id = $this->brand;
+                            $child->model = $this->model;
+                            $child->category_id = $this->category;
                             $child->save();
                         }
                     }
