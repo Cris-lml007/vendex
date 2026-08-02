@@ -9,7 +9,7 @@ document.getElementById('btn-camera').addEventListener('click',()=>{
                 fps: 30,
                 qrbox: {
                     width: 250,
-                    height: 250
+                    height: 100
                 }
             });
     }
