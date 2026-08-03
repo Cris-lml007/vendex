@@ -11,10 +11,7 @@
         @else
             <h5></h5>
         @endif
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Buscar...." wire:model.blur.enter.live="search">
-            <button class="btn btn-primary"><i class="fa fa-search"></i></button>
-        </div>
+        <input type="text" class="form-control" placeholder="Buscar...." wire:model.blur.enter.live="search">
     </div>
     @endif
     <div class="table-responsive">
