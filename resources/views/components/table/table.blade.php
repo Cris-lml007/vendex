@@ -11,7 +11,7 @@
         @else
             <h5></h5>
         @endif
-            <input type="text" class="form-control w-25" placeholder="Buscar...." wire:model.blur.live="search">
+            <input type="text" class="form-control w-25" placeholder="Buscar...." wire:model.blur.enter.live="search">
     </div>
     @endif
     <div class="table-responsive">
