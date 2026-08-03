@@ -16,6 +16,7 @@ use App\Models\Store;
 use App\Models\TagProduct;
 use App\Models\Transfer;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -239,7 +240,7 @@ class ProductForm extends Component
 
         return response()->streamDownload(
             fn () => print($pdf->output()),
-            'barcodes-'.$this->product->name.'-'.$this->tags .'.pdf'
+            'barcodes-'.$this->product->name.'-'.Carbon::now()->toString().'.pdf'
         );
     }
 
