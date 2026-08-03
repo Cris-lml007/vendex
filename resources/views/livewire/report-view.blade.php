@@ -201,7 +201,7 @@
 
                     <div class="card-body">
 
-                        <div id="sales-chart"></div>
+                        <div wire:ignore id="sales-chart"></div>
 
                     </div>
 
@@ -221,7 +221,7 @@
 
                     <div class="card-body">
 
-                        <div id="stores-chart"></div>
+                        <div wire:ignore id="stores-chart"></div>
 
                     </div>
 
@@ -231,45 +231,141 @@
 
         </div>
 
-        <div class="row mb-3">
+        <div class="card">
 
-            <div class="col-lg-8">
-
-                <div class="card">
-
-                    <div class="card-header">
-
-                        Stock de Productos
-
-                    </div>
-
-                    <div class="card-body">
-
-                        <div id="stocks-chart"></div>
-
-                    </div>
-
-                </div>
-
+            <div class="card-header">
+                <h5 class="mb-0">
+                    Productos más vendidos
+                </h5>
             </div>
 
-            <div class="col-lg-4">
+            <table class="table table-striped table-hover">
 
-                <div class="card">
+                <thead>
 
-                    <div class="card-header">
+                <tr>
 
-                        Productos mas Vendidos
+                    <th>#</th>
 
-                    </div>
+                    <th>Producto</th>
 
-                    <div class="card-body">
+                    <th class="text-center">
+                        Cantidad
+                    </th>
 
-                        <div id="product-chart"></div>
+                    <th class="text-end">
+                        Total
+                    </th>
 
-                    </div>
+                </tr>
 
-                </div>
+                </thead>
+
+                <tbody>
+
+                @foreach($bestSellingProducts as $item)
+
+                    <tr>
+
+                        <td>
+                            {{ $loop->iteration }}
+                        </td>
+
+                        <td>
+                            {{ $item->name }}
+                        </td>
+
+                        <td class="text-center">
+                            {{ number_format($item->quantity) }}
+                        </td>
+
+                        <td class="text-end">
+                            $ {{ number_format($item->total,2) }}
+                        </td>
+
+                    </tr>
+
+                @endforeach
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <div class="card-header">
+                <h5 class="mb-0">Existencias por Tienda</h5>
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover table-striped mb-0">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>Producto</th>
+
+                        @foreach($stores as $store)
+
+                            <th class="text-center">
+
+                                {{ $store->name }}
+
+                            </th>
+
+                        @endforeach
+
+                        <th class="text-center bg-primary">
+
+                            Total
+
+                        </th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    @foreach($stockTable as $row)
+
+                        <tr>
+
+                            <td>
+
+                                {{ $row['product'] }}
+
+                            </td>
+
+                            @foreach($stores as $store)
+
+                                <td class="text-center">
+
+                                    {{ $row[$store->id] }}
+
+                                </td>
+
+                            @endforeach
+
+                            <td class="text-center fw-bold">
+
+                                {{ $row['total'] }}
+
+                            </td>
+
+                        </tr>
+
+                    @endforeach
+
+                    </tbody>
+
+                </table>
 
             </div>
 
@@ -424,7 +520,7 @@
                 }
             };
 
-            window.salesChart = new ApexCharts(
+            const salesChart = new ApexCharts(
                 document.querySelector("#sales-chart"),
                 options
             );
@@ -455,88 +551,6 @@
             );
 
             storeChart.render();
-
-            const productOptions = {
-                chart: {
-                    type: 'donut',
-                    height: 365
-                },
-
-                series: @json($productSeries).map(Number),
-
-                labels: @json($productLabels),
-
-                legend: {
-                    position: 'bottom'
-                },
-
-                dataLabels: {
-                    enabled: true
-                },
-
-                tooltip: {
-                    y: {
-                        formatter: function (val) {
-                            return val + " unidades";
-                        }
-                    }
-                }
-            };
-
-            const productChart = new ApexCharts(
-                document.querySelector("#product-chart"),
-                productOptions
-            );
-
-            productChart.render();
-
-            const stocksOptions = {
-                chart: {
-                    type: 'bar',
-                    height: 350
-                },
-                series: [{
-                    name: 'Stock',
-                    data: @json($stockSeries)
-                }],
-                xaxis: {
-                    categories: @json($stockLabels)
-                },
-                plotOptions: {
-                        bar: {
-                            borderRadius: 4,
-                            borderRadiusApplication: 'end',
-                            horizontal: true,
-                        },
-                    },
-            };
-
-            const stocksChart = new ApexCharts(
-                document.querySelector("#stocks-chart"),
-                stocksOptions
-            );
-
-            stocksChart.render();
-
-        });
-
-
-        Livewire.on('updateSalesChart',(event)=>{
-
-            salesChart.updateOptions({
-
-                xaxis:{
-                    categories:event.labels
-                }
-
-            });
-
-            salesChart.updateSeries([{
-
-                data:event.series
-
-            }]);
-
         });
 
     </script>

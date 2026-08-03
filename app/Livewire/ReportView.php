@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use App\Models\Customer;
+use App\Models\DetailTransaction;
 use App\Models\Product;
+use App\Models\Stock;
 use App\Models\Store;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -201,21 +203,7 @@ class ReportView extends Component
     {
         return Product::query()
 
-            ->leftJoin('stocks', function ($join) {
-                $join->on('products.id', '=', 'stocks.product_id');
-
-                if ($this->store) {
-                    $join->where('stocks.store_id', $this->store);
-                }
-            })
-
-            ->leftJoin('products as serials', function ($join) {
-                $join->on('products.id', '=', 'serials.parent_id');
-
-                if ($this->store) {
-                    $join->where('serials.store_id', $this->store);
-                }
-            })
+            ->whereNull('products.parent_id')
 
             ->select(
                 'products.id',
@@ -223,18 +211,22 @@ class ReportView extends Component
             )
 
             ->selectRaw('
-            COALESCE(SUM(stocks.quantity),0)
+            (
+                SELECT COALESCE(SUM(quantity),0)
+                FROM stocks
+                WHERE stocks.product_id = products.id
+                ' . ($this->store ? 'AND stocks.store_id = '.$this->store : '') . '
+            )
             +
-            COUNT(DISTINCT serials.id)
+            (
+                SELECT COUNT(*)
+                FROM products serials
+                WHERE serials.parent_id = products.id
+                ' . ($this->store ? 'AND serials.store_id = '.$this->store : '') . '
+                and serials.status != 4
+            )
             AS stock
         ')
-
-            ->whereNull('products.parent_id')
-
-            ->groupBy(
-                'products.id',
-                'products.name'
-            )
 
             ->orderByDesc('stock')
 
@@ -243,7 +235,119 @@ class ReportView extends Component
             ->get();
     }
 
+    public function getStockTable()
+    {
+        $stores = Store::orderBy('name')->get();
 
+        // Stock de productos por lote
+        $stocks = Stock::selectRaw('
+            product_id,
+            store_id,
+            SUM(quantity) as quantity
+        ')
+            ->groupBy('product_id', 'store_id')
+            ->get();
+
+        // Cantidad de productos serializados
+        $serials = Product::selectRaw('
+            parent_id as product_id,
+            store_id,
+            COUNT(*) as quantity
+        ')
+            ->whereNotNull('parent_id')
+            ->groupBy('parent_id', 'store_id')
+            ->get();
+
+        // Productos padre
+        $products = Product::whereNull('parent_id')
+            ->orderBy('name')
+            ->get();
+
+        return $products->map(function ($product) use ($stores, $stocks, $serials) {
+
+            $row = [
+                'product' => $product->name,
+            ];
+
+            $total = 0;
+
+            foreach ($stores as $store) {
+
+                $stock = optional(
+                    $stocks
+                        ->where('product_id', $product->id)
+                        ->where('store_id', $store->id)
+                        ->first()
+                )->quantity ?? 0;
+
+                $serialized = optional(
+                    $serials
+                        ->where('product_id', $product->id)
+                        ->where('store_id', $store->id)
+                        ->first()
+                )->quantity ?? 0;
+
+                $quantity = $stock + $serialized;
+
+                $row[$store->id] = $quantity;
+
+                $total += $quantity;
+            }
+
+            $row['total'] = $total;
+
+            return $row;
+        });
+    }
+
+    public function getBestSellingProducts()
+    {
+        return DetailTransaction::query()
+
+            ->join('transactions', 'detail_transactions.transaction_id', '=', 'transactions.id')
+
+            ->join('products', 'detail_transactions.product_id', '=', 'products.id')
+
+            ->when($this->store, function ($query) {
+                $query->where('transactions.store_id', $this->store);
+            })
+
+            ->when($this->customer, function ($query) {
+                $query->where('transactions.customer_id', $this->customer);
+            })
+
+            ->when($this->user, function ($query) {
+                $query->where('transactions.user_id', $this->user);
+            })
+
+            ->when($this->from, function ($query) {
+                $query->whereDate('transactions.created_at', '>=', $this->from);
+            })
+
+            ->when($this->to, function ($query) {
+                $query->whereDate('transactions.created_at', '<=', $this->to);
+            })
+
+            ->select(
+                'products.id',
+                'products.name'
+            )
+
+            ->selectRaw('SUM(detail_transactions.quantity) as quantity')
+
+            ->selectRaw('SUM(detail_transactions.quantity * detail_transactions.price) as total')
+
+            ->groupBy(
+                'products.id',
+                'products.name'
+            )
+
+            ->orderByDesc('quantity')
+
+            ->limit(10)
+
+            ->get();
+    }
 
 
 
@@ -277,6 +381,8 @@ class ReportView extends Component
 
             'stockLabels' => $stockChart->pluck('name'),
             'stockSeries' => $stockChart->pluck('stock'),
+            'stockTable' => $this->getStockTable(),
+            'bestSellingProducts' => $this->getBestSellingProducts(),
         ]);
     }
 }
