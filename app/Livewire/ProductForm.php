@@ -372,6 +372,29 @@ class ProductForm extends Component
             'price_purchase' => 'Precio de compra',
         ]);
 
+        for ($i = 0; $i < $this->number_labels ;$i++){
+            if(empty($this->labels) || empty($this->values)){
+                return $this->js('Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Etiqueta Vacia!",
+            showConfirmButton: false,
+            timer: 1500
+            })');
+            }
+
+            if(!isset($this?->labels[$i]) || !isset($this?->values[$i])){
+
+                return $this->js('Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Etiqueta Vacia!",
+            showConfirmButton: false,
+            timer: 1500
+            })');
+            }
+        }
+
         try {
             if($this->product->id == null){
                 $this->product = new Product();
