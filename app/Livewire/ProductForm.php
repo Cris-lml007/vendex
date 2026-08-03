@@ -240,7 +240,7 @@ class ProductForm extends Component
 
         return response()->streamDownload(
             fn () => print($pdf->output()),
-            'barcodes-'.$this->product->name.'-'.Carbon::now()->toString().'.pdf'
+            'barcodes-'.$this->product->id.'.pdf'
         );
     }
 
