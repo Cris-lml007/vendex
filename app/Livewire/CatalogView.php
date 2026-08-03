@@ -36,7 +36,17 @@ class CatalogView extends Component
 
     public function getProduct($id)
     {
-        $this->dispatch('getProduct', $id)->to(CatalogForm::class);
+        if(Product::where('id', $id)->exists()){
+            $this->dispatch('getProduct', $id)->to(CatalogForm::class);
+        }else{
+            $this->js('Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Producto no encontrado!",
+            showConfirmButton: false,
+            timer: 1500
+            })');
+        }
     }
 
 

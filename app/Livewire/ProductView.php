@@ -41,7 +41,7 @@ class ProductView extends Component
             'ID' => 'id',
             'Nombre' =>'name',
             'Modelo' => 'model',
-            'Serializado' => 'null',
+            'Serializado' => 'is_serialize',
             'Marca' => 'brand_id',
             'Categoria' => 'category_id',
             'Precio (Usd)' => 'price',
