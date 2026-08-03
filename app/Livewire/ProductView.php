@@ -37,8 +37,11 @@ class ProductView extends Component
     #[On('refresh')]
     public function render()
     {
-        $heads = ['Nombre' =>'name',
+        $heads = [
+            'ID' => 'id',
+            'Nombre' =>'name',
             'Modelo' => 'model',
+            'Serializado' => 'null',
             'Marca' => 'brand_id',
             'Categoria' => 'category_id',
             'Precio (Usd)' => 'price',

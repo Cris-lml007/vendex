@@ -12,8 +12,10 @@
             <livewire:table :heads="$heads" wire:model.live="list">
                 @foreach ($products as $item)
                     <tr>
+                        <td>{{ $item->id }}</td>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->model }}</td>
+                        <td>{{ $item->is_serialize == 0 ? 'No' : 'Si' }}</td>
                         @if($item->brand)
                             <td><strong style="color: {{ $item->brand->color_fg }}; background: {{ $item->brand->color_bg }}">{{ $item->brand->name }}</strong></td>
                         @else
