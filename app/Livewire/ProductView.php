@@ -50,18 +50,39 @@ class ProductView extends Component
 
         $search = $this->list['search'];
         if($search != ''){
-            $products = Product::where(function ($query) use ($search) {
-                    $query->where('name', 'like', '%'.$search.'%')
-                        ->orWhere('id', 'like', '%'.$search.'%')
-                        ->orWhere('model', 'like', '%'.$search.'%')
-                        ->orWhereHas('brand', function ($query) use ($search) {
-                            $query->where('name', 'like', '%'.$search.'%');
-                        })
-                        ->orWhereHas('category', function ($query) use ($search) {
-                            $query->where('name', 'like', '%'.$search.'%');
-                        })
-                        ->orWhere('price', 'like', '%'.$search.'%');
-                })->orderBy($this->list['sort_field'],$this->list['sort_direction'])
+
+            $terms = preg_split('/\s+/', trim($search));
+
+            $products = Product::where('status', Status::ACTIVE)
+                ->where(function ($query) use ($terms) {
+
+                    foreach ($terms as $term) {
+
+                        $query->where(function ($q) use ($term) {
+
+                            $q->where('id', 'like', "%{$term}%")
+                                ->orWhere('name', 'like', "%{$term}%")
+                                ->orWhere('model', 'like', "%{$term}%")
+                                ->orWhere('price', 'like', "%{$term}%")
+                                ->orWhereHas('store', function ($q) use ($term) {
+                                    $q->where('name', 'like', "%{$term}%");
+                                })
+
+                                ->orWhereHas('brand', function ($brand) use ($term) {
+                                    $brand->where('name', 'like', "%{$term}%");
+                                })
+
+                                ->orWhereHas('tags', function ($tag) use ($term) {
+                                    $tag->where('name', 'like', "%{$term}%")
+                                        ->orWhere('value', 'like', "%{$term}%");
+                                });
+
+                        });
+
+                    }
+
+                })
+                ->orderBy($this->list['sort_field'], $this->list['sort_direction'])
                 ->paginate();
         }else{
             $products = Product::where('is_serialize',false)

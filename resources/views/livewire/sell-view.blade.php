@@ -89,7 +89,7 @@
                         <div @class(['row','mb-3','d-none' => !$is_search])>
                             <div class="col">
                                 <label for="">Busqueda</label>
-                                <input wire:model.live="search" type="text" class="form-control" placeholder="Ingrese Busqueda">
+                                <input wire:model.blur.enter.live="search" type="text" class="form-control" placeholder="Ingrese Busqueda">
                             </div>
                         </div>
                     </div>
