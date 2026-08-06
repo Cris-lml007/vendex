@@ -41,6 +41,7 @@ class ProductView extends Component
             'ID' => 'id',
             'Nombre' =>'name',
             'Modelo' => 'model',
+            'Color' => 'color',
             'Serializado' => 'is_serialize',
             'Marca' => 'brand_id',
             'Categoria' => 'category_id',
@@ -64,6 +65,7 @@ class ProductView extends Component
                                 ->orWhere('name', 'like', "%{$term}%")
                                 ->orWhere('model', 'like', "%{$term}%")
                                 ->orWhere('price', 'like', "%{$term}%")
+                                ->orWhere('color', 'like', "%{$term}%")
                                 ->orWhereHas('store', function ($q) use ($term) {
                                     $q->where('name', 'like', "%{$term}%");
                                 })

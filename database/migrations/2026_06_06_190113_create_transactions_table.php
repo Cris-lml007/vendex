@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('store_id');
             $table->enum('payment_method',\App\Enums\Type::cases());
+            $table->string('observation')->nullable();
             $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('customers')->cascadeOnUpdate()->nullOnDelete();

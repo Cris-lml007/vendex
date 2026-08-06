@@ -136,6 +136,11 @@
                             </table>
                         </div>
 
+                        <div class="mx-3">
+                            <label for="">Observacion</label>
+                            <textarea class="form-control" wire:model="observation"></textarea>
+                        </div>
+
                     </div>
 
                     <div class="card-footer">

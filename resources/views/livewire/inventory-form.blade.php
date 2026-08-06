@@ -35,6 +35,8 @@
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
+            </div>
+            <div class="row mb-3">
                 <div class="col">
                     <label for="">Precio de Adquisición/Venta (Unidad)</label>
                     <div class="input-group">
@@ -49,7 +51,7 @@
                         <div class="input-group-text">Usd(1.00)</div>
                     </div>
                     @error('price')
-                        <span class="text-danger">{{ $message }}</span>
+                    <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
             </div>

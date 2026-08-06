@@ -49,12 +49,18 @@
                 <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
+        </div>
+        <div class="row mb-3">
             <div class="col">
                 <label for="">Categoria</label>
                 <input type="text" class="form-control" wire:model="category" disabled>
                 @error('category')
                 <span class="text-danger">{{ $message }}</span>
                 @enderror
+            </div>
+            <div class="col">
+                <label for="">Color</label>
+                <input type="text" class="form-control" wire:model="color" disabled>
             </div>
         </div>
         <div class="row mb-3">

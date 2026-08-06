@@ -13,6 +13,7 @@ class Transaction extends Model
         'user_id',
         'store_id',
         'payment_method',
+        'observation',
     ];
 
     protected function casts(): array

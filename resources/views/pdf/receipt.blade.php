@@ -242,7 +242,11 @@
 </table>
 
 <div class="literal">
+    <strong>Observacion: </strong>
+    {{ $transaction->observation ?? '' }}
+</div>
 
+<div class="literal">
     <strong>SON:</strong>
     {{ strtoupper($format->format($transaction->total * $transaction->details[0]->exchange_rate->usd_to_bs)) }} BOLIVIANOS
 

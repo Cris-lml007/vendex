@@ -15,6 +15,7 @@
                         <td>{{ $item->id }}</td>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->model }}</td>
+                        <td>{{ $item->color ?? '' }}</td>
                         <td>{{ $item->is_serialize == 0 ? 'No' : 'Si' }}</td>
                         @if($item->brand)
                             <td><strong style="color: {{ $item->brand->color_fg }}; background: {{ $item->brand->color_bg }}">{{ $item->brand->name }}</strong></td>

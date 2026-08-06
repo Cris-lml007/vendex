@@ -83,6 +83,8 @@ class ProductForm extends Component
 
     public $search;
 
+    public $color;
+
     public function updatedSearch(){
     }
 
@@ -258,6 +260,7 @@ class ProductForm extends Component
             'Id' => 'id',
             'Nombre' => 'name',
             'Precio' => 'price',
+            'Color' => 'color',
             'locación' => 'location',
         ];
         $this->stores_list = Store::where('status', Status::ACTIVE)->get();
@@ -269,6 +272,7 @@ class ProductForm extends Component
             $this->barcode = $this->product->id;
             $this->name = $this->product->name;
             $this->price = $this->product->price;
+            $this->color = $this->product->color ?? '';
             $this->usd = $this->product->price;
             $this->updatedUsd();
 
@@ -405,6 +409,7 @@ class ProductForm extends Component
             $this->product->brand_id = $this->brand;
             $this->product->model = $this->model;
             $this->product->category_id = $this->category;
+            $this->product->color = $this->color;
             if($this->barcode != ''){
                 $this->product->id = $this->barcode;
             }else{

@@ -27,6 +27,7 @@ class CatalogForm extends Component
     public $model;
     public $product;
     public $store_id;
+    public $color;
 
 
     public $stores;
@@ -46,6 +47,7 @@ class CatalogForm extends Component
         $this->brand = $product->brand?->name ?? '';
         $this->model = $product->model;
         $this->store_id = $product->store_id;
+        $this->color = $product->color ?? '';
 
         $this->product = $product;
 

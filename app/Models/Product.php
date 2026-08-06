@@ -11,7 +11,8 @@ class Product extends Model
     use HasUuids;
 
     public $fillable = [
-        'store_id'
+        'store_id',
+        'color'
     ];
 
     public function category(){

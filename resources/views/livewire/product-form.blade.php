@@ -17,7 +17,7 @@
                 <div class="row mb-3">
                     <div class="col">
                         <label for="">Buscar Producto</label>
-                        <input type="text" class="form-control" wire:model.blur.live="search" placeholder="Buscar Producto">
+                        <input type="text" class="form-control" wire:model.blur.enter.live="search" placeholder="Buscar Producto">
                     </div>
                     <div class="col">
                         <label for="">Producto</label>
@@ -98,9 +98,9 @@
                     <label for="">Precio (Bs)</label>
                     <div class="input-group">
                         <div class="input-group-text">Bs({{ Number::format(\App\Models\ExchangeRate::orderBy('id','desc')->first()->usd_to_bs,2) }})</div>
-                        <input type="text" class="form-control" wire:model.live="bs">
+                        <input type="text" class="form-control" wire:model.blur.enter.live="bs">
                         <div class="input-group-text"><i class="fa fa-share"></i></div>
-                        <input type="text" class="form-control" wire:model.live="usd">
+                        <input type="text" class="form-control" wire:model.blur.enter.live="usd">
                         <div class="input-group-text">Usd(1.00)</div>
                     </div>
 
@@ -108,6 +108,8 @@
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
+            </div>
+            <div class="row mb-3">
                 <div class="col">
                     <label for="">Categoria</label>
                     <select class="form-select" wire:model="category">
@@ -117,8 +119,12 @@
                         @endforeach
                     </select>
                     @error('category')
-                        <span class="text-danger">{{ $message }}</span>
+                    <span class="text-danger">{{ $message }}</span>
                     @enderror
+                </div>
+                <div class="col">
+                    <label for="">Color</label>
+                    <input type="text" class="form-control" wire:model="color" placeholder="Ingrese Color">
                 </div>
             </div>
             <div class="row mb-3">
@@ -217,11 +223,12 @@
                                     <table class="table mb-0">
                                         <thead>
                                         <tr>
-                                            <th colspan="4" class="text-center"><strong>NO SERIALIZADOS</strong></th>
+                                            <th colspan="5" class="text-center"><strong>NO SERIALIZADOS</strong></th>
                                         </tr>
                                         <tr>
                                             <th>Nombre</th>
                                             <th>Tipo</th>
+                                            <th>Color</th>
                                             <th>Stock Minimo</th>
                                             <th>Cantidad</th>
                                         </tr>
@@ -231,6 +238,7 @@
                                             <tr>
                                                 <td>{{ $item->name }}</td>
                                                 <td>{{ __('messages.'.$item->type->name) }}</td>
+                                                <td>{{ $item->color ?? '' }}</td>
                                                 <td>
                                                     <input wire:blur="setMinQuantity({{$item->id}}, $event.target.value)" type="number" class="form-control" value="{{ $min_quantity[$item->id]}}">
                                                 </td>
@@ -253,11 +261,12 @@
                                     <table class="table table-striped mb-0">
                                         <thead>
                                         <tr>
-                                            <th colspan="4" class="text-center"><strong>HEREDADOS</strong></th>
+                                            <th colspan="5" class="text-center"><strong>HEREDADOS</strong></th>
                                         </tr>
                                         <tr>
                                             <th>Id</th>
                                             <th>Nombre</th>
+                                            <th>Color</th>
                                             <th>Precio</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -267,6 +276,7 @@
                                             <tr>
                                                 <td>{{ $item->id }}</td>
                                                 <td>{{ $item->name }}</td>
+                                                <td>{{ $item->color ?? '' }}</td>
                                                 <td>{{ Number::format($item->price,2) }}</td>
                                                 <td>
                                                     <a href="{{ route('admin.product.id', $item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
@@ -284,12 +294,13 @@
                                     <table class="table table-striped mb-0">
                                         <thead>
                                         <tr>
-                                            <th colspan="5" class="text-center"><strong>SERIALIZADOS</strong></th>
+                                            <th colspan="6" class="text-center"><strong>SERIALIZADOS</strong></th>
                                         </tr>
                                         <tr>
                                             <th>Id</th>
                                             <th>Nombre</th>
                                             <th>Precio</th>
+                                            <th>Color</th>
                                             <th>Locación</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -300,6 +311,7 @@
                                                 <td>{{ $item->id }}</td>
                                                 <td>{{ $item->name }}</td>
                                                 <td>{{ Number::format($item->price,2) }}</td>
+                                                <td>{{ $item->color ?? '' }}</td>
                                                 <td>
                                                     <select class="form-select" wire:model="product_serials[{{$item->store_id}}]">
                                                         <option value="{{ $item->store_id }}">{{ $item?->store?->name ?? '' }}</option>

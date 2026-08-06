@@ -12,6 +12,8 @@ class CatalogView extends Component
 {
     use WithPagination;
 
+    public $is_table = true;
+
     public $list = [
         'search' => '',
         'sort_field' => 'name',
@@ -20,6 +22,10 @@ class CatalogView extends Component
     ];
 
     public $search;
+
+    public function isTable(){
+        $this->is_table = !$this->is_table;
+    }
 
     public function updatedList(){
         if($this->list['pages'] != ''){
@@ -53,7 +59,9 @@ class CatalogView extends Component
     public function render()
     {
         $heads = [
+            'Id' => 'id',
             "Nombre" => 'name',
+            'Color' => 'color',
             "Modelo" => 'model',
             "Marca" => 'brand_id',
             "Precio" => 'price',
@@ -75,6 +83,7 @@ class CatalogView extends Component
                                 ->orWhere('name', 'like', "%{$term}%")
                                 ->orWhere('model', 'like', "%{$term}%")
                                 ->orWhere('price', 'like', "%{$term}%")
+                                ->orWhere('color', 'like', "%{$term}%")
 
                                 ->orWhereHas('brand', function ($brand) use ($term) {
                                     $brand->where('name', 'like', "%{$term}%");

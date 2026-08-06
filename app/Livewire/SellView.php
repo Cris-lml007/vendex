@@ -38,6 +38,7 @@ class SellView extends Component
     public $list;
     public $store;
     public $stores;
+    public $observation;
 
     public Transaction $transaction;
 
@@ -188,7 +189,8 @@ class SellView extends Component
                     'customer_id' => $this->customer_id ?? null,
                     'user_id' => Auth::user()->id,
                     'store_id' => $this->store,
-                    'payment_method' => $this->method_payment
+                    'payment_method' => $this->method_payment,
+                    'observation' => $this->observation,
                 ]);
 
                 foreach ($this->list as $item) {

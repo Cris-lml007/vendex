@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('model');
             $table->string('description')->nullable();
             $table->decimal('price',15,8);
+            $table->string('color')->nullable();
+
+
 
             $table->boolean('is_serialize')->default(false);
             $table->string('parent_id')->nullable();
