@@ -110,7 +110,7 @@
                                             <td>{{ $item->name }}</td>
                                             <td>{{ __('messages.'.$item->type->name) }}</td>
                                             <td>
-                                                <input wire:blur="setStock({{$item->id}}, $event.target.value)" type="number" @class(['form-control'])  value="{{ $stocks[$item->id]}}"/>
+                                                <input disabled wire:blur="setStock({{$item->id}}, $event.target.value)" type="number" @class(['form-control'])  value="{{ $stocks[$item->id]}}"/>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -133,7 +133,6 @@
         @endif
     </div>
     <div class="modal-footer">
-        <button wire:click="transfer()" class="btn btn-primary" @if($stocks === $stocks_cp && $product?->store_id == $store_id) disabled @endif>Transferir</button>
         <button data-bs-dismiss="modal" class="btn btn-secondary">Cerrar</button>
     </div>
 </div>

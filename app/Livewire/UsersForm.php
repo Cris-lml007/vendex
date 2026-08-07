@@ -46,7 +46,7 @@ class UsersForm extends Component
         $this->validate([
             'name' => 'required',
             'password' => 'required|min:8',
-            'password_confirmation' => 'required|min:8|same:password',
+            'password_confirmation' => 'same:password',
             'username' => 'required|unique:users,username,'.$this?->user?->id ?? null,
             'phone' => 'required',
             'status' => 'required',
