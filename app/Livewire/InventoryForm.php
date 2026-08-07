@@ -167,6 +167,7 @@ class InventoryForm extends Component
 
         $this->js('$("#modal-inventory").modal("hide")');
         $this->dispatch('refresh')->to(InventoryView::class);
+        $this->redirect(route('admin.kardex'));
     }
 
 

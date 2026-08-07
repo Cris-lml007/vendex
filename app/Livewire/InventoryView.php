@@ -21,8 +21,8 @@ class InventoryView extends Component
 
     public $list = [
         'search' => '',
-        'sort_field' => 'id',
-        'sort_direction' => 'asc',
+        'sort_field' => 'created_at',
+        'sort_direction' => 'desc',
         'pages' => 1
     ];
 
