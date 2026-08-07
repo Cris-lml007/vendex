@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use function PHPUnit\Framework\isNull;
 
 class InventoryForm extends Component
 {
@@ -31,6 +32,13 @@ class InventoryForm extends Component
     public $usd;
 
     public function updatedBs(){
+        //verificar que solo sea numberos y puntos
+        if(!is_numeric($this->bs)){
+            $this->bs = 0;
+            $this->usd = 0;
+            return;
+        }
+
         if($this->bs != ''){
             if($this?->kardex?->id != null){
                 $this->usd = $this->bs / $this->kardex->exchange_rate->usd_to_bs;
@@ -47,6 +55,13 @@ class InventoryForm extends Component
 
     public function updatedUsd()
     {
+        if(!is_numeric($this->bs)){
+            $this->bs = 0;
+            $this->usd = 0;
+            return;
+        }
+
+
         if($this->usd != ''){
             if($this?->kardex?->id != null){
                 $this->bs = $this->usd * $this->kardex->exchange_rate->usd_to_bs;
@@ -121,7 +136,7 @@ class InventoryForm extends Component
             '_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
             'price' => 'required',
-            'total' => 'required|integer|min:'.$this->quantity.'|max:'.$this->quantity
+            'total' => 'required|integer|min:'.($this->quantity ?? 0).'|max:'.($this->quantity ?? 0)
         ], attributes: [
             '_id' => 'producto'
         ]);

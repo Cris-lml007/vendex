@@ -67,8 +67,11 @@ class CatalogView extends Component
             "Precio" => 'price',
             "Acciones" => null
         ];
-
-        $search = $this->search;
+        if($this->is_table){
+            $search = $this->list['search'];
+        }else{
+            $search = $this->search;
+        }
         if($search != ''){
             $terms = preg_split('/\s+/', trim($search));
 

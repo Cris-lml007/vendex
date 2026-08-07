@@ -72,7 +72,7 @@ class CatalogForm extends Component
 
         $q = $this->product?->stocks()->sum('quantity') ?? 0;
         if($q > 0 && !$this->product->is_serialize){
-            if(array_sum($this->stocks) > $q || (array_sum($this->stocks) == 0 && $this->product->stocks()->sum('quantity') > 0) ){
+            if(array_sum($this->stocks) != $q){
                 $this->js('Swal.fire({
                 icon: "error",
                 title: "Oops...",

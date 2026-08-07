@@ -298,7 +298,10 @@
         <div class="card">
 
             <div class="card-header">
-                <h5 class="mb-0">Existencias por Tienda</h5>
+                <div class="d-flex justify-content-between">
+                    <h5 class="mb-0">Existencias por Tienda</h5>
+                    <input type="text" class="form-control w-25" placeholder="Buscar..." wire:model.blur.enter.live="search">
+                </div>
             </div>
 
             <div class="table-responsive">
@@ -333,38 +336,85 @@
 
                     <tbody>
 
-                    @foreach($stockTable as $row)
-
+                    @foreach($products as $product)
                         <tr>
-
-                            <td>
-
-                                {{ $row['product'] }}
-
-                            </td>
-
-                            @foreach($stores as $store)
-
-                                <td class="text-center">
-
-                                    {{ $row[$store->id] }}
-
-                                </td>
-
+                            <td>{{ $product->name }}</td>
+                            @foreach($stores as $s)
+                                <td>{{ $product->stocks()?->where('store_id', $s->id)?->first()?->quantity ?? 0 }}</td>
                             @endforeach
-
-                            <td class="text-center fw-bold">
-
-                                {{ $row['total'] }}
-
-                            </td>
-
+                            <td>{{ $product->stocks()->sum('quantity') ?? 0 }}</td>
                         </tr>
-
                     @endforeach
-
                     </tbody>
+                    <tfoot>
+                        <td><strong>TOTALES</strong></td>
+                        @foreach($stores as $s)
+                            <td>{{ $s->stocks()->whereHas('product',function ($builder){
 
+            $terms = preg_split('/\s+/', trim($this->search ?? ''));
+
+            $builder->where('status', \App\Enums\Status::ACTIVE)
+                ->where(function ($query) use ($terms) {
+
+                    foreach ($terms as $term) {
+
+                        $query->where(function ($q) use ($term) {
+
+                            $q->where('id', 'like', "%{$term}%")
+                                ->orWhere('name', 'like', "%{$term}%")
+                                ->orWhere('model', 'like', "%{$term}%")
+                                ->orWhere('price', 'like', "%{$term}%")
+                                ->orWhere('color', 'like', "%{$term}%")
+
+                                ->orWhereHas('brand', function ($brand) use ($term) {
+                                    $brand->where('name', 'like', "%{$term}%");
+                                })
+
+                                ->orWhereHas('tags', function ($tag) use ($term) {
+                                    $tag->where('name', 'like', "%{$term}%")
+                                        ->orWhere('value', 'like', "%{$term}%");
+                                });
+
+                        });
+
+                    }
+
+                });
+})->sum('quantity') ?? 0 }}</td>
+                        @endforeach
+                        <td>{{ \App\Models\Stock::whereHas('product',function ($builder){
+
+            $terms = preg_split('/\s+/', trim($this->search ?? ''));
+
+            $builder->where('status', \App\Enums\Status::ACTIVE)
+                ->where(function ($query) use ($terms) {
+
+                    foreach ($terms as $term) {
+
+                        $query->where(function ($q) use ($term) {
+
+                            $q->where('id', 'like', "%{$term}%")
+                                ->orWhere('name', 'like', "%{$term}%")
+                                ->orWhere('model', 'like', "%{$term}%")
+                                ->orWhere('price', 'like', "%{$term}%")
+                                ->orWhere('color', 'like', "%{$term}%")
+
+                                ->orWhereHas('brand', function ($brand) use ($term) {
+                                    $brand->where('name', 'like', "%{$term}%");
+                                })
+
+                                ->orWhereHas('tags', function ($tag) use ($term) {
+                                    $tag->where('name', 'like', "%{$term}%")
+                                        ->orWhere('value', 'like', "%{$term}%");
+                                });
+
+                        });
+
+                    }
+
+                });
+})->sum('quantity') ?? 0 }}</td>
+                    </tfoot>
                 </table>
 
             </div>

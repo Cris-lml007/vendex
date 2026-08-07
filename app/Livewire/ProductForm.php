@@ -90,6 +90,12 @@ class ProductForm extends Component
 
 
     public function updatedBs(){
+
+        if(!is_numeric($this->bs)){
+            $this->bs = 0;
+            $this->usd = 0;
+            return;
+        }
         if($this->bs != ''){
             $this->usd = $this->bs / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
             $this->price = $this->usd;
@@ -102,6 +108,11 @@ class ProductForm extends Component
 
     public function updatedUsd()
     {
+        if(!is_numeric($this->bs)){
+            $this->bs = 0;
+            $this->usd = 0;
+            return;
+        }
         if($this->usd != ''){
             $this->bs = $this->usd * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
             $this->price = $this->usd;
@@ -114,6 +125,11 @@ class ProductForm extends Component
     }
 
     public function updatedBs1(){
+        if(!is_numeric($this->bs)){
+            $this->bs = 0;
+            $this->usd = 0;
+            return;
+        }
         if($this->bs1 != ''){
             if($this->edit){
                 $this->usd1 = $this->bs1 / $this->product->kardex()->first()->exchange_rate->usd_to_bs;
@@ -130,6 +146,11 @@ class ProductForm extends Component
 
     public function updatedUsd1()
     {
+        if(!is_numeric($this->bs)){
+            $this->bs = 0;
+            $this->usd = 0;
+            return;
+        }
         if($this->usd1 != ''){
             if($this->edit){
                 $this->bs1 = $this->usd1 * $this->product->kardex()->first()->exchange_rate->usd_to_bs;
@@ -527,7 +548,7 @@ class ProductForm extends Component
 
             $q = $this->product?->stocks()->sum('quantity') ?? 0;
             if($q > 0 || !empty($this->product_serials)){
-                if(array_sum($this->stocks) > $q || (array_sum($this->stocks) == 0 && $this->product->stocks()->sum('quantity') > 0) ){
+                if(array_sum($this->stocks) != $q){
                     $this->js('Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -639,9 +660,37 @@ class ProductForm extends Component
         $categories = Category::all();
         $brands = Brand::all();
         if($this->search != ''){
-            $products = Product::where('name', 'like', '%'.$this->search.'%')
+
+            $terms = preg_split('/\s+/', trim($this->search));
+
+            $products = Product::where('status', Status::ACTIVE)
                 ->where('is_serialize',false)
-                ->get();
+                ->where(function ($query) use ($terms) {
+
+                    foreach ($terms as $term) {
+
+                        $query->where(function ($q) use ($term) {
+
+                            $q->where('name', 'like', "%{$term}%")
+                                ->orWhere('id', 'like', "%{$term}%")
+                                ->orWhere('model', 'like', "%{$term}%")
+                                ->orWhere('price', 'like', "%{$term}%")
+                                ->orWhere('color', 'like', "%{$term}%")
+
+                                ->orWhereHas('brand', function ($brand) use ($term) {
+                                    $brand->where('name', 'like', "%{$term}%");
+                                })
+
+                                ->orWhereHas('tags', function ($tag) use ($term) {
+                                    $tag->where('name', 'like', "%{$term}%")
+                                        ->orWhere('value', 'like', "%{$term}%");
+                                });
+
+                        });
+
+                    }
+
+                })->get();
         }else{
             $products = Product::where('is_serialize',false)->get();
         }

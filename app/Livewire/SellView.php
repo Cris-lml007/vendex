@@ -146,7 +146,7 @@ class SellView extends Component
         $product = Product::find($this->product_id);
         $this->list[] = [
             'product_id' => $this->product_id,
-            'name' => $product->name,
+            'name' => $product->name . '('.$product->color.')',
             'quantity' => $this->quantity,
             'price' => $this->price,
         ];
@@ -314,6 +314,7 @@ class SellView extends Component
                                 ->orWhere('id', 'like', "%{$term}%")
                                 ->orWhere('model', 'like', "%{$term}%")
                                 ->orWhere('price', 'like', "%{$term}%")
+                                ->orWhere('color', 'like', "%{$term}%")
 
                                 ->orWhereHas('brand', function ($brand) use ($term) {
                                     $brand->where('name', 'like', "%{$term}%");

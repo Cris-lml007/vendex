@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\Status;
 use App\Models\Customer;
 use App\Models\DetailTransaction;
 use App\Models\Product;
@@ -35,6 +36,8 @@ class ReportView extends Component
     public $totalAmount = 0;
     public $productsSold = 0;
     public $averageSale = 0;
+
+    public $search;
 
     public function updating()
     {
@@ -350,7 +353,6 @@ class ReportView extends Component
     }
 
 
-
     public function render()
     {
         $this->calculateResume();
@@ -359,6 +361,41 @@ class ReportView extends Component
         $productsChart = $this->getProductsChart();
 
         $stockChart = $this->getStockChart();
+        if($this->search != ''){
+
+            $terms = preg_split('/\s+/', trim($this->search));
+
+            $products = Product::where('status', Status::ACTIVE)
+                ->where(function ($query) use ($terms) {
+
+                    foreach ($terms as $term) {
+
+                        $query->where(function ($q) use ($term) {
+
+                            $q->where('id', 'like', "%{$term}%")
+                                ->orWhere('name', 'like', "%{$term}%")
+                                ->orWhere('model', 'like', "%{$term}%")
+                                ->orWhere('price', 'like', "%{$term}%")
+                                ->orWhere('color', 'like', "%{$term}%")
+
+                                ->orWhereHas('brand', function ($brand) use ($term) {
+                                    $brand->where('name', 'like', "%{$term}%");
+                                })
+
+                                ->orWhereHas('tags', function ($tag) use ($term) {
+                                    $tag->where('name', 'like', "%{$term}%")
+                                        ->orWhere('value', 'like', "%{$term}%");
+                                });
+
+                        });
+
+                    }
+
+                })
+                ->get();
+        }else{
+            $products = Product::all();
+        }
 
         return view('livewire.report-view', [
 
@@ -383,6 +420,7 @@ class ReportView extends Component
             'stockSeries' => $stockChart->pluck('stock'),
             'stockTable' => $this->getStockTable(),
             'bestSellingProducts' => $this->getBestSellingProducts(),
+            'products' => $products
         ]);
     }
 }
