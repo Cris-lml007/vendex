@@ -52,6 +52,7 @@
                         <td>{{ $item->quantity }}</td>
                         <td>{{ __('messages.'.$item->type->name) }}</td>
                         <td>{{ $item->store->name }}</td>
+                        <td>{{ $item->user->name }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-inventory" wire:click="getKardex({{ $item->id }})"><i class="fa fa-eye"></i></button>

@@ -91,21 +91,54 @@ class InventoryView extends Component
             'Tipo' => 'type',
             'Locación' => 'name',
             'Fecha' => 'created_at',
+            'Por' => 'name',
             'Acciones' => null
         ];
 
         $search = $this->list['search'];
         if($search != ''){
-            $data = Kardex::Where('id','like', '%'.$search.'%')
-                ->orWhere('quantity', 'like', '%'.$search.'%')
-                ->orWhereRaw('(quantity*price) like ?', '%'.$search.'%')
-                ->orWhere('type', 'like', '%'.$search.'%')
-                ->orWhereHas('product', function($query) use ($search){
-                    $query->where('name', 'like', '%'.$search.'%');
-                })
-                ->orWhere('created_at', 'like', '%'.$search.'%')
-                ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
+            $terms = preg_split('/\s+/', trim($search));
+
+            $data = Kardex::where(function ($query) use ($terms){
+
+                foreach ($terms as $term) {
+                    $query->where(function ($q) use ($term) {
+                            $q->orWhere(function($q1) use ($term){
+                                foreach (Type::cases() as $i){
+                                    if(stripos(__('messages.'.$i->name),$term) !== false){
+                                        $q1->where('type', $i->value);
+                                    }
+                                }
+                            })->orWhere('price', 'like', "%{$term}%")
+                            ->orWhere('quantity', 'like', "%{$term}%")
+                            ->orWhere('id', 'like', "%{$term}%")
+                            ->orWhereRaw('(quantity*price) like ?', "%{$term}%")
+                            ->orWhereHas('product', function($query) use ($term){
+                                $query->where('name', 'like', '%'.$term.'%')
+                                    ->orWhere('id', 'like', '%'.$term.'%')
+                                    ->orWhere('color', 'like', '%'.$term.'%');
+                            })->orWhereHas('user', function($query) use ($term){
+                                $query->where('name', 'like', '%'.$term.'%');
+                            })->orWhere('created_at', 'like', '%'.$term.'%')
+                                ->orWhereHas('store', function($query) use ($term){
+                                    $query->where('name', 'like', '%'.$term.'%');
+                                });
+                    });
+                }
+
+
+
+            })->orderBy($this->list['sort_field'],$this->list['sort_direction'])
                 ->paginate();
+            //Where('id','like', '%'.$search.'%')
+            //    ->orWhere('quantity', 'like', '%'.$search.'%')
+            //    ->orWhereRaw('(quantity*price) like ?', '%'.$search.'%')
+            //    ->orWhere('type', 'like', '%'.$search.'%')
+            //    ->orWhereHas('product', function($query) use ($search){
+            //        $query->where('name', 'like', '%'.$search.'%');
+            //    })->orWhereHas('user', function($query) use ($search){
+            //        $query->where('name', 'like', '%'.$search.'%');
+            //    })->orWhere('created_at', 'like', '%'.$search.'%')
         }else{
             $data = kardex::orderBy($this->list['sort_field'],$this->list['sort_direction'])
                 ->paginate();
