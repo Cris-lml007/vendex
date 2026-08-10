@@ -90,8 +90,8 @@ class InventoryView extends Component
             'Cantidad' => 'quantity',
             'Tipo' => 'type',
             'Locación' => 'name',
+            'Por' => null,
             'Fecha' => 'created_at',
-            'Por' => 'name',
             'Acciones' => null
         ];
 
