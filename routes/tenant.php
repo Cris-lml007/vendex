@@ -66,11 +66,13 @@ Route::middleware([
             'verify' => false,
         ]);
 
-        Route::get('/', function () {
-            return 'This is your multi-tenant application. The id of the current tenant is ' . tenant('id'). ' user: '.Auth::user();
-        });
+        Route::get('/',SellView::class)->middleware('auth');
 
-        Route::prefix('/dashboard')->group(function(){
+        // Route::get('/', function () {
+        //     return 'This is your multi-tenant application. The id of the current tenant is ' . tenant('id'). ' user: '.Auth::user();
+        // });
+
+        Route::prefix('/dashboard')->middleware('auth')->group(function(){
 
             Route::can('isAdmin')->get('/exchange',ExchangeView::class)->name('admin.exchange');
 

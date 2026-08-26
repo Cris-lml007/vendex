@@ -19,9 +19,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+foreach (config('tenancy.central_domains') as $domain) {
+    Route::domain($domain)->group(function () {
+        Route::get('/', function () {
+            return view('welcome');
+        });
+
+    });
+}
 
 //Route::middleware('auth')->get('/', SellView::class );
 
@@ -57,8 +62,8 @@ Route::prefix('/dashboard')->middleware('auth')->group(function(){
             $url = $not['url'];
 
             $dropdownHtml .= "<a href='{$url}' class='dropdown-item'>
-                            {$icon}{$not['text']}
-                          </a>";
+            {$icon}{$not['text']}
+            </a>";
 
             if ($key < count($notifications) - 1) {
                 $dropdownHtml .= "<div class='dropdown-divider'></div>";
@@ -105,9 +110,9 @@ Route::prefix('/dashboard')->middleware('auth')->group(function(){
             'isHtml5ParserEnabled' => true,
             'isRemoteEnabled' => true,
         ])->loadView('pdf.receipt',[
-            'transaction' => $transaction,
-            'format' => $format,
-        ]);
+                'transaction' => $transaction,
+                'format' => $format,
+            ]);
         $pdf->setPaper('letter', 'landscape');
         $pdf->render();
         return $pdf->stream();
