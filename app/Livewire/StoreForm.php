@@ -59,10 +59,11 @@ class StoreForm extends Component
 
 
             if (Storage::disk('local')->exists("stores/{$this->store->id}.jpg")) {
-                $this->photo_url = Storage::disk('local')
-                    ->temporaryUrl("stores/{$this->store->id}.jpg",
-                        now()->addMinutes(5)
-                    );
+                $this->photo_url = route('store.photo',['stores',$this->store->id]);
+                // Storage::disk('local')
+                //     ->temporaryUrl("stores/{$this->store->id}.jpg",
+                //         now()->addMinutes(5)
+                //     );
             }
         }else{
             $this->store = new Store();
