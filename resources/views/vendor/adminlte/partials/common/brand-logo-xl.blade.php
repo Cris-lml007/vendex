@@ -2,8 +2,7 @@
 
 @php
     if(\Illuminate\Support\Facades\Storage::disk('local')->exists("stores/".\Illuminate\Support\Facades\Auth::user()->store_id .".jpg")){
-        $url = \Illuminate\Support\Facades\Storage::disk('local')
-        ->temporaryUrl("stores/".\Illuminate\Support\Facades\Auth::user()->store_id .".jpg","2027-12-12");
+        $url = route('store.photo',["stores",\Illuminate\Support\Facades\Auth::user()->store_id]);
     }else{
         $url = asset(config('adminlte.logo_img', 'vendor/adminlte/dist/img/AdminLTELogo.png'));
     }
