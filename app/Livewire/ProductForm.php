@@ -318,10 +318,11 @@ class ProductForm extends Component
             if (Storage::disk('local')->exists("products/{$this->product->id}.jpg")) {
                 //$this->photo_url = Storage::disk('local')->get("products/{$this->product->id}.jpg");
 
-                $this->photo_url = Storage::disk('local')
-                    ->temporaryUrl("products/{$this->product->id}.jpg",
-                        now()->addMinutes(5)
-                    );
+                $this->photo_url = route('store.photo',['products',$this->product->id]);
+                // Storage::disk('local')
+                //     ->temporaryUrl("products/{$this->product->id}.jpg",
+                //         now()->addMinutes(5)
+                //     );
 
                 //$this->photo_url = "data:image/png;base64,". base64_encode($this->photo_url);
             }

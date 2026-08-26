@@ -43,20 +43,14 @@
 
                                         $photo_url = null;
                                         if (Storage::disk('local')->exists("products/{$product->id}.jpg")) {
-                                            $photo_url = Storage::disk('local')
-                                                ->temporaryUrl("products/{$product->id}.jpg",
-                                                    now()->addMinutes(5)
-                                                );
+                                            $photo_url = route('store.photo',['products',$product->id]);
                                         }else{
                                             $v = false;
                                             $p = $product?->parent;
                                             do{
                                                 if($p?->id != null){
                                                     if(Storage::disk('local')->exists("products/{$p->id}.jpg")) {
-                                                        $photo_url = Storage::disk('local')
-                                                            ->temporaryUrl("products/{$p->id}.jpg",
-                                                                now()->addMinutes(5)
-                                                            );
+                                                        $photo_url = route('store.photo',['products',$p->id]);
                                                         $v = true;
                                                     }
                                                 }else{
