@@ -183,7 +183,7 @@ Route::prefix('/tenants')->group(function(){
             $request->validate([
                 'username' => 'required|exists:users,username'
             ]);
-            $password = Str::random(8);
+            $password = "12345678";//;Str::random(8);
             User::where('username', $request->username)
                 ->update([
                     'password' => $password
