@@ -159,6 +159,7 @@ Route::prefix('/tenants')->group(function(){
                 return response()->json(['message' => 'usuario admin existente'],200);
             }else{
                 $u = User::create([
+                    'name' => 'admin',
                     'username' => 'admin',
                     'password' => $p,
                     'status' => Status::ACTIVE,
