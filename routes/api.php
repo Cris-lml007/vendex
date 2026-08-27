@@ -183,10 +183,10 @@ Route::prefix('/tenants')->group(function(){
             $request->validate([
                 'username' => 'required|exists:users,username'
             ]);
-            $password = Hash::make(Str::random(8));
+            $password = Str::random(8);
             User::where('username', $request->username)
                 ->update([
-                    'password' => $password
+                    'password' => Hash::make($password)
                 ]);
             return response()->json([
                 'message' => 'contraseña Restablecida: '. $request->username,
