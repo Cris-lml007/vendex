@@ -23,7 +23,7 @@
                             <td><strong>---</strong></td>
                         @endif
                         <td>{{ $item?->category?->name ?? '---' }}</td>
-                        <td>{{ Number::format($item->price, precision: 2) }}</td>
+                        <td>{{ Number::format($item->price*$rate, precision: 2) }}</td>
                     <td>
                         <a href="{{ route('admin.product.id',$item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                     </td>

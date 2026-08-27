@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Enums\Status;
+use App\Models\ExchangeRate;
 use App\Models\Product;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -37,6 +38,7 @@ class ProductView extends Component
     #[On('refresh')]
     public function render()
     {
+        $rate = ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
         $heads = [
             'ID' => 'id',
             'Nombre' =>'name',
@@ -93,6 +95,6 @@ class ProductView extends Component
         }
         $this->list['pages_max'] = $products->lastPage();
         //$products = Product::all();
-        return view('livewire.product-view',compact(['heads','products']));
+        return view('livewire.product-view',compact(['heads','products','rate']));
     }
 }
