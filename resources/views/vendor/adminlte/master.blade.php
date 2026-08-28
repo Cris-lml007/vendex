@@ -99,7 +99,7 @@
 
 </head>
 
-<body class="@yield('classes_body')" @yield('body_data')>
+<body class="@yield('classes_body')" @yield('body_data') data-theme="vendex">
 
     {{-- Body Content --}}
     @yield('body')

@@ -31,8 +31,191 @@
     --color-success: #22C55E;
     --color-warning: #F59E0B;
     --color-danger: #EF4444;
+    --color-text-titulo: #ffffff;
+
+    --color-acento: #4F46E5;
+    --color-acento-hover: #4338CA;
+
+    --color-success: #22C55E;
+    --color-success-hover: #16A34A;
+
+    --color-danger: #EF4444;
+    --color-danger-hover: #DC2626;
+
+    --color-warning: #F59E0B;
+    --color-warning-hover: #D97706;
+
+    --color-info: #06B6D4;
+    --color-info-hover: #0891B2;
 
 }
+
+/* ==========================================================
+   TEMA VENDEX
+   ========================================================== */
+
+[data-theme="vendex"] {
+
+    /* Fondos */
+    --color-fondo-principal: #0F172A;
+    --color-fondo-sidebar: #111827;
+    --color-fondo-widgets: #1E293B;
+    --color-fondo-hover: #334155;
+
+    /* Bordes */
+    --color-bordes: #334155;
+
+    /* Texto */
+    --color-texto-principal: #F8FAFC;
+    --color-texto-secundario: #94A3B8;
+
+    /* Principal */
+    --color-acento: #4F46E5;
+    --color-acento-hover: #4338CA;
+    --color-acento-soft: rgba(79, 70, 229, .15);
+
+    /* Auxiliares */
+    --color-info: #06B6D4;
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
+    --color-text-titulo: #ffffff
+
+}
+
+
+/* ==========================================================
+   TEMA MIDNIGHT
+   ========================================================== */
+
+[data-theme="midnight"] {
+
+    /* Fondos */
+    --color-fondo-principal: #020617;
+    --color-fondo-sidebar: #020617;
+    --color-fondo-widgets: #0F172A;
+    --color-fondo-hover: #1E293B;
+
+    /* Bordes */
+    --color-bordes: #1E3A5F;
+
+    /* Texto */
+    --color-texto-principal: #E0F2FE;
+    --color-texto-secundario: #7DD3FC;
+
+    /* Principal */
+    --color-acento: #0284C7;
+    --color-acento-hover: #0369A1;
+    --color-acento-soft: rgba(2, 132, 199, .15);
+
+    /* Auxiliares */
+    --color-info: #38BDF8;
+    --color-success: #10B981;
+    --color-warning: #FBBF24;
+    --color-danger: #F43F5E;
+
+}
+
+
+/* ==========================================================
+   TEMA EMERALD
+   ========================================================== */
+
+[data-theme="emerald"] {
+
+    /* Fondos */
+    --color-fondo-principal: #071A14;
+    --color-fondo-sidebar: #06140F;
+    --color-fondo-widgets: #0F241C;
+    --color-fondo-hover: #1B3A2D;
+
+    /* Bordes */
+    --color-bordes: #28543F;
+
+    /* Texto */
+    --color-texto-principal: #ECFDF5;
+    --color-texto-secundario: #86EFAC;
+
+    /* Principal */
+    --color-acento: #10B981;
+    --color-acento-hover: #059669;
+    --color-acento-soft: rgba(16, 185, 129, .15);
+
+    /* Auxiliares */
+    --color-info: #22D3EE;
+    --color-success: #34D399;
+    --color-warning: #FBBF24;
+    --color-danger: #FB7185;
+
+}
+
+/* ==========================================================
+   TEMA PURPLE
+   ========================================================== */
+
+[data-theme="purple"] {
+
+    /* Fondos */
+    --color-fondo-principal: #171021;
+    --color-fondo-sidebar: #120C1A;
+    --color-fondo-widgets: #241632;
+    --color-fondo-hover: #38234A;
+
+    /* Bordes */
+    --color-bordes: #50326B;
+
+    /* Texto */
+    --color-texto-principal: #F5F3FF;
+    --color-texto-secundario: #C4B5FD;
+
+    /* Principal */
+    --color-acento: #8B5CF6;
+    --color-acento-hover: #7C3AED;
+    --color-acento-soft: rgba(139, 92, 246, .15);
+
+    /* Auxiliares */
+    --color-info: #22D3EE;
+    --color-success: #4ADE80;
+    --color-warning: #FBBF24;
+    --color-danger: #FB7185;
+
+}
+
+/* ==========================================================
+   TEMA CRIMSON
+   ========================================================== */
+
+[data-theme="crimson"] {
+
+    /* Fondos */
+    --color-fondo-principal: #1A0B0E;
+    --color-fondo-sidebar: #120709;
+    --color-fondo-widgets: #281116;
+    --color-fondo-hover: #421C25;
+
+    /* Bordes */
+    --color-bordes: #5C2632;
+
+    /* Texto */
+    --color-texto-principal: #FFF1F2;
+    --color-texto-secundario: #FDA4AF;
+
+    /* Principal */
+    --color-acento: #E11D48;
+    --color-acento-hover: #BE123C;
+    --color-acento-soft: rgba(225, 29, 72, .15);
+
+    /* Auxiliares */
+    --color-info: #38BDF8;
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-danger: #FB7185;
+    --color-texto-titulo: #FFFFFF;
+
+}
+
+
+
 
 /* ==========================================================
    BODY
@@ -76,7 +259,7 @@ body{
 }
 
 .brand-link .brand-text{
-    color:#fff!important;
+    color:var(--color-texto-principal) !important;
     font-weight:700;
     letter-spacing:3px;
 }
@@ -114,7 +297,7 @@ body{
 
 .nav-sidebar .nav-item>.nav-link.active{
     background:var(--color-acento-soft)!important;
-    color:#fff!important;
+    color:var(--color-texto-principal) !important;
     font-weight:600;
 }
 
@@ -131,7 +314,7 @@ body{
 }
 
 .content-header h1{
-    color:#fff;
+    color:var(--color-texto-principal);
     font-weight:700;
 }
 
@@ -149,7 +332,7 @@ body{
 .card-header{
     background:transparent;
     border-bottom:1px solid var(--color-bordes);
-    color:#fff;
+    color:var(--color-texto-principal);
     font-weight:600;
 }
 
@@ -159,7 +342,7 @@ body{
 }
 
 .card-title{
-    color:#fff;
+    color:var(--color-texto-principal);
 }
 
 /* Hover para tarjetas de productos */
@@ -181,9 +364,9 @@ label{
 .form-control,
 .form-select{
 
-    background:#0F172A;
+    background:var(--color-fondo-principal);
     border:1px solid var(--color-bordes);
-    color:#fff;
+    color:var(--color-texto-principal);
 
 }
 
@@ -194,10 +377,10 @@ label{
 .form-control:focus,
 .form-select:focus{
 
-    background:#0F172A;
-    color:#fff;
+    background:var(--color-fondo-principal);
+    color:var(--color-texto-principal);
     border-color:var(--color-acento);
-    box-shadow:0 0 0 .2rem rgba(79,70,229,.20);
+    box-shadow:0 0 0 .2rem var(--color-fondo-principal);
 
 }
 
@@ -209,7 +392,7 @@ label{
 .form-control[readonly],
 .form-select:disabled{
 
-    background-color: #273449 !important;
+    background-color: var(--color-fondo-hover) !important;
     color: white !important;
     border-color: var(--color-bordes) !important;
     opacity: 1;
@@ -218,7 +401,7 @@ label{
 
 .form-control:disabled::placeholder{
 
-    color: #6B7280;
+    color: var(--color-fondo-hover);
 
 }
 
@@ -239,52 +422,194 @@ label{
    BOTONES
    ========================================================== */
 
-.btn{
-    border-radius:8px;
-    font-weight:600;
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
 }
 
-.btn-primary{
 
-    background:var(--color-acento);
-    border-color:var(--color-acento);
+/* ==========================================================
+   PRIMARY
+   ========================================================== */
 
-}
+.btn-primary {
 
-.btn-primary:hover{
-
-    background:var(--color-acento-hover);
-    border-color:var(--color-acento-hover);
-
-}
-
-.btn-success{
-
-    background:var(--color-success);
-    border-color:var(--color-success);
+    background-color: var(--color-acento) !important;
+    border-color: var(--color-acento) !important;
+    color: #fff !important;
 
 }
 
-.btn-danger{
+.btn-primary:hover {
 
-    background:var(--color-danger);
-    border-color:var(--color-danger);
-
-}
-
-.btn-warning{
-
-    background:var(--color-warning);
-    border-color:var(--color-warning);
-    color:#fff;
+    background-color: var(--color-acento-hover) !important;
+    border-color: var(--color-acento-hover) !important;
 
 }
 
-.btn-info{
+.btn-primary:focus,
+.btn-primary:focus-visible {
 
-    background:var(--color-info);
-    border-color:var(--color-info);
-    color:#fff;
+    background-color: var(--color-acento) !important;
+    border-color: var(--color-acento) !important;
+
+    box-shadow:
+        0 0 0 .2rem
+        var(--color-acento-soft) !important;
+
+}
+
+.btn-primary:active,
+.btn-primary.active,
+.show > .btn-primary.dropdown-toggle {
+
+    background-color: var(--color-acento-hover) !important;
+    border-color: var(--color-acento-hover) !important;
+
+}
+
+.btn-primary:active:focus,
+.btn-primary.active:focus {
+
+    box-shadow:
+        0 0 0 .2rem
+        var(--color-acento-soft) !important;
+
+}
+
+
+/* ==========================================================
+   SUCCESS
+   ========================================================== */
+
+.btn-success {
+
+    background-color: var(--color-success) !important;
+    border-color: var(--color-success) !important;
+    color: #fff !important;
+
+}
+
+.btn-success:hover,
+.btn-success:active,
+.btn-success.active {
+
+    background-color: var(--color-success-hover) !important;
+    border-color: var(--color-success-hover) !important;
+
+}
+
+.btn-success:focus,
+.btn-success:focus-visible {
+
+    background-color: var(--color-success) !important;
+    border-color: var(--color-success) !important;
+
+    box-shadow:
+        0 0 0 .2rem
+        rgba(34, 197, 94, .20) !important;
+
+}
+
+
+/* ==========================================================
+   DANGER
+   ========================================================== */
+
+.btn-danger {
+
+    background-color: var(--color-danger) !important;
+    border-color: var(--color-danger) !important;
+    color: #fff !important;
+
+}
+
+.btn-danger:hover,
+.btn-danger:active,
+.btn-danger.active {
+
+    background-color: var(--color-danger-hover) !important;
+    border-color: var(--color-danger-hover) !important;
+
+}
+
+.btn-danger:focus,
+.btn-danger:focus-visible {
+
+    background-color: var(--color-danger) !important;
+    border-color: var(--color-danger) !important;
+
+    box-shadow:
+        0 0 0 .2rem
+        rgba(239, 68, 68, .20) !important;
+
+}
+
+
+/* ==========================================================
+   WARNING
+   ========================================================== */
+
+.btn-warning {
+
+    background-color: var(--color-warning) !important;
+    border-color: var(--color-warning) !important;
+    color: #fff !important;
+
+}
+
+.btn-warning:hover,
+.btn-warning:active,
+.btn-warning.active {
+
+    background-color: var(--color-warning-hover) !important;
+    border-color: var(--color-warning-hover) !important;
+
+}
+
+.btn-warning:focus,
+.btn-warning:focus-visible {
+
+    background-color: var(--color-warning) !important;
+    border-color: var(--color-warning) !important;
+
+    box-shadow:
+        0 0 0 .2rem
+        rgba(245, 158, 11, .20) !important;
+
+}
+
+
+/* ==========================================================
+   INFO
+   ========================================================== */
+
+.btn-info {
+
+    background-color: var(--color-info) !important;
+    border-color: var(--color-info) !important;
+    color: #fff !important;
+
+}
+
+.btn-info:hover,
+.btn-info:active,
+.btn-info.active {
+
+    background-color: var(--color-info-hover) !important;
+    border-color: var(--color-info-hover) !important;
+
+}
+
+.btn-info:focus,
+.btn-info:focus-visible {
+
+    background-color: var(--color-info) !important;
+    border-color: var(--color-info) !important;
+
+    box-shadow:
+        0 0 0 .2rem
+        rgba(6, 182, 212, .20) !important;
 
 }
 
@@ -332,7 +657,7 @@ label{
 .page-link:hover{
 
     background:var(--color-fondo-hover);
-    color:#fff;
+    color:var(--color-texto-principal);
 
 }
 
@@ -383,7 +708,7 @@ label{
 .dropdown-item:hover{
 
     background:var(--color-fondo-hover);
-    color:#fff;
+    color:var(--color-texto-principal);
 
 }
 
@@ -395,7 +720,7 @@ label{
 
     background:var(--color-fondo-widgets);
     border:1px solid var(--color-bordes);
-    color:#fff;
+    color:var(--color-texto-principal);
 
 }
 
@@ -543,7 +868,7 @@ body.register-page{
 .table thead,
 .table thead th{
     background: var(--color-fondo-hover) !important;
-    color: #fff !important;
+    color: var(--color-texto-principal) !important;
     border-color: var(--color-bordes) !important;
 }
 
@@ -564,7 +889,7 @@ body.register-page{
 .table tfoot th,
 .table tfoot td{
     background: var(--color-fondo-hover) !important;
-    color: #fff !important;
+    color: var(--color-texto-principal) !important;
     border-color: var(--color-bordes) !important;
 }
 
@@ -611,14 +936,14 @@ table.dataTable tbody tr:hover{
 
 .table-striped > tbody > tr:nth-of-type(odd) > *{
 
-    background-color: #243247 !important;
+    background-color: var(--color-fondo-principal) !important;
 
 }
 
 .table-hover > tbody > tr:hover > *{
 
     background-color: var(--color-fondo-hover) !important;
-    color: #fff !important;
+    color: var(--color-texto-principal) !important;
 
 }
 
@@ -636,7 +961,7 @@ table.dataTable tbody tr:hover{
     justify-content:center;
     align-items:center;
 
-    background:#0F172A;
+    background:var(--color-fondo-principal);
 
     z-index:999999;
 
@@ -719,4 +1044,8 @@ table.dataTable tbody tr:hover{
     opacity:0;
     visibility:hidden;
 
+}
+
+h5 {
+    color: var(--color-texto-principal);
 }
