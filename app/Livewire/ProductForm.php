@@ -108,7 +108,7 @@ class ProductForm extends Component
 
     public function updatedUsd()
     {
-        if(!is_numeric($this->bs)){
+        if(!is_numeric($this->usd)){
             $this->bs = 0;
             $this->usd = 0;
             return;
@@ -146,7 +146,7 @@ class ProductForm extends Component
 
     public function updatedUsd1()
     {
-        if(!is_numeric($this->bs)){
+        if(!is_numeric($this->usd)){
             $this->bs = 0;
             $this->usd = 0;
             return;
