@@ -99,7 +99,7 @@
 
 </head>
 
-<body class="@yield('classes_body')" @yield('body_data') data-theme="vendex">
+<body class="@yield('classes_body')" @yield('body_data') data-theme="{{ App\Models\Settings::first()?->theme ?? 'vendex' }}">
 
     {{-- Body Content --}}
     @yield('body')

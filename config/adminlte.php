@@ -381,6 +381,12 @@ return [
             'route' => 'admin.exchange',
             'icon' => 'fas fa-fw fa-dollar-sign',
             'can' => 'isAdmin'
+        ],
+        [
+            'text' => 'Configuraciones',
+            'route' => 'admin.settings',
+            'icon' => 'fas fa-fw fa-wrench',
+            'can' => 'isAdmin'
         ]
         ,[
             'can' => 'isAdmin',

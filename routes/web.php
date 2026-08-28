@@ -10,6 +10,7 @@ use App\Livewire\ProductView;
 use App\Livewire\ReportView;
 use App\Livewire\SaleView;
 use App\Livewire\SellView;
+use App\Livewire\SettingsView;
 use App\Livewire\StoreForm;
 use App\Livewire\StoreView;
 use App\Livewire\TransfersView;
@@ -101,6 +102,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function(){
     Route::can('isPrivilegied')->get('/transfers',TransfersView::class)->name('admin.transfers');
     Route::get('/sales',SaleView::class)->name('admin.sales');
     Route::can('isAdmin')->get('/reports',ReportView::class)->name('admin.reports');
+    Route::can('isAdmin')->get('/settings',SettingsView::class)->name('admin.settings');
 
     Route::get('/sell/{transaction}',function (\App\Models\Transaction $transaction){
 
