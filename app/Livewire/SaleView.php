@@ -4,10 +4,13 @@ namespace App\Livewire;
 
 use App\Enums\Role;
 use App\Enums\Type;
+use App\Models\ExchangeRate;
 use App\Models\Store;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -18,12 +21,14 @@ class SaleView extends Component
     public $store;
     #public $data;
     public $lock = false;
+    public $today = true;
+    public $total = 0;
 
     public $list = [
         'search' => '',
         'sort_field' => 'Id',
         'sort_direction' => 'asc',
-        'pages' => 1
+        'pages' => null
     ];
 
     public function updatedList(){
@@ -65,13 +70,20 @@ class SaleView extends Component
                     ->where(function (Builder $builder) use ($search) {
                         $builder->whereHas('customer', function (Builder $builder) use ($search) {
                             $builder->where('name', 'like', '%' . $search . '%');
-                        })->orWhere('created_at', 'like', '%' . $search . '%');
+                        })->orWhere(function ($b) use ($search){
+                                $b->where('created_at', 'like', '%' . $search . '%')
+                                    ->when($this->today,function ($q){
+                                        $q->whereDate('created_at',today());
+                                    });
+                            });
                     })->orderBy($this->list['sort_field'],$this->list['sort_direction'])
-                    ->paginate();
+                    ->get();
             }else{
                 $data = Auth::user()->sales()->where('store_id',$this->store)
-                    ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
-                    ->paginate();
+                    ->when($this->today,function($q){
+                        $q->whereDate('created_at',today());
+                    })->orderBy($this->list['sort_field'],$this->list['sort_direction'])
+                    ->get();
             }
         }else{
             if($search != ''){
@@ -81,18 +93,27 @@ class SaleView extends Component
                             $builder->where('name', 'like', '%' . $search . '%');
                         })->orWhereHas('user', function (Builder $builder) use ($search) {
                             $builder->where('name', 'like', '%' . $search . '%');
-                        })->orWhere('created_at', 'like', '%' . $search . '%');
+                        })->orWhere(function ($b) use ($search){
+                                $b->where('created_at', 'like', '%' . $search . '%')
+                                    ->when($this->today,function ($q){
+                                        $q->whereDate('created_at',today());
+                                    });
+                            });
                     })->orderBy($this->list['sort_field'],$this->list['sort_direction'])
-                    ->paginate();
+                    ->get();
             }else{
                 $data = Transaction::where('store_id',$this->store)
-                    ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
-                    ->paginate();
+                    ->when($this->today,function ($q){
+                        $q->whereDate('created_at',today());
+                    })->orderBy($this->list['sort_field'],$this->list['sort_direction'])
+                    ->get();
+                $this->total = $data->sum('totalBs');
+                // dd($this->total);
             }
         }
 
 
-        $this->list['pages_max'] = $data->lastPage();
+        $this->list['pages_max'] = null;//$data->lastPage();
         return view('livewire.sale-view', compact(['heads', 'stores', 'data']));
     }
 }

@@ -46,4 +46,16 @@ class Transaction extends Model
             }
         );
     }
+
+    public function totalBs():Attribute{
+        return Attribute::make(
+            get: function(){
+                return $this->details()
+                    ->join('exchange_rates','exchange_rates.id','=','detail_transactions.exchange_rate_id')
+                    ->selectRaw('SUM(price*quantity*exchange_rates.usd_to_bs) as total')
+                    ->first()
+                    ->total;
+            }
+        );
+    }
 }
