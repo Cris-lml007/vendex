@@ -18,22 +18,23 @@
             @endif
 
             @if ($settings->heredaded_products || $product->parent)
-            <div class="row mb-3">
-                <div class="col">
-                    <label for="">Buscar Producto</label>
-                    <input type="text" class="form-control" wire:model.blur.enter.live="search"
-                        placeholder="Buscar Producto">
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="">Buscar Producto</label>
+                        <input type="text" class="form-control" wire:model.blur.enter.live="search"
+                            placeholder="Buscar Producto">
+                    </div>
+                    <div class="col">
+                        <label for="">Producto</label>
+                        <select class="form-select" wire:model.live="product_id">
+                            <option value="">Seleccione Producto</option>
+                            @foreach ($products as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}({{ $item->color ?? '' }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-                <div class="col">
-                    <label for="">Producto</label>
-                    <select class="form-select" wire:model.live="product_id">
-                        <option value="">Seleccione Producto</option>
-                        @foreach ($products as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}({{ $item->color ?? '' }})</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
 
             @endif
 
@@ -60,9 +61,11 @@
                                     Bs({{ Number::format(\App\Models\ExchangeRate::orderBy('id', 'desc')->first()->usd_to_bs, 2) }})
                                 </div>
                             @endif
-                            <input type="number" step="any" class="form-control" wire:model.live="bs1">
+                            <input type="number" step="any" class="form-control" wire:model.live="bs1"
+                                @if (!empty($this->kardex)) disabled @endif>
                             <div class="input-group-text"><i class="fa fa-share"></i></div>
-                            <input type="number" step="any" class="form-control" wire:model.live="usd1">
+                            <input type="number" step="any" class="form-control" wire:model.live="usd1"
+                                @if (!empty($this->kardex)) disabled @endif>
                             <div class="input-group-text">Usd(1.00)</div>
                         </div>
                         @error('price_purchase')
@@ -106,7 +109,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col">
-                    <label for="">Precio (Bs)</label>
+                    <label for="">Precio Unitario</label>
                     <div class="input-group">
                         <div class="input-group-text">
                             Bs({{ Number::format(\App\Models\ExchangeRate::orderBy('id', 'desc')->first()->usd_to_bs, 2) }})
@@ -122,6 +125,26 @@
                     @enderror
                 </div>
             </div>
+            @if ($settings->wholesale_price)
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="">Precio por Mayor</label>
+                        <div class="input-group">
+                            <div class="input-group-text">
+                                Bs({{ Number::format(\App\Models\ExchangeRate::orderBy('id', 'desc')->first()->usd_to_bs, 2) }})
+                            </div>
+                            <input type="text" class="form-control" wire:model.blur.enter.live="bs2">
+                            <div class="input-group-text"><i class="fa fa-share"></i></div>
+                            <input type="text" class="form-control" wire:model.blur.enter.live="usd2">
+                            <div class="input-group-text">Usd(1.00)</div>
+                        </div>
+
+                        @error('price')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+            @endif
             <div class="row mb-3">
                 <div class="col">
                     <label for="">Categoria</label>
@@ -293,7 +316,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th colspan="5" class="text-center">
-                                                            <strong>HEREDADOS</strong></th>
+                                                            <strong>HEREDADOS</strong>
+                                                        </th>
                                                     </tr>
                                                     <tr>
                                                         <th>Id</th>
@@ -329,7 +353,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th colspan="6" class="text-center">
-                                                            <strong>SERIALIZADOS</strong></th>
+                                                            <strong>SERIALIZADOS</strong>
+                                                        </th>
                                                     </tr>
                                                     <tr>
                                                         <th>Id</th>

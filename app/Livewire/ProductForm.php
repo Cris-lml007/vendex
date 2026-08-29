@@ -75,10 +75,14 @@ class ProductForm extends Component
 
     public $min_quantity = [];
 
-    public $bs;
-    public $usd;
-    public $bs1;
-    public $usd1;
+    public $bs = 0;
+    public $usd = 0;
+    public $bs1 = 0;
+    public $usd1 = 0;
+
+    public $bs2 = 0;
+    public $usd2 = 0;
+    public $wholesale_price;
 
     public $rate;
 
@@ -90,82 +94,127 @@ class ProductForm extends Component
     public function updatedSearch(){
     }
 
-
-    public function updatedBs(){
-
+    public function bstoUsd(&$bs,&$usd,&$var){
         if(!is_numeric($this->bs)){
-            $this->bs = 0;
-            $this->usd = 0;
+            $bs = 0;
+            $usd = 0;
             return;
         }
-        if($this->bs != ''){
-            $this->usd = $this->bs / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
-            $this->price = $this->usd;
-            $this->usd = round($this->usd,2);
+        if($bs != ''){
+            $usd = $bs / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+            $var = $usd;
+            $usd = round($usd,2);
         }else{
-            $this->usd = 0;
-            $this->price = 0;
+            $usd = 0;
+            $var = 0;
         }
+    }
+
+    public function usdToBs(&$usd,&$bs,&$var){
+        if(!is_numeric($usd)){
+            $bs = 0;
+            $usd = 0;
+            return;
+        }
+        if($usd != ''){
+            $bs = $usd * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+            $var = $usd;
+            $bs = round($bs,2);
+            $usd = round($usd,2);
+        }else{
+            $bs = 0;
+            $var = 0;
+        }
+    }
+
+    public function updatedBs(){
+        $this->bstoUsd($this->bs,$this->usd,$this->price);
+        // if(!is_numeric($this->bs)){
+        //     $this->bs = 0;
+        //     $this->usd = 0;
+        //     return;
+        // }
+        // if($this->bs != ''){
+        //     $this->usd = $this->bs / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+        //     $this->price = $this->usd;
+        //     $this->usd = round($this->usd,2);
+        // }else{
+        //     $this->usd = 0;
+        //     $this->price = 0;
+        // }
     }
 
     public function updatedUsd()
     {
-        if(!is_numeric($this->usd)){
-            $this->bs = 0;
-            $this->usd = 0;
-            return;
-        }
-        if($this->usd != ''){
-            $this->bs = $this->usd * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
-            $this->price = $this->usd;
-            $this->bs = round($this->bs,2);
-            $this->usd = round($this->usd,2);
-        }else{
-            $this->bs = 0;
-            $this->price = 0;
-        }
+        $this->usdToBs($this->usd,$this->bs,$this->price);
+        // if(!is_numeric($this->usd)){
+        //     $this->bs = 0;
+        //     $this->usd = 0;
+        //     return;
+        // }
+        // if($this->usd != ''){
+        //     $this->bs = $this->usd * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+        //     $this->price = $this->usd;
+        //     $this->bs = round($this->bs,2);
+        //     $this->usd = round($this->usd,2);
+        // }else{
+        //     $this->bs = 0;
+        //     $this->price = 0;
+        // }
     }
 
     public function updatedBs1(){
-        if(!is_numeric($this->bs)){
-            $this->bs = 0;
-            $this->usd = 0;
-            return;
-        }
-        if($this->bs1 != ''){
-            if($this->edit){
-                $this->usd1 = $this->bs1 / $this->product->kardex()->first()->exchange_rate->usd_to_bs;
-            }else{
-                $this->usd1 = $this->bs1 / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
-            }
-            $this->price_purchase = $this->usd1;
-            $this->usd1 = round($this->usd1,2);
-        }else{
-            $this->usd1 = 0;
-            $this->price_purchase = 0;
-        }
+
+        $this->bstoUsd($this->bs1,$this->usd1,$this->price_purchase);
+        // if(!is_numeric($this->bs)){
+        //     $this->bs = 0;
+        //     $this->usd = 0;
+        //     return;
+        // }
+        // if($this->bs1 != ''){
+        //     if($this->edit){
+        //         $this->usd1 = $this->bs1 / $this->product->kardex()->first()->exchange_rate->usd_to_bs;
+        //     }else{
+        //         $this->usd1 = $this->bs1 / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+        //     }
+        //     $this->price_purchase = $this->usd1;
+        //     $this->usd1 = round($this->usd1,2);
+        // }else{
+        //     $this->usd1 = 0;
+        //     $this->price_purchase = 0;
+        // }
     }
 
     public function updatedUsd1()
     {
-        if(!is_numeric($this->usd)){
-            $this->bs = 0;
-            $this->usd = 0;
-            return;
-        }
-        if($this->usd1 != ''){
-            if($this->edit){
-                $this->bs1 = $this->usd1 * $this->product->kardex()->first()->exchange_rate->usd_to_bs;
-            }else{
-                $this->bs1 = $this->usd1 * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
-            }
-            $this->price_purchase = $this->usd1;
-            $this->bs1 = round($this->bs1,2);
-            $this->usd1 = round($this->usd1,2);
-        }else{
-            $this->bs1 = 0;
-            $this->price_purchase = 0;
-        }
+        $this->usdToBs($this->usd1,$this->bs1,$this->price_purchase);
+        // if(!is_numeric($this->usd)){
+        //     $this->bs = 0;
+        //     $this->usd = 0;
+        //     return;
+        // }
+        // if($this->usd1 != ''){
+        //     if($this->edit){
+        //         $this->bs1 = $this->usd1 * $this->product->kardex()->first()->exchange_rate->usd_to_bs;
+        //     }else{
+        //         $this->bs1 = $this->usd1 * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+        //     }
+        //     $this->price_purchase = $this->usd1;
+        //     $this->bs1 = round($this->bs1,2);
+        //     $this->usd1 = round($this->usd1,2);
+        // }else{
+        //     $this->bs1 = 0;
+        //     $this->price_purchase = 0;
+        // }
+    }
+
+    public function updatedBs2(){
+        $this->bstoUsd($this->bs2,$this->usd2,$this->wholesale_price);
+    }
+
+    public function updatedUsd2(){
+        $this->usdToBs($this->usd2,$this->bs2,$this->wholesale_price);
+
     }
 
     public function updatedIsSerial()
@@ -174,6 +223,7 @@ class ProductForm extends Component
             $this->name = '';
             $this->barcode = '';
             $this->price = '';
+            $this->wholesale_price = '';
             $this->description = '';
             $this->category = '';
             $this->brand = '';
@@ -193,6 +243,12 @@ class ProductForm extends Component
             $this->price = $p->price;
             $this->usd = $this->price;
             $this->updatedUsd();
+
+            $this->wholesale_price = $p->wholesale_price;
+            $this->usd2 = $this->wholesale_price;
+            $this->updatedUsd2();
+
+
             $this->category = $p->category_id;
             $this->description = $p->description;
             $this->brand = $p->brand_id;
@@ -204,8 +260,13 @@ class ProductForm extends Component
             $this->name = '';
             $this->barcode = '';
             $this->price = '';
+            $this->wholesale_price = '';
             $this->usd = 0;
             $this->updatedUsd();
+
+            $this->usd2 = 0;
+            $this->updatedUsd2();
+
             $this->description = '';
             $this->category = '';
             $this->brand = '';
@@ -304,6 +365,10 @@ class ProductForm extends Component
             $this->usd1 = $this->price_purchase;
             $this->updatedUsd1();
             $this->store_id = $this->product?->store_id ?? null;
+
+            $this->wholesale_price = $this->product->wholesale_price;
+            $this->usd2 = $this->wholesale_price;
+            $this->updatedUsd2();
 
             $this->category = $this->product->category_id;
             $this->description = $this->product->description;
@@ -444,6 +509,9 @@ class ProductForm extends Component
             if($this->settings->serialized_products || $this->product->is_serialize) $this->product->is_serialize = $this->is_serial;
 
             if($this->settings->heredaded_products || $this->product->parent) $this->product->parent_id = $this->product_id;
+
+            if($this->settings->wholesale_price) $this->product->wholesale_price = $this->wholesale_price;
+
             #$this->product->store_id = $this->store_id;
             //dd($this->store_id, $this->product->store_id);
             if($this->store_id != $this->product->store_id && $this->edit) {
@@ -537,6 +605,7 @@ class ProductForm extends Component
                     foreach ($this->product->children ?? [] as $child){
                         if($child->is_serialize){
                             $child->price = $this->price;
+                            $child->wholesale_price = $this->wholesale_price;
                             $child->name = $this->name;
                             $child->description = $this->description;
                             $child->brand_id = $this->brand;
@@ -664,42 +733,40 @@ class ProductForm extends Component
         $categories = Category::all();
         $brands = Brand::all();
         $settings = Settings::first();
-        if($this->settings->heredaded_products){
-            if($this->search != ''){
+        if($this->search != '' && $this->settings->heredaded_products){
 
-                $terms = preg_split('/\s+/', trim($this->search));
+            $terms = preg_split('/\s+/', trim($this->search));
 
-                $products = Product::where('status', Status::ACTIVE)
-                    ->where('is_serialize',false)
-                    ->where(function ($query) use ($terms) {
+            $products = Product::where('status', Status::ACTIVE)
+                ->where('is_serialize',false)
+                ->where(function ($query) use ($terms) {
 
-                        foreach ($terms as $term) {
+                    foreach ($terms as $term) {
 
-                            $query->where(function ($q) use ($term) {
+                        $query->where(function ($q) use ($term) {
 
-                                $q->where('name', 'like', "%{$term}%")
-                                    ->orWhere('id', 'like', "%{$term}%")
-                                    ->orWhere('model', 'like', "%{$term}%")
-                                    ->orWhere('price', 'like', "%{$term}%")
-                                    ->orWhere('color', 'like', "%{$term}%")
+                            $q->where('name', 'like', "%{$term}%")
+                                ->orWhere('id', 'like', "%{$term}%")
+                                ->orWhere('model', 'like', "%{$term}%")
+                                ->orWhere('price', 'like', "%{$term}%")
+                                ->orWhere('color', 'like', "%{$term}%")
 
-                                    ->orWhereHas('brand', function ($brand) use ($term) {
-                                        $brand->where('name', 'like', "%{$term}%");
-                                    })
+                                ->orWhereHas('brand', function ($brand) use ($term) {
+                                    $brand->where('name', 'like', "%{$term}%");
+                                })
 
-                                    ->orWhereHas('tags', function ($tag) use ($term) {
-                                        $tag->where('name', 'like', "%{$term}%")
-                                            ->orWhere('value', 'like', "%{$term}%");
-                                    });
+                                ->orWhereHas('tags', function ($tag) use ($term) {
+                                    $tag->where('name', 'like', "%{$term}%")
+                                        ->orWhere('value', 'like', "%{$term}%");
+                                });
 
-                            });
+                        });
 
-                        }
+                    }
 
-                    })->get();
-            }else{
-                $products = Product::where('is_serialize',false)->get();
-            }
+                })->get();
+        }else{
+            $products = Product::where('is_serialize',false)->get();
         }
 
 
