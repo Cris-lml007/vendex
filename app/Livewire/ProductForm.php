@@ -11,6 +11,7 @@ use App\Models\ExchangeRate;
 use App\Models\Kardex;
 use App\Models\Product;
 use App\Models\ProductSequense;
+use App\Models\Settings;
 use App\Models\Stock;
 use App\Models\Store;
 use App\Models\TagProduct;
@@ -84,6 +85,7 @@ class ProductForm extends Component
     public $search;
 
     public $color;
+    public Settings $settings;
 
     public function updatedSearch(){
     }
@@ -277,6 +279,7 @@ class ProductForm extends Component
     }
 
     public function mount($id = null){
+        $this->settings = Settings::first();
         $this->heads = [
             'Id' => 'id',
             'Nombre' => 'name',
@@ -438,8 +441,9 @@ class ProductForm extends Component
                 $this->product->id = str_pad($p->id, 10, "0", STR_PAD_LEFT);
             }
 
-            $this->product->is_serialize = $this->is_serial;
-            $this->product->parent_id = $this->product_id;
+            if($this->settings->serialized_products || $this->product->is_serialize) $this->product->is_serialize = $this->is_serial;
+
+            if($this->settings->heredaded_products || $this->product->parent) $this->product->parent_id = $this->product_id;
             #$this->product->store_id = $this->store_id;
             //dd($this->store_id, $this->product->store_id);
             if($this->store_id != $this->product->store_id && $this->edit) {
@@ -526,8 +530,8 @@ class ProductForm extends Component
                             'product_id' => $this->product->id,
                             'store_id' => $id,
                         ],[
-                            'min_quantity' => $value
-                        ]);
+                                'min_quantity' => $value
+                            ]);
                     }
 
                     foreach ($this->product->children ?? [] as $child){
@@ -550,10 +554,10 @@ class ProductForm extends Component
             if($q > 0 || !empty($this->product_serials)){
                 if(array_sum($this->stocks) != $q){
                     $this->js('Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Unidades no Disponibles"
-                })');
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Unidades no Disponibles"
+                        })');
                     return;
                 }
                 try{
@@ -584,8 +588,8 @@ class ProductForm extends Component
                                     'product_id' => $this->product->id,
                                     'store_id' => $id,
                                 ],[
-                                    'quantity' => $value,
-                                ]);
+                                        'quantity' => $value,
+                                    ]);
 
                                 $transfer = DetailTransfer::create([
                                     'transfer_id' => $t->id,
@@ -659,41 +663,46 @@ class ProductForm extends Component
     {
         $categories = Category::all();
         $brands = Brand::all();
-        if($this->search != ''){
+        $settings = Settings::first();
+        if($this->settings->heredaded_products){
+            if($this->search != ''){
 
-            $terms = preg_split('/\s+/', trim($this->search));
+                $terms = preg_split('/\s+/', trim($this->search));
 
-            $products = Product::where('status', Status::ACTIVE)
-                ->where('is_serialize',false)
-                ->where(function ($query) use ($terms) {
+                $products = Product::where('status', Status::ACTIVE)
+                    ->where('is_serialize',false)
+                    ->where(function ($query) use ($terms) {
 
-                    foreach ($terms as $term) {
+                        foreach ($terms as $term) {
 
-                        $query->where(function ($q) use ($term) {
+                            $query->where(function ($q) use ($term) {
 
-                            $q->where('name', 'like', "%{$term}%")
-                                ->orWhere('id', 'like', "%{$term}%")
-                                ->orWhere('model', 'like', "%{$term}%")
-                                ->orWhere('price', 'like', "%{$term}%")
-                                ->orWhere('color', 'like', "%{$term}%")
+                                $q->where('name', 'like', "%{$term}%")
+                                    ->orWhere('id', 'like', "%{$term}%")
+                                    ->orWhere('model', 'like', "%{$term}%")
+                                    ->orWhere('price', 'like', "%{$term}%")
+                                    ->orWhere('color', 'like', "%{$term}%")
 
-                                ->orWhereHas('brand', function ($brand) use ($term) {
-                                    $brand->where('name', 'like', "%{$term}%");
-                                })
+                                    ->orWhereHas('brand', function ($brand) use ($term) {
+                                        $brand->where('name', 'like', "%{$term}%");
+                                    })
 
-                                ->orWhereHas('tags', function ($tag) use ($term) {
-                                    $tag->where('name', 'like', "%{$term}%")
-                                        ->orWhere('value', 'like', "%{$term}%");
-                                });
+                                    ->orWhereHas('tags', function ($tag) use ($term) {
+                                        $tag->where('name', 'like', "%{$term}%")
+                                            ->orWhere('value', 'like', "%{$term}%");
+                                    });
 
-                        });
+                            });
 
-                    }
+                        }
 
-                })->get();
-        }else{
-            $products = Product::where('is_serialize',false)->get();
+                    })->get();
+            }else{
+                $products = Product::where('is_serialize',false)->get();
+            }
         }
+
+
         return view('livewire.product-form')
             ->with('categories',$categories)
             ->with('brands',$brands)
