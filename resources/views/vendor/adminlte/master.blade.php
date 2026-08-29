@@ -99,7 +99,7 @@
 
 </head>
 
-<body class="@yield('classes_body')" @yield('body_data') data-theme="{{ App\Models\Settings::first()?->theme ?? 'vendex' }}">
+    <body class="@yield('classes_body')" @yield('body_data') data-theme="{{ (Auth::user()?->id ? App\Models\Settings::first()?->theme : 'vendex') ?? 'vendex' }}">
 
     {{-- Body Content --}}
     @yield('body')
