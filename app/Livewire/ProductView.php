@@ -89,7 +89,9 @@ class ProductView extends Component
                 ->orderBy($this->list['sort_field'], $this->list['sort_direction'])
                 ->paginate();
         }else{
-            $products = Product::where('is_serialize',false)
+            $products = Product::whereNot(function($q){
+                $q->where('is_serialize',true)->where('parent_id','!=',null);
+            })
                 ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
                 ->paginate();
         }

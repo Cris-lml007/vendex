@@ -248,7 +248,7 @@
 
 <div class="literal">
     <strong>SON:</strong>
-    {{ strtoupper($format->format($transaction->total * $transaction->details[0]->exchange_rate->usd_to_bs)) }} BOLIVIANOS
+    {{ strtoupper($format->format(Number::format($transaction->total * $transaction->details[0]->exchange_rate->usd_to_bs,2))) }} BOLIVIANOS
 
 </div>
 
