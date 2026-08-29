@@ -267,7 +267,7 @@
                                             <table class="table mb-0">
                                                 <thead>
                                                     <tr>
-                                                        <th colspan="5" class="text-center"><strong>NO
+                                                        <th colspan="6" class="text-center"><strong>NO
                                                                 SERIALIZADOS</strong></th>
                                                     </tr>
                                                     <tr>
@@ -275,7 +275,8 @@
                                                         <th>Tipo</th>
                                                         <th>Color</th>
                                                         <th>Stock Minimo</th>
-                                                        <th>Cantidad</th>
+                                                        <th>Cantidad Original</th>
+                                                        <th>Transferencia</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -289,6 +290,10 @@
                                                                     wire:blur="setMinQuantity({{ $item->id }}, $event.target.value)"
                                                                     type="number" class="form-control"
                                                                     value="{{ $min_quantity[$item->id] }}">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" wire:ignore @class(['form-control', 'bg-secondary'])
+                                                                    value="{{ $stocks[$item->id] }}" disabled />
                                                             </td>
                                                             <td>
                                                                 <input
@@ -307,7 +312,12 @@
                                     </tr>
                                     <tr>
                                         <td><strong>SUBTOTAL</strong></td>
-                                        <td><strong @class(['text-success', 'text-danger' => $total != $total_origin])>{{ $total }}</strong></td>
+                                        <td><strong @class(['text-success', 'text-danger' => $total != $total_origin])>{{ $total }} @if ($total < $total_origin)
+                                (Unidades Falantes: {{ abs($total_origin - $total) }})
+                                    @elseif($total > $total_origin)
+                                (Unidades Sobrates: {{ abs($total_origin - $total) }})
+                                                @endif
+                                            </strong></td>
                                     </tr>
 
                                     <tr>
