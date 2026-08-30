@@ -7,6 +7,7 @@ use App\Models\DetailTransfer;
 use App\Models\ExchangeRate;
 use App\Models\Kardex;
 use App\Models\Product;
+use App\Models\Settings;
 use App\Models\Stock;
 use App\Models\Store;
 use App\Models\Transfer;
@@ -35,6 +36,8 @@ class CatalogForm extends Component
     public $stocks_cp;
     public $total = 0;
     public $total_origin = 0;
+
+    public Settings $settings;
 
     #[On('getProduct')]
     public function getProduct($id)
@@ -72,7 +75,7 @@ class CatalogForm extends Component
 
         $q = $this->product?->stocks()->sum('quantity') ?? 0;
         if($q > 0 && !$this->product->is_serialize){
-            if(array_sum($this->stocks) != $q){
+            if(array_sum($this->stocks) != $q  || array_any($this->stocks,fn($i) => $i < 0)){
                 $this->js('Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -174,6 +177,7 @@ class CatalogForm extends Component
 
     public function render()
     {
+        $this->settings = Settings::first();
         return view('livewire.catalog-form');
     }
 }

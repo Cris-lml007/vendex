@@ -11,6 +11,7 @@
                 <tr>
                     <td>{{ $item->id }}</td>
                     <td>{{ $item->created_at }}</td>
+                    <td>{{ $item->user->name }}</td>
                     <td>{{ $item->details()->count()}}</td>
                     <td>
                         <button data-bs-toggle="modal" data-bs-target="#modal-transfer" wire:click="getTransfer({{ $item->id }})" class="btn btn-primary"><i class="fa fa-eye"></i></button>
