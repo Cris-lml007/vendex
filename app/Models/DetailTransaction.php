@@ -13,6 +13,7 @@ class DetailTransaction extends Model
         'quantity',
         'price',
         'exchange_rate_id',
+        'wholesale_price'
     ];
 
     public function kardex(){

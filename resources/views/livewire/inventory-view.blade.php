@@ -1,7 +1,8 @@
 <x-slot name="header">
     <div class="d-flex justify-content-between">
         <h1>Registro de Movimientos</h1>
-        <button data-bs-toggle="modal" data-bs-target="#modal-inventory" class="btn btn-primary"><i class="fa fa-plus"></i> Añadir Nuevo Lote</button>
+        <button data-bs-toggle="modal" data-bs-target="#modal-inventory" class="btn btn-primary"><i class="fa fa-plus"></i>
+            Añadir Nuevo Lote</button>
     </div>
 </x-slot>
 
@@ -15,49 +16,60 @@
     <div>
         <x-card>
             <livewire:table :heads="$heads" wire:model.live="list">
-                @foreach($data as $item)
+                @foreach ($data as $item)
                     <tr>
-                        <td>{{ $item->id }}</td>
-                        <td><a href="{{ route('admin.product.id', $item->product->id) }}">{{ $item->product->name }}@if($item->product->is_serialize) ({{ $item->product->id }})@endif</a></td>
-                        @if($item->type == \App\Enums\Type::IN)
-                            @if($current == 1)
-                                <td>{{ \Illuminate\Support\Number::format(($item->price*$item->exchange_rate->usd_to_bs)*$item->quantity,2) }}</td>
+                        <td><a
+                                @if ($item->type == \App\Enums\Type::OUT) href="{{ route('admin.sell.id', $item->referenceable->id) }}" @endif>{{ $item->id }}</a>
+                        </td>
+                        <td><a href="{{ route('admin.product.id', $item->product->id) }}">{{ $item->product->name }}
+                                @if ($item->product->is_serialize)
+                                    ({{ $item->product->id }})
+                                @endif
+                            </a></td>
+                        @if ($item->type == \App\Enums\Type::IN)
+                            @if ($current == 1)
+                                <td>{{ \Illuminate\Support\Number::format($item->price * $item->exchange_rate->usd_to_bs * $item->quantity, 2) }}
+                                </td>
                             @else
-                                <td>{{ \Illuminate\Support\Number::format($item->price*$item->quantity,2) }}</td>
+                                <td>{{ \Illuminate\Support\Number::format($item->price * $item->quantity, 2) }}</td>
                             @endif
                             <td>---</td>
                             @php
-                                if($current == 1){
-                                    $income+= ($item->price*$item->exchange_rate->usd_to_bs)*$item->quantity;
-                                }else{
-                                $income+= $item->price*$item->quantity;
+                                if ($current == 1) {
+                                    $income += $item->price * $item->exchange_rate->usd_to_bs * $item->quantity;
+                                } else {
+                                    $income += $item->price * $item->quantity;
                                 }
                             @endphp
                         @else
                             <td>---</td>
 
-                            @if($current == 1)
-                                <td>{{ \Illuminate\Support\Number::format(($item->price*$item->exchange_rate->usd_to_bs)*$item->quantity,2) }}</td>
+                            @if ($current == 1)
+                                <td>{{ \Illuminate\Support\Number::format($item->price * $item->exchange_rate->usd_to_bs * $item->quantity, 2) }}
+                                </td>
                             @else
-                                <td>{{ \Illuminate\Support\Number::format($item->price*$item->quantity,2) }}</td>
+                                <td>{{ \Illuminate\Support\Number::format($item->price * $item->quantity, 2) }}</td>
                             @endif
                             @php
-                                if($current == 1){
-                                    $expense+= ($item->price*$item->exchange_rate->usd_to_bs)*$item->quantity;
-                                }else{
-                                    $expense+= $item->price*$item->quantity;
+                                if ($current == 1) {
+                                    $expense += $item->price * $item->exchange_rate->usd_to_bs * $item->quantity;
+                                } else {
+                                    $expense += $item->price * $item->quantity;
                                 }
                             @endphp
                         @endif
                         <td>{{ $item->quantity }}</td>
-                        <td>{{ __('messages.'.$item->type->name) }}</td>
+                        <td>{{ __('messages.' . $item->type->name) }}</td>
                         <td>{{ $item->store->name }}</td>
                         <td>{{ $item->user->name }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-inventory" wire:click="getKardex({{ $item->id }})"><i class="fa fa-eye"></i></button>
-                            @if( $item->type != \App\Enums\Type::TRANSFER && $item->type != \App\Enums\Type::OUT)
-                                <button class="btn btn-danger" wire:click="$js.delete({{ $item->id }})" @if($item->id != $last) disabled @endif><i class="fa fa-trash"></i></button>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-inventory"
+                                wire:click="getKardex({{ $item->id }})"><i class="fa fa-eye"></i></button>
+                            @if ($item->type != \App\Enums\Type::TRANSFER && $item->type != \App\Enums\Type::OUT && $item->id == $last)
+                                <button class="btn btn-danger" wire:click="$js.delete({{ $item->id }})"
+                                    @if ($item->id != $last) disabled @endif><i
+                                        class="fa fa-trash"></i></button>
                             @endif
                         </td>
                     </tr>
@@ -65,12 +77,13 @@
                 <livewire:slot name="footer">
                     <tr>
                         <th colspan="2">SUBTOTAL</th>
-                        <th>{{ \Illuminate\Support\Number::format($income,2) }}</th>
-                        <th>{{ \Illuminate\Support\Number::format($expense,2) }}</th>
+                        <th>{{ \Illuminate\Support\Number::format($income, 2) }}</th>
+                        <th>{{ \Illuminate\Support\Number::format($expense, 2) }}</th>
                     </tr>
                     <tr>
                         <th colspan="2">TOTAL</th>
-                        <th colspan="2" class="text-center">{{ \Illuminate\Support\Number::format($expense-$income,2) }}
+                        <th colspan="2" class="text-center">
+                            {{ \Illuminate\Support\Number::format($expense - $income, 2) }}
                             <select wire:model.live="current" class="form-select d-inline" style="width: 80px;">
                                 <option value="1">Bs</option>
                                 <option value="2">Usd</option>
@@ -84,15 +97,15 @@
     </div>
 
     @island
-    <x-modal id="modal-inventory" title="Inventario" class="modal-lg">
-        <livewire:inventory-form></livewire:inventory-form>
-    </x-modal>
+        <x-modal id="modal-inventory" title="Inventario" class="modal-lg">
+            <livewire:inventory-form></livewire:inventory-form>
+        </x-modal>
     @endisland
 
     @island
-    <x-modal id="modal-scanner" title="escaner">
-        <livewire:scanner wire:model.live="product_id"></livewire:scanner>
-    </x-modal>
+        <x-modal id="modal-scanner" title="escaner">
+            <livewire:scanner wire:model.live="product_id"></livewire:scanner>
+        </x-modal>
     @endisland
 </div>
 
@@ -108,16 +121,16 @@
                 confirmButtonColor: "gray",
                 background: "red",
                 color: "white",
-            }).then( async (result) => {
-                if(result.isConfirmed){
-                    let r = await $wire.remove(result.value,id)
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    let r = await $wire.remove(result.value, id)
                     console.log(r)
-                    if(r){
+                    if (r) {
                         window.Swal.fire({
                             title: "Eliminado Correctamente",
                             icon: "success"
                         })
-                    }else{
+                    } else {
                         window.Swal.fire({
                             title: "No se pudo Eliminar",
                             icon: "error"
