@@ -43,28 +43,38 @@ class UsersForm extends Component
     }
 
     public function save(){
-        $this->validate([
+        $rule = [
             'name' => 'required',
-            'password' => 'required|min:8',
             'password_confirmation' => 'same:password',
             'username' => 'required|unique:users,username,'.$this?->user?->id ?? null,
             'phone' => 'required',
             'status' => 'required',
             'role' => 'required',
-        ]);
+        ];
 
-        $user = User::updateOrCreate([
-            'username' => $this->username,
-        ],[
+        if($this?->user?->id == null){
+            $rule['password'] = 'required|min:8';
+        }
+
+        $this->validate($rule);
+
+        $data = [
             'name' => $this->name,
             'phone' => $this->phone,
-            'password' => $this->password,
             'status' => $this->status,
             'role' => $this->role,
             'store_id' => $this->store_id,
             'entry_time' => $this->entry_time,
             'exit_time' => $this->exit_time,
-        ]);
+        ];
+
+        if($this->password != '' && $this->password_confirmation == $this->password){
+            $data['password'] = $this->password;
+        }
+
+        $user = User::updateOrCreate([
+            'username' => $this->username,
+        ],$data);
 
         $this->redirect(route('admin.users'));
     }

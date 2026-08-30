@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Enums\Type;
 use App\Models\Attendance;
+use App\Models\Settings;
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -122,7 +123,8 @@ class Profile extends Component
 
     public function render()
     {
+        $change_password = Settings::first()->change_password;
         $this->user = auth()->user();
-        return view('livewire.profile');
+        return view('livewire.profile',compact(['change_password']));
     }
 }
