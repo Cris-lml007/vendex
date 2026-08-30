@@ -54,7 +54,7 @@ class SaleView extends Component
             'Id' => 'id',
             'Cliente' => 'customer_id',
             'Vendedor' => 'user_id',
-            'Total' => null,
+            'Total(Bs)' => null,
             'Fecha' => 'created_at',
             'Acciones' => null];
         $stores = Store::where('type', Type::STORE)->get();

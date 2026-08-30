@@ -622,7 +622,7 @@ class ProductForm extends Component
 
             $q = $this->product?->stocks()->sum('quantity') ?? 0;
             if($q > 0 || !empty($this->product_serials)){
-                if(array_sum($this->stocks) != $q){
+                if(array_sum($this->stocks) != $q || array_any($this->stocks,fn($i) => $i < 0)){
                     $this->js('Swal.fire({
                         icon: "error",
                         title: "Oops...",

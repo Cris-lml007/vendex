@@ -10,6 +10,7 @@ use App\Models\DetailTransaction;
 use App\Models\ExchangeRate;
 use App\Models\Kardex;
 use App\Models\Product;
+use App\Models\Settings;
 use App\Models\Stock;
 use App\Models\Store;
 use App\Models\Transaction;
@@ -47,12 +48,23 @@ class SellView extends Component
 
     public $method_payment = Type::CASH;
 
+    public Settings $settings;
+
+    public bool $is_whosale = false;
+
+    public function changeWhosale(){
+        $this->is_whosale = !$this->is_whosale;
+        if($this->product_id != '' && $this->product_id != null)
+            $this->updatedProductId();
+    }
+
     public function searchOn()
     {
         $this->is_search = !$this->is_search;
     }
 
     public function mount(){
+        $this->settings = Settings::first();
         $this->store = Auth::user()->store->id ?? null;
 
         if(Auth::user()->store_id == null && Auth::user()->role == Role::SELLER){
@@ -82,7 +94,11 @@ class SellView extends Component
             ');
                 return;
             }
-            $this->product_price = $p->price * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+            if($this->is_whosale){
+                $this->product_price = $p->wholesale_price * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+            }else{
+                $this->product_price = $p->price * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+            }
 
             $p = Product::find($this->product_id);
             if($p->is_serialize && $p->status == Status::ACTIVE){
@@ -220,6 +236,7 @@ class SellView extends Component
                         'quantity' => $item['quantity'],
                         'price' => $item['price']/ExchangeRate::orderBy('id','desc')->first()->usd_to_bs,
                         'exchange_rate_id' => ExchangeRate::orderBy('id','desc')->first()->id,
+                        'wholesale_price' => $this->is_whosale
                     ]);
 
                     $register = Kardex::create([
@@ -286,6 +303,10 @@ class SellView extends Component
     public function generateReceipt(){
     }
 
+    public function getProductInfo($id){
+        $this->dispatch('getProduct',$id)->to(CatalogForm::class);
+    }
+
     public function render()
     {
         if(Auth::user()?->store?->status != Status::ACTIVE && Auth::user()->role == Role::SELLER){
@@ -298,7 +319,8 @@ class SellView extends Component
             $this->products = Product::where('status', Status::ACTIVE)
                 ->where(function ($query) {
                     $query->whereHas('stocks', function($q){
-                        $q->where('store_id',$this->store);
+                        $q->where('store_id',$this->store)
+                        ->where('quantity', '>', 0);
                     })->orWhere(function($qq){
                         $qq->where('store_id',$this->store)
                             ->where('store_id','!=',null);
@@ -334,7 +356,8 @@ class SellView extends Component
             $this->products = Product::where('status', Status::ACTIVE)
                 ->where(function ($query) {
                     $query->whereHas('stocks', function($q){
-                        $q->where('store_id',$this->store);
+                        $q->where('store_id',$this->store)
+                            ->where('quantity','>',0);
                     })->orWhere(function($qq){
                         $qq->where('store_id',$this->store)
                             ->where('store_id','!=',null);

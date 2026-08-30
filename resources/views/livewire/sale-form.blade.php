@@ -47,7 +47,7 @@
                     <thead>
                     <td>Producto</td>
                     <td>Cantidad</td>
-                    <td>Precio</td>
+                    <td>Precio(Bs)</td>
                     <td>Subtotal</td>
                     </thead>
                     <tbody>
@@ -55,7 +55,7 @@
                         <tr>
                             <td><a href="{{ route('admin.product.id', $item->product->id) }}">{{ $item->product->name }}@if($item->product->is_serialize)({{ $item->product->id }})@endif</a> </td>
                             <td>{{ $item->quantity }}</td>
-                            <td>{{ Number::format($item->price*$item->exchange_rate->usd_to_bs,2) }}</td>
+                    <td>{{ Number::format($item->price*$item->exchange_rate->usd_to_bs,2) }} ({{ $item->wholesale_price == 1 ? 'Mayor' : 'Unidad' }})</td>
                             <td>{{ Number::format($item->subtotal*$item->exchange_rate->usd_to_bs,2) }}</td>
                         </tr>
                     @endforeach

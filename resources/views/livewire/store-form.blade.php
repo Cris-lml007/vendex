@@ -7,7 +7,7 @@
                     <label for="">Nombre</label>
                     <input type="text" class="form-control" placeholder="Ingrese Nombre" wire:model="name">
                     @error('name')
-                    <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
@@ -17,14 +17,15 @@
                     <label for="">Celular</label>
                     <input type="text" class="form-control" placeholder="Ingrese Celular" wire:model="phone">
                     @error('phone')
-                    <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="col">
                     <label for="">Correo Electronico</label>
-                    <input type="email" class="form-control" placeholder="Ingrese Correo Electronico" wire:model="email">
+                    <input type="email" class="form-control" placeholder="Ingrese Correo Electronico"
+                        wire:model="email">
                     @error('email')
-                    <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
@@ -33,7 +34,7 @@
                     <label for="">Direccion</label>
                     <input type="text" class="form-control" placeholder="Ingrese Direccion" wire:model="address">
                     @error('address')
-                    <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
@@ -43,11 +44,13 @@
                     <label for="">Tipo</label>
                     <select class="form-select" wire:model="type">
                         <option value="">Seleccione un Tipo</option>
-                        <option value="{{ \App\Enums\Type::STORE }}">{{ __('messages.'.\App\Enums\Type::STORE->name)  }}</option>
-                        <option value="{{ \App\Enums\Type::WAREHOUSE }}">{{ __('messages.'.\App\Enums\Type::WAREHOUSE->name) }}</option>
+                        <option value="{{ \App\Enums\Type::STORE }}">{{ __('messages.' . \App\Enums\Type::STORE->name) }}
+                        </option>
+                        <option value="{{ \App\Enums\Type::WAREHOUSE }}">
+                            {{ __('messages.' . \App\Enums\Type::WAREHOUSE->name) }}</option>
                     </select>
                     @error('type')
-                    <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="col">
@@ -55,13 +58,13 @@
                     <select class="form-select" wire:model="status">
                         <option value="">Seleccione un Estado</option>
                         @foreach (App\Enums\Status::cases() as $item)
-                            @if($item != \App\Enums\Status::SALE)
-                                <option value="{{ $item->value }}">{{ __('messages.'.$item->name) }}</option>
+                            @if ($item != \App\Enums\Status::SALE)
+                                <option value="{{ $item->value }}">{{ __('messages.' . $item->name) }}</option>
                             @endif
                         @endforeach
                     </select>
                     @error('status')
-                    <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
@@ -84,7 +87,7 @@
             <div class="row mb-3">
                 <div class="col">
                     <label>Imagen de Producto</label>
-                    @if($photo)
+                    @if ($photo)
                         {{-- Vista previa de la nueva imagen --}}
                         <div class="d-flex justify-content-center" style="height: 300px;">
                             <img src="{{ $photo->temporaryUrl() }}" class="img-thumbnail">
@@ -106,18 +109,30 @@
 
 
 
-            @if($edit)
+            @if ($edit)
                 <div class="row">
                     <div class="col">
                         <h5>En Inventario</h5>
                         <livewire:table :heads="$heads" :searchable="false">
-                            @foreach($stock ?? [] as $item)
+                            @foreach ($stock ?? [] as $item)
                                 <tr>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->pivot->quantity ?? 0 }}</td>
-                                    <td>{{ Number::format($item->price,2) }}</td>
+                                    <td>{{ Number::format($item->price, 2) }}</td>
                                     <td>
-                                        <a href="{{ route('admin.product.id', $item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                        <a href="{{ route('admin.product.id', $item->id) }}" class="btn btn-primary"><i
+                                                class="fa fa-eye"></i></a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            @foreach ($stock_serials ?? [] as $item)
+                                <tr>
+                                    <td>{{ $item->name }}</td>
+                                    <td>1</td>
+                                    <td>{{ Number::format($item->price, 2) }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.product.id', $item->id) }}" class="btn btn-primary"><i
+                                                class="fa fa-eye"></i></a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -128,13 +143,15 @@
                     <div class="col">
                         <h5>Vendidos</h5>
                         <livewire:table :heads="$heads1" :searchable="false">
-                            @foreach($sales ?? [] as $item)
+                            @foreach ($sales ?? [] as $item)
                                 <tr>
-                                    <td>{{ $item->id }}</td>
+                                    <td><a
+                                            href="{{ route('admin.sell.id', $item->referenceable->id) }}">{{ $item->id }}</a>
+                                    </td>
                                     <td>{{ $item->product->name }}</td>
-                                    <td>{{ $item->referenceable?->customer?->name ?? '---'}}</td>
+                                    <td>{{ $item->referenceable?->customer?->name ?? '---' }}</td>
                                     <td>{{ $item->quantity }}</td>
-                                    <td>{{ Number::format($item->price,2) }}</td>
+                                    <td>{{ Number::format($item->price, 2) }}</td>
                                     <td>{{ $item->user->name }}</td>
                                 </tr>
                             @endforeach
@@ -143,13 +160,13 @@
                 </div>
             @endif
         </div>
-        @if($edit)
+        @if ($edit)
             <hr>
             <div class="d-flex justify-content-end mb-3">
                 <button type="submit" class="btn btn-primary me-1">Guardar</button>
                 <a href="{{ route('admin.stores') }}" class="btn btn-secondary">Cerrar</a>
             </div>
-            @else
+        @else
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Guardar</button>
                 <button data-bs-dismiss="modal" type="reset" class="btn btn-secondary">Cancelar</button>
@@ -160,7 +177,6 @@
 
 @script
     <script>
-
         const input = document.querySelector('#photo');
 
         input.addEventListener('change', (evento) => {
@@ -238,7 +254,7 @@
 
         let geofence = null;
 
-        if($wire.lat != null){
+        if ($wire.lat != null) {
             geofence = {
                 "lat": $wire.lat,
                 "lng": $wire.long,
@@ -249,8 +265,7 @@
         if (geofence) {
 
             circle = L.circle(
-                [geofence.lat, geofence.lng],
-                {
+                [geofence.lat, geofence.lng], {
                     radius: geofence.radius,
                     color: '#0d6efd',
                     fillColor: '#0d6efd',
@@ -261,7 +276,7 @@
             map.fitBounds(circle.getBounds());
         }
 
-        map.on(L.Draw.Event.CREATED, function (e) {
+        map.on(L.Draw.Event.CREATED, function(e) {
 
             // Eliminar el círculo anterior
             if (geofence) {
@@ -281,11 +296,10 @@
 
         });
 
-        if(modalElement){
-            modalElement.addEventListener('shown.bs.modal', function () {
+        if (modalElement) {
+            modalElement.addEventListener('shown.bs.modal', function() {
                 map.invalidateSize();
             });
         }
-
     </script>
 @endscript

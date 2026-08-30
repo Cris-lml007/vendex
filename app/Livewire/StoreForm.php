@@ -22,6 +22,7 @@ class StoreForm extends Component
 
     public Store $store;
     public $stock;
+    public $stock_serials;
     public $sales;
     public $edit = false;
 
@@ -55,6 +56,7 @@ class StoreForm extends Component
             $this->radius = $store->radius;
 
             $this->stock = $this->store->products;
+            $this->stock_serials = $this->store->products_serial;
             $this->sales = Kardex::where('store_id', $this->store->id)->where('type',Type::OUT)->get();
 
 

@@ -333,7 +333,7 @@
                                                         <th>Id</th>
                                                         <th>Nombre</th>
                                                         <th>Color</th>
-                                                        <th>Precio</th>
+                                                        <th>Precio(Usd)</th>
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
@@ -369,7 +369,7 @@
                                                     <tr>
                                                         <th>Id</th>
                                                         <th>Nombre</th>
-                                                        <th>Precio</th>
+                                                        <th>Precio(Usd)</th>
                                                         <th>Color</th>
                                                         <th>Locación</th>
                                                         <th>Acciones</th>

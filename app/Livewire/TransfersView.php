@@ -14,7 +14,7 @@ class TransfersView extends Component
     public $list = [
         'search' => '',
         'sort_field' => 'id',
-        'sort_direction' => 'asc',
+        'sort_direction' => 'desc',
         'pages' => 1
     ];
 
@@ -34,6 +34,7 @@ class TransfersView extends Component
         $heads = [
             'Id'=> 'id',
             'Fecha' => 'created_at',
+            'Por' => 'name',
             'Movimientos' => null,
             'Acciones' =>null
         ];
@@ -43,6 +44,9 @@ class TransfersView extends Component
         if($search != ''){
             $data = Transfer::where('id', 'like', '%'.$search.'%')
                 ->orWhere('created_at', 'like', '%'.$search.'%')
+                ->orWhereHas('user',function($q) use ($search){
+                    $q->where('name','like',"%{$search}%");
+                })
                 ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
                 ->paginate();
         }else{
