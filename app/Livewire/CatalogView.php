@@ -64,7 +64,7 @@ class CatalogView extends Component
             'Color' => 'color',
             "Modelo" => 'model',
             "Marca" => 'brand_id',
-            "Precio" => 'price',
+            "Precio(Usd)" => 'price',
             "Acciones" => null
         ];
         if($this->is_table){
