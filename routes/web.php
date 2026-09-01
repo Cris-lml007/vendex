@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\VerificationStatus;
 use App\Livewire\CatalogView;
 use App\Livewire\CategoryView;
 use App\Livewire\CustomersView;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 #    return view('welcome');
 #);
 
-Route::middleware('auth')->get('/', SellView::class );
+Route::middleware(['auth',VerificationStatus::class])->get('/', SellView::class );
 
 Auth::routes([
     'register' => false,
