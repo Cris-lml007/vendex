@@ -9,6 +9,7 @@ class TagProduct extends Model
     public $fillable = [
         'product_id',
         'name',
-        'value'
+        'value',
+        'show'
     ];
 }

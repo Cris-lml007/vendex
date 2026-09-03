@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Enums\Status;
 use App\Models\ExchangeRate;
 use App\Models\Product;
+use App\Models\Settings;
+use App\Models\TagProduct;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,6 +16,8 @@ class ProductView extends Component
     use WithPagination;
 
     public $product_id;
+
+    public Settings $settings;
 
     public $list = [
         'search' => '',
@@ -43,13 +47,21 @@ class ProductView extends Component
             'ID' => 'id',
             'Nombre' =>'name',
             'Modelo' => 'model',
-            'Color' => 'color',
-            'Serializado' => 'is_serialize',
-            'Marca' => 'brand_id',
-            'Categoria' => 'category_id',
-            'Precio (Bs)' => 'price',
-            'Acciones' => null
         ];
+
+        $this->settings = Settings::first();
+
+        foreach (json_decode($this->settings->product_tags) as $value) {
+            $heads [$value] = $value;
+        }
+
+        $heads ['Color'] = 'color';
+        $heads ['Serializado'] = 'is_serialize';
+        $heads ['Marca'] = 'brand_id';
+        $heads ['Categoria'] = null;
+        $heads ['Cantidad'] = null;
+        $heads ['Precio (Bs)'] = 'price';
+        $heads ['Acciones'] = null;
 
         $search = $this->list['search'];
         if($search != ''){
