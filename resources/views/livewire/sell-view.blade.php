@@ -8,7 +8,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4">
-                <div class="card mb-3">
+                <div class="card mb-3" id="container-supplier">
                     <div class="card-header">
                         <h5 class="mb-0">Cliente</h5>
                     </div>
@@ -211,3 +211,17 @@
         </x-modal>
     @endisland
 </div>
+
+@script
+<script>
+const driverObj = driver();
+
+driverObj.highlight({
+  element: '#container-supplier',
+  popover: {
+    title: 'Registro de Clientes',
+    description: 'Panel de Registro de Clientes',
+  },
+});
+</script>
+@endscript

@@ -7,6 +7,7 @@
     }else{
         $url = asset(config('adminlte.logo_img', 'vendor/adminlte/dist/img/AdminLTELogo.png'));
     }
+    $user = Auth::user();
 @endphp
 
 
