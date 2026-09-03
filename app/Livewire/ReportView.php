@@ -45,7 +45,7 @@ class ReportView extends Component
 
     }
 
-    public function search()
+    public function searchFilter()
     {
         // Solo reinicia la paginación.
         // Los datos se recalculan automáticamente en render().
@@ -76,6 +76,7 @@ class ReportView extends Component
             })
 
             ->when($this->from, function (Builder $query) {
+                dd("hol");
                 $query->whereDate('transactions.created_at', '>=', $this->from);
             })
 

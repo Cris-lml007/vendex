@@ -88,7 +88,7 @@
 
                         <button
                             class="btn btn-primary w-100"
-                            wire:click="search">
+                            wire:click="searchFilter">
 
                             Buscar
 
