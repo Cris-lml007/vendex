@@ -338,7 +338,7 @@
 
                     @foreach($products as $product)
                         <tr>
-                            <td>{{ $product->name }}</td>
+                                    <td>{{ $product->id }} {{ $product->name }} ({{ $product->model }})</td>
                             @foreach($stores as $s)
                                 <td>{{ $product->stocks()?->where('store_id', $s->id)?->first()?->quantity ?? 0 }}</td>
                             @endforeach
