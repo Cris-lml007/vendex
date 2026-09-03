@@ -76,7 +76,6 @@ class ReportView extends Component
             })
 
             ->when($this->from, function (Builder $query) {
-                dd("hol");
                 $query->whereDate('transactions.created_at', '>=', $this->from);
             })
 
