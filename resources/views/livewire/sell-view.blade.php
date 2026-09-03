@@ -212,16 +212,3 @@
     @endisland
 </div>
 
-@script
-<script>
-const driverObj = driver();
-
-driverObj.highlight({
-  element: '#container-supplier',
-  popover: {
-    title: 'Registro de Clientes',
-    description: 'Panel de Registro de Clientes',
-  },
-});
-</script>
-@endscript
