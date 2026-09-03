@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\VerificationStatus;
 use App\Livewire\CatalogView;
 use App\Livewire\CategoryView;
 use App\Livewire\CustomersView;
@@ -25,11 +26,10 @@ foreach (config('tenancy.central_domains') as $domain) {
         Route::get('/', function () {
             return view('welcome');
         });
-
     });
 }
 
-//Route::middleware('auth')->get('/', SellView::class );
+Route::middleware(['auth',VerificationStatus::class])->get('/', SellView::class );
 
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

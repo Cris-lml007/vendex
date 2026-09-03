@@ -6,6 +6,8 @@ import L from 'leaflet';
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import 'leaflet/dist/leaflet.css';
+import { driver } from 'driver.js';
+import 'driver.js/dist/driver.css';
 
 import ApexCharts from "apexcharts";
 
@@ -13,3 +15,4 @@ window.Swal = Swal;
 window.Html5QrcodeScanner = Html5QrcodeScanner;
 window.ApexCharts = ApexCharts;
 window.L = L;
+window.driver = driver;

@@ -6,6 +6,7 @@
     }else{
         $url = asset(config('adminlte.logo_img', 'vendor/adminlte/dist/img/AdminLTELogo.png'));
     }
+    $user = Auth::user();
 @endphp
 
 
@@ -33,7 +34,11 @@
 
     {{-- Brand text --}}
     <span class="brand-text font-weight-light {{ config('adminlte.classes_brand_text') }}">
-        {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}
+        @if($user->id)
+        {!! $user->store->name !!}
+        @else
+            {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}
+        @endif
     </span>
 
 </a>
