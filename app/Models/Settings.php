@@ -13,6 +13,13 @@ class Settings extends Model
         'transfers_all',
         'change_password',
         'tutorial',
-        'theme'
+        'theme',
+        'product_tags'
     ];
+
+    protected function cast(): array {
+        return [
+            'product_tags' => 'array'
+        ];
+    }
 }

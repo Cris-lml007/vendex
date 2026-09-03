@@ -254,96 +254,186 @@
     {{-- CONFIGURACION DE PRODUCTOS --}}
     {{-- ========================================================= --}}
 
-    @if ($section === 'products')
-        <div class="mb-3">
+@if ($section === 'products')
 
-            <button class="btn btn-secondary" wire:click="$set('section', null)">
-                <i class="fas fa-arrow-left mr-1"></i>
-                Volver
-            </button>
+    <div class="mb-3">
+
+        <button class="btn btn-secondary" wire:click="$set('section', null)">
+            <i class="fas fa-arrow-left mr-1"></i>
+            Volver
+        </button>
+
+    </div>
+
+
+    <x-card>
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-boxes mr-2"></i>
+
+                Configuración de Productos
+
+            </h3>
 
         </div>
 
 
-        <x-card>
-
-            <div class="card-header">
-
-                <h3 class="card-title">
-
-                    <i class="fas fa-boxes mr-2"></i>
-
-                    Configuración de Productos
-
-                </h3>
-
-            </div>
+        <div class="card-body p-0">
 
 
-            <div class="card-body p-0">
+            {{-- Productos Serializados --}}
+            <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
 
+                <div>
 
-                {{-- Productos Serializados --}}
-                <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+                    <h5 class="mb-1">
+                        Productos Serializados
+                    </h5>
 
-                    <div>
-
-                        <h5 class="mb-1">
-                            Productos Serializados
-                        </h5>
-
-                        <small class="text-secondary">
-                            Permitir controlar productos mediante número de serie.
-                        </small>
-
-                    </div>
-
-
-                    <div class="custom-control custom-switch">
-
-                        <input type="checkbox" class="custom-control-input" id="serialized_products"
-                            wire:model.live="serialized_products">
-
-                        <label class="custom-control-label" for="serialized_products"></label>
-
-                    </div>
+                    <small class="text-secondary">
+                        Permitir controlar productos mediante número de serie.
+                    </small>
 
                 </div>
 
 
+                <div class="custom-control custom-switch">
 
-                {{-- Productos Heredados --}}
-                <div class="d-flex justify-content-between align-items-center p-3">
+                    <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id="serialized_products"
+                        wire:model.live="serialized_products"
+                    >
 
-                    <div>
+                    <label
+                        class="custom-control-label"
+                        for="serialized_products">
+                    </label>
 
-                        <h5 class="mb-1">
-                            Productos Heredados
-                        </h5>
+                </div>
 
-                        <small class="text-secondary">
-                            Permitir gestionar productos heredados entre tiendas.
-                        </small>
-
-                    </div>
+            </div>
 
 
-                    <div class="custom-control custom-switch">
+            {{-- Productos Heredados --}}
+            <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
 
-                        <input type="checkbox" class="custom-control-input" id="inherited_products"
-                            wire:model.live="inherited_products">
+                <div>
 
-                        <label class="custom-control-label" for="inherited_products"></label>
+                    <h5 class="mb-1">
+                        Productos Heredados
+                    </h5>
 
-                    </div>
+                    <small class="text-secondary">
+                        Permitir gestionar productos heredados entre tiendas.
+                    </small>
 
                 </div>
 
 
+                <div class="custom-control custom-switch">
+
+                    <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id="inherited_products"
+                        wire:model.live="inherited_products"
+                    >
+
+                    <label
+                        class="custom-control-label"
+                        for="inherited_products">
+                    </label>
+
+                </div>
+
             </div>
 
-        </x-card>
-    @endif
+
+            {{-- Etiquetas de Productos --}}
+            <div class="p-3 border-bottom">
+
+                <div class="mb-3">
+
+                    <h5 class="mb-1">
+                        Etiquetas de Productos
+                    </h5>
+
+                    <small class="text-secondary">
+                        Selecciona las etiquetas que deseas mostrar como columnas
+                        adicionales en el listado de productos.
+                    </small>
+
+                </div>
+
+
+                <div class="row">
+
+                    @forelse($available_tags as $tag)
+
+                        <div class="col-md-4 col-lg-3 mb-2">
+
+                            <div class="custom-control custom-checkbox">
+
+                                <input
+                                    type="checkbox"
+                                    class="custom-control-input"
+                                    id="tag_{{ Str::slug($tag) }}"
+                                    wire:model="selected_tags"
+                                    value="{{ $tag }}"
+                                >
+                                <label
+                                    class="custom-control-label"
+                                    for="tag_{{ Str::slug($tag) }}"
+                                >
+                                    {{ $tag }}
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    @empty
+
+                        <div class="col-12">
+
+                            <small class="text-secondary">
+                                No hay etiquetas de productos disponibles.
+                            </small>
+
+                        </div>
+
+                    @endforelse
+
+                </div>
+
+            </div>
+
+
+            {{-- Guardar --}}
+            <div class="d-flex justify-content-end p-3">
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    wire:click="save"
+                >
+                    <i class="fas fa-save mr-1"></i>
+                    Guardar configuración
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </x-card>
+
+@endif
 
 
 

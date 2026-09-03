@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Settings;
+use App\Models\TagProduct;
 use Livewire\Component;
 
 class SettingsView extends Component
@@ -26,6 +27,9 @@ class SettingsView extends Component
 
     public Settings $settings;
 
+    public $available_tags;
+    public $selected_tags = [];
+
     public function mount(){
         $settings = Settings::first();
         if($settings?->id == null){
@@ -46,8 +50,16 @@ class SettingsView extends Component
             $this->change_password = $settings->change_password;
             $this->show_tutorial = $settings->tutorial;
             $this->theme = $settings->theme;
+            $this->selected_tags = json_decode($settings->product_tags);
         }
         $this->settings = $settings;
+
+        $this->available_tags = TagProduct::query()
+            ->select('name')
+            ->distinct()
+            ->orderBy('name')
+            ->pluck('name')
+            ->toArray();
     }
 
     public function updatedWholesalePrice(){
@@ -86,6 +98,14 @@ class SettingsView extends Component
         $this->settings->theme = $this->theme;
         $this->settings->save();
         $this->js('Swal.fire({title: "Tema Guardado",icon:"success",showConfirmButton: false,timer:1500})');
+    }
+
+    public function save()
+    {
+        $this->settings->update([
+            'product_tags' => $this->selected_tags,
+        ]);
+        $this->js('Swal.fire({title: "Actualizado",icon:"success",showConfirmButton: false,timer:1500})');
     }
 
 
