@@ -572,11 +572,14 @@ class ProductForm extends Component
             if($this->number_labels > 0){
                 DB::transaction(function () {
                     for ($i = 0;$i < $this->number_labels ;$i++){
-                        TagProduct::create([
-                            'product_id' => $this->product->id,
-                            'name' => $this->labels[$i],
-                            'value' => $this->values[$i],
-                        ]);
+                        TagProduct::updateOrCreate(
+                            [
+                                'product_id' => $this->product->id,
+                                'name' => $this->labels[$i]
+                            ],[
+                                'value' => $this->values[$i]
+                            ]
+                        );
                     }
                 });
             }
