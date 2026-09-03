@@ -88,7 +88,7 @@
 
                         <button
                             class="btn btn-primary w-100"
-                            wire:click="search">
+                            wire:click="searchFilter">
 
                             Buscar
 
@@ -295,6 +295,133 @@
 
 
 
+        {{-- TABLA --}}
+        <div class="card shadow-sm">
+
+            <div class="card-header d-flex justify-content-between">
+
+                <h5 class="mb-0">
+
+                    Ventas
+
+                </h5>
+
+                <div>
+
+                    <button wire:click="exportPdf" class="btn btn-danger btn-sm"><i class="fa fa-file-pdf"></i> Exportar PDF</button>
+
+                </div>
+
+            </div>
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped mb-0">
+
+                        <thead>
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Fecha</th>
+
+                            <th>Tienda</th>
+
+                            <th>Cliente</th>
+
+                            <th>Vendedor</th>
+
+                            <th class="text-center">
+
+                                Productos
+
+                            </th>
+
+                            <th class="text-end">
+
+                                Total
+
+                            </th>
+
+                        </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        @forelse($transactions ?? [] as $transaction)
+
+                            <tr>
+
+                                <td>
+
+                                    {{ $transaction->id }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $transaction->created_at->format('d/m/Y H:i') }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $transaction->store->name }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $transaction?->customer?->name ?? '---'}}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $transaction->user->name }}
+
+                                </td>
+
+                                <td class="text-center">
+
+                                    {{ $transaction->details()->sum('quantity') }}
+
+                                </td>
+
+                                <td class="text-end">
+
+                                    Usd.
+                                    {{ number_format($transaction->total,2) }}
+
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="text-center">
+                                    No existen registros.
+                                </td>
+                            </tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                {{ $transactions->links() }}
+            </div>
+        </div>
+
+
+
         <div class="card">
 
             <div class="card-header">
@@ -423,130 +550,6 @@
 
 
 
-        {{-- TABLA --}}
-        <div class="card shadow-sm">
-
-            <div class="card-header d-flex justify-content-between">
-
-                <h5 class="mb-0">
-
-                    Ventas
-
-                </h5>
-
-                <div>
-
-                    <button wire:click="exportPdf" class="btn btn-danger btn-sm"><i class="fa fa-file-pdf"></i> Exportar PDF</button>
-
-                </div>
-
-            </div>
-
-            <div class="card-body p-0">
-
-                <div class="table-responsive">
-                    <table class="table table-hover table-striped mb-0">
-
-                        <thead>
-
-                        <tr>
-
-                            <th>#</th>
-
-                            <th>Fecha</th>
-
-                            <th>Tienda</th>
-
-                            <th>Cliente</th>
-
-                            <th>Vendedor</th>
-
-                            <th class="text-center">
-
-                                Productos
-
-                            </th>
-
-                            <th class="text-end">
-
-                                Total
-
-                            </th>
-
-                        </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                        @forelse($transactions ?? [] as $transaction)
-
-                            <tr>
-
-                                <td>
-
-                                    {{ $transaction->id }}
-
-                                </td>
-
-                                <td>
-
-                                    {{ $transaction->created_at->format('d/m/Y H:i') }}
-
-                                </td>
-
-                                <td>
-
-                                    {{ $transaction->store->name }}
-
-                                </td>
-
-                                <td>
-
-                                    {{ $transaction?->customer?->name ?? '---'}}
-
-                                </td>
-
-                                <td>
-
-                                    {{ $transaction->user->name }}
-
-                                </td>
-
-                                <td class="text-center">
-
-                                    {{ $transaction->details()->sum('quantity') }}
-
-                                </td>
-
-                                <td class="text-end">
-
-                                    Usd.
-                                    {{ number_format($transaction->total,2) }}
-
-                                </td>
-
-                            </tr>
-
-                        @empty
-
-                            <tr>
-
-                                <td
-                                    colspan="7"
-                                    class="text-center">
-                                    No existen registros.
-                                </td>
-                            </tr>
-                        @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="card-footer">
-                {{ $transactions->links() }}
-            </div>
-        </div>
     </div>
 </div>
 
