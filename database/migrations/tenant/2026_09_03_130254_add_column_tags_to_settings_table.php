@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('settings', function (Blueprint $table) {
-            $table->json('product_tags')->default('[]');
+            $table->json('product_tags')->nullable()->default('[]');
         });
     }
 
