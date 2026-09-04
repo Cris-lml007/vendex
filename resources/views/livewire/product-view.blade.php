@@ -15,7 +15,7 @@
                         <td>{{ $item->id }}</td>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->model }}</td>
-                        @foreach (json_decode($settings->product_tags) as $tag)
+                        @foreach (json_decode($settings->product_tags) ?? [] as $tag)
                             <td>{{ $item->tags()->where('name', 'like', $tag)->first()->value ?? '---' }}</td>
                         @endforeach
                         <td>{{ $item->color ?? '' }}</td>
