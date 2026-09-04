@@ -81,8 +81,8 @@
                                         <option value="">Seleccione Producto</option>
                                         @foreach ($products ?? [] as $item)
                                             <option value="{{ $item->id }}">
-                                                {{ $item->name }}({{ $item->color ?? '' }})@if ($item->is_serialize)
-                                                    ({{ $item->id }})
+                                                {{ $item->id }} - {{ $item->name }} ({{ $item->model }})
+                                                ({{ $item->color ?? '' }})@if ($item->is_serialize)
                                                 @endif
                                             </option>
                                         @endforeach
@@ -111,8 +111,9 @@
                                     <input data-bs-toggle="tooltip" data-bs-title="adad" type="number" step="0.01"
                                         class="form-control" wire:model="price"
                                         placeholder="{{ Number::format($product_price ?? 0, 2) ?? '0' }}">
-                                    <button @if(!$settings->wholesale_price) disabled @endif wire:click="changeWhosale" type="button" class="btn btn-primary"><i
-                                            class="fa fa-share"></i> {{ $is_whosale ? 'Mayor' : 'Menor' }}</button>
+                                    <button @if (!$settings->wholesale_price) disabled @endif wire:click="changeWhosale"
+                                        type="button" class="btn btn-primary"><i class="fa fa-share"></i>
+                                        {{ $is_whosale ? 'Mayor' : 'Menor' }}</button>
                                 </div>
                             </div>
 
@@ -211,4 +212,3 @@
         </x-modal>
     @endisland
 </div>
-
