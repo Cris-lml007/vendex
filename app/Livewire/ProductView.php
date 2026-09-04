@@ -51,7 +51,7 @@ class ProductView extends Component
 
         $this->settings = Settings::first();
 
-        foreach (json_decode($this->settings->product_tags) as $value) {
+        foreach (json_decode($this->settings->product_tags) ?? [] as $value) {
             $heads [$value] = $value;
         }
 
