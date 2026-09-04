@@ -35,7 +35,7 @@
     {{-- Brand text --}}
     <span class="brand-text font-weight-light {{ config('adminlte.classes_brand_text') }}">
         @if($user->id)
-        {!! $user->store->name !!}
+        {!! $user?->store?->name ??  config('adminlte.logo', '<b>Admin</b>LTE') !!}
         @else
             {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}
         @endif
