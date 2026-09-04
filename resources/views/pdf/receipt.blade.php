@@ -205,7 +205,7 @@
                     </td>
 
                     <td>
-                        {{ $detail->product->name }} ({{ $detail->product->id }})
+                        {{ $detail->product->id }} - {{ $detail->product->name }} ({{ $detail->product->model }})
                     </td>
 
                     <td class="text-right">

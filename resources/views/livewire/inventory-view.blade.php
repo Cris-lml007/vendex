@@ -21,9 +21,8 @@
                         <td><a
                                 @if ($item->type == \App\Enums\Type::OUT) href="{{ route('admin.sell.id', $item->referenceable->id) }}" @endif>{{ $item->id }}</a>
                         </td>
-                        <td><a href="{{ route('admin.product.id', $item->product->id) }}">{{ $item->product->name }}
-                                @if ($item->product->is_serialize)
-                                    ({{ $item->product->id }})
+                        <td><a href="{{ route('admin.product.id', $item->product->id) }}">{{ $item->product->id }} -
+                                {{ $item->product->name }} ({{ $item->model }}) @if ($item->product->is_serialize)
                                 @endif
                             </a></td>
                         @if ($item->type == \App\Enums\Type::IN)
