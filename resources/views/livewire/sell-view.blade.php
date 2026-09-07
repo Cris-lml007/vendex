@@ -82,7 +82,8 @@
                                         @foreach ($products ?? [] as $item)
                                             <option value="{{ $item->id }}">
                                                 {{ $item->id }} - {{ $item->name }} ({{ $item->model }})
-                                                ({{ $item->color ?? '' }})@if ($item->is_serialize)
+                                                ({{ $item->color ?? '' }})
+                                                @if ($item->is_serialize)
                                                 @endif
                                             </option>
                                         @endforeach
@@ -106,7 +107,8 @@
                             </div>
 
                             <div class="col-md mt-3">
-                                <label class="form-label">Precio(Bs)</label>
+                                <label
+                                    class="form-label">Precio({{ $settings->currency_main == App\Enums\Currency::BS->value ? 'Bs' : 'Usd' }})</label>
                                 <div class="input-group">
                                     <input data-bs-toggle="tooltip" data-bs-title="adad" type="number" step="0.01"
                                         class="form-control" wire:model="price"
@@ -187,7 +189,8 @@
                             </div>
                             <div class="col-md-6 text-end">
                                 <h5 class="mb-2 text-light">
-                                    Total: {{ \Illuminate\Support\Number::format($total, 2) }} Bs
+                                    Total: {{ \Illuminate\Support\Number::format($total, 2) }}
+                                    {{ $settings->currency_main == App\Enums\Currency::BS->value ? 'Bs' : 'Usd' }}
                                 </h5>
                                 <div>
                                     <button class="btn btn-success btn-lg" wire:click="save">

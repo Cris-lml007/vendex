@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\Currency;
 use App\Enums\Role;
 use App\Enums\Status;
 use App\Enums\Type;
@@ -95,9 +96,9 @@ class SellView extends Component
                 return;
             }
             if($this->is_whosale){
-                $this->product_price = $p->wholesale_price * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+                $this->product_price = $p->wholesale_price * ($this->settings->currency_main == Currency::BS->value ? ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : 1);
             }else{
-                $this->product_price = $p->price * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+                $this->product_price = $p->price * ($this->settings->currency_main == Currency::BS->value ? ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : 1);
             }
 
             $p = Product::find($this->product_id);
@@ -234,7 +235,7 @@ class SellView extends Component
                         'transaction_id' => $transaction->id,
                         'product_id' => $item['product_id'],
                         'quantity' => $item['quantity'],
-                        'price' => $item['price']/ExchangeRate::orderBy('id','desc')->first()->usd_to_bs,
+                        'price' => $item['price']/ ($this->settings->currency_main == Currency::BS ? ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : 1),
                         'exchange_rate_id' => ExchangeRate::orderBy('id','desc')->first()->id,
                         'wholesale_price' => $this->is_whosale
                     ]);
@@ -242,7 +243,7 @@ class SellView extends Component
                     $register = Kardex::create([
                         'product_id' => $item['product_id'],
                         'quantity' => $item['quantity'],
-                        'price' => $item['price']/ExchangeRate::orderBy('id','desc')->first()->usd_to_bs,
+                        'price' => $item['price']/($this->settings->currency_main == Currency::BS ? ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : 1),
                         'store_id' => $this->store,
                         'type' => Type::OUT,
                         'user_id' => Auth::user()->id,
