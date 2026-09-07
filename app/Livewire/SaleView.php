@@ -84,6 +84,7 @@ class SaleView extends Component
                         $q->whereDate('created_at',today());
                     })->orderBy($this->list['sort_field'],$this->list['sort_direction'])
                     ->get();
+                // $this->total = $data->sum('totalBs');
             }
         }else{
             if($search != ''){
@@ -107,11 +108,12 @@ class SaleView extends Component
                         $q->whereDate('created_at',today());
                     })->orderBy($this->list['sort_field'],$this->list['sort_direction'])
                     ->get();
-                $this->total = $data->sum('totalBs');
+                // $this->total = $data->sum('totalBs');
                 // dd($this->total);
             }
         }
 
+        $this->total = $data->sum('totalBs');
 
         $this->list['pages_max'] = null;//$data->lastPage();
         return view('livewire.sale-view', compact(['heads', 'stores', 'data']));
