@@ -240,6 +240,34 @@
 
                     </div>
 
+            </div>
+
+                {{-- Moneda Principal --}}
+                <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+
+                    <div>
+
+                        <h5 class="mb-1">
+                            Moneda Principal
+                        </h5>
+
+                        <small class="text-secondary">
+                            Moneda Principal en el sistema.
+                        </small>
+
+                    </div>
+
+
+                    <div class="custom-control custom-switch">
+
+                    <select class="form-select" wire:model.live="currency_main">
+                        @foreach (\App\Enums\Currency::cases() as $item)
+                            <option value="{{ $item->value }}">{{ $item->name }}</option>
+                        @endforeach
+                    </select>
+
+                    </div>
+
                 </div>
 
 

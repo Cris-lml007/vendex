@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\Currency;
 use App\Models\Settings;
 use App\Models\TagProduct;
 use Livewire\Component;
@@ -23,6 +24,8 @@ class SettingsView extends Component
 
     public $theme = 'vendex';
 
+    public $currency_main;
+
     public $version = 1;
 
     public Settings $settings;
@@ -40,7 +43,8 @@ class SettingsView extends Component
                 'transfers_all' => false,
                 'change_password' => false,
                 'tutorial' => true,
-                'theme' => 'vendex'
+                'theme' => 'vendex',
+                'currency_main' => Currency::USD
             ]);
         }else{
             $this->wholesale_price = $settings->wholesale_price;
@@ -51,6 +55,7 @@ class SettingsView extends Component
             $this->show_tutorial = $settings->tutorial;
             $this->theme = $settings->theme;
             $this->selected_tags = json_decode($settings->product_tags);
+            $this->currency_main = $settings->currency_main;
         }
         $this->settings = $settings;
 
@@ -85,6 +90,11 @@ class SettingsView extends Component
     }
     public function updatedShowTutorial(){
         $this->settings->tutorial = $this->show_tutorial;
+        $this->settings->save();
+    }
+
+    public function updatedCurrencyMain(){
+        $this->settings->currency_main = $this->currency_main;
         $this->settings->save();
     }
 
