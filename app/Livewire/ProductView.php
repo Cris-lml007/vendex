@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\Currency;
 use App\Enums\Status;
 use App\Models\ExchangeRate;
 use App\Models\Product;
@@ -60,7 +61,7 @@ class ProductView extends Component
         $heads ['Marca'] = 'brand_id';
         $heads ['Categoria'] = null;
         $heads ['Cantidad'] = null;
-        $heads ['Precio (Bs)'] = 'price';
+        $heads ['Precio ('.($this->settings->currency_main == Currency::BS->value ? 'Bs' : 'Usd').')'] = 'price';
         $heads ['Acciones'] = null;
 
         $search = $this->list['search'];

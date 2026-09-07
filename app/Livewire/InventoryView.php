@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Enums\Role;
 use App\Enums\Type;
 use App\Models\Kardex;
+use App\Models\Settings;
 use App\Models\Stock;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +28,7 @@ class InventoryView extends Component
     ];
 
     public $product_id;
-    public $current = 2;
+    public $current;
 
     public function updatedList(){
         if($this->list['pages'] != ''){
@@ -47,6 +48,7 @@ class InventoryView extends Component
 
     public function mount(){
         $this->last = Kardex::latest('id')->first()->id ?? null;
+        $this->current = Settings::first()->currency_main;
     }
 
 

@@ -2,8 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Enums\Currency;
 use App\Enums\Type;
+use App\Models\ExchangeRate;
 use App\Models\Kardex;
+use App\Models\Settings;
 use App\Models\Stock;
 use App\Models\Store;
 use Illuminate\Support\Facades\Storage;
@@ -34,6 +37,7 @@ class StoreForm extends Component
     public $long;
     public $radius;
 
+    public Settings $settings;
 
     #[Validate('image|max:1024')]
     public $photo;
@@ -42,6 +46,7 @@ class StoreForm extends Component
 
 
     public function mount(Store $store = null){
+        $this->settings = Settings::first();
         if($store->id != null){
             $this->edit = true;
             $this->store = $store;
@@ -109,9 +114,21 @@ class StoreForm extends Component
 
     public function render()
     {
-        $heads = ['Nombre'=> 'name','Disponibles' =>null,'Precio' => null,'Acciones' => null];
-        $heads1 = ['Id' => null,'Producto' => null,'Cliente' => null,'Cantidad' => null,'Precio' => null,'Por' => null];
+        $heads = ['Nombre'=> 'name',
+            'Disponibles' =>null,
+            'Precio'.'('.($this->settings->currency_main == Currency::BS->value ? 'Bs' : 'Usd').')' => null,
+            'Acciones' => null
+        ];
+        $heads1 = ['Id' => null,
+            'Producto' => null,
+            'Cliente' => null,
+            'Cantidad' => null,
+            'Precio'.'('.($this->settings->currency_main == Currency::BS->value ? 'Bs' : 'Usd').')' => null,
+            'Por' => null
+        ];
+
+        $rate = ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
         $this->stock = $this->store->products;
-        return view('livewire.store-form',compact('heads','heads1'));
+        return view('livewire.store-form',compact('heads','heads1','rate'));
     }
 }

@@ -2,10 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Enums\Currency;
 use App\Enums\Status;
 use App\Models\Customer;
 use App\Models\DetailTransaction;
+use App\Models\ExchangeRate;
 use App\Models\Product;
+use App\Models\Settings;
 use App\Models\Stock;
 use App\Models\Store;
 use App\Models\User;
@@ -38,6 +41,9 @@ class ReportView extends Component
     public $averageSale = 0;
 
     public $search;
+
+    public Settings $settings;
+    public $rate;
 
     public function updating()
     {
@@ -98,11 +104,11 @@ class ReportView extends Component
             return $transaction->details->sum(function ($detail) {
                 return $detail->quantity * $detail->price;
             });
-        });
+        }) *  ($this->settings->currency_main == Currency::BS->value ?  $this->rate : 1);
 
-        $this->averageSale = $this->totalSales > 0
+        $this->averageSale = ($this->totalSales > 0
             ? $this->totalAmount / $this->totalSales
-            : 0;
+            : 0) *  ($this->settings->currency_main == Currency::BS->value ?  $this->rate : 1);
     }
 
     public function exportPdf()
@@ -310,6 +316,7 @@ class ReportView extends Component
             ->join('transactions', 'detail_transactions.transaction_id', '=', 'transactions.id')
 
             ->join('products', 'detail_transactions.product_id', '=', 'products.id')
+            ->join('exchange_rates','detail_transactions.exchange_rate_id','=','exchange_rates.id')
 
             ->when($this->store, function ($query) {
                 $query->where('transactions.store_id', $this->store);
@@ -338,11 +345,12 @@ class ReportView extends Component
 
             ->selectRaw('SUM(detail_transactions.quantity) as quantity')
 
-            ->selectRaw('SUM(detail_transactions.quantity * detail_transactions.price) as total')
+            ->selectRaw('SUM(detail_transactions.quantity * detail_transactions.price)'.($this->settings->currency_main == Currency::BS->value ? "* exchange_rates.usd_to_bs" : '').' as total')
 
             ->groupBy(
                 'products.id',
-                'products.name'
+                'products.name',
+                'exchange_rates.usd_to_bs'
             )
 
             ->orderByDesc('quantity')
@@ -355,6 +363,9 @@ class ReportView extends Component
 
     public function render()
     {
+        $this->settings = Settings::first();
+        $this->rate = ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+
         $this->calculateResume();
         $salesChart = $this->getSalesChart();
         $storesChart = $this->getStoresChart();

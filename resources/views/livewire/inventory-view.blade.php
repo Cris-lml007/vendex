@@ -26,7 +26,7 @@
                                 @endif
                             </a></td>
                         @if ($item->type == \App\Enums\Type::IN)
-                            @if ($current == 1)
+                            @if ($current == App\Enums\Currency::BS->value)
                                 <td>{{ \Illuminate\Support\Number::format($item->price * $item->exchange_rate->usd_to_bs * $item->quantity, 2) }}
                                 </td>
                             @else
@@ -34,7 +34,7 @@
                             @endif
                             <td>---</td>
                             @php
-                                if ($current == 1) {
+                                if ($current == App\Enums\Currency::BS->value) {
                                     $income += $item->price * $item->exchange_rate->usd_to_bs * $item->quantity;
                                 } else {
                                     $income += $item->price * $item->quantity;
@@ -43,14 +43,14 @@
                         @else
                             <td>---</td>
 
-                            @if ($current == 1)
+                            @if ($current == App\Enums\Currency::BS->value)
                                 <td>{{ \Illuminate\Support\Number::format($item->price * $item->exchange_rate->usd_to_bs * $item->quantity, 2) }}
                                 </td>
                             @else
                                 <td>{{ \Illuminate\Support\Number::format($item->price * $item->quantity, 2) }}</td>
                             @endif
                             @php
-                                if ($current == 1) {
+                                if ($current == App\Enums\Currency::BS->value) {
                                     $expense += $item->price * $item->exchange_rate->usd_to_bs * $item->quantity;
                                 } else {
                                     $expense += $item->price * $item->quantity;
@@ -84,8 +84,8 @@
                         <th colspan="2" class="text-center">
                             {{ \Illuminate\Support\Number::format($expense - $income, 2) }}
                             <select wire:model.live="current" class="form-select d-inline" style="width: 80px;">
-                                <option value="1">Bs</option>
-                                <option value="2">Usd</option>
+                                <option value="2">Bs</option>
+                                <option value="1">Usd</option>
                             </select>
                         </th>
                     </tr>

@@ -31,7 +31,7 @@ class DetailTransaction extends Model
     public function subtotal(): Attribute{
         return Attribute::make(
             get: function(){
-                return $this->price*$this->quantity;
+                return $this->price*$this->quantity * $this->exchange_rate->usd_to_bs;
             }
         );
     }

@@ -42,7 +42,7 @@ class Transaction extends Model
     public function total(): Attribute{
         return Attribute::make(
             get: function(){
-                return $this->details()->selectRaw('SUM(price*quantity) as total')->first()->total;
+                return $this->details()->selectRaw('SUM(price*quantity) as total')->first()->total * $this->details()->first()->exchange_rate->usd_to_bs;
             }
         );
     }

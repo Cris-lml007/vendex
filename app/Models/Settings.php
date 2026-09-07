@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Currency;
 use Illuminate\Database\Eloquent\Model;
 
 class Settings extends Model
@@ -14,12 +15,14 @@ class Settings extends Model
         'change_password',
         'tutorial',
         'theme',
-        'product_tags'
+        'product_tags',
+        'currency_main'
     ];
 
     protected function cast(): array {
         return [
-            'product_tags' => 'array'
+            'product_tags' => 'array',
+            'currency_main' => Currency::class
         ];
     }
 }
