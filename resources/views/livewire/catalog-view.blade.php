@@ -1,41 +1,42 @@
 <x-slot name="header">
     <div class="d-flex justify-content-between">
         <h1>Catalogo</h1>
-        <button data-bs-toggle="modal" data-bs-target="#modal-scanner" class="btn btn-primary"><i class="fa fa-qrcode"></i> Buscar por Codigo de Barras</button>
+        <button data-bs-toggle="modal" data-bs-target="#modal-scanner" class="btn btn-primary"><i class="fa fa-qrcode"></i>
+            Buscar por Codigo de Barras</button>
     </div>
 </x-slot>
 
 <div>
     <style>
-        .product-image{
-            height:180px;
-            background:#f8f9fa;
+        .product-image {
+            height: 180px;
+            background: #f8f9fa;
         }
 
-        .card{
-            transition:.2s;
+        .card {
+            transition: .2s;
         }
 
-        .card:hover{
-            transform:translateY(-3px);
-            box-shadow:0 .5rem 1rem rgba(0,0,0,.15);
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
         }
     </style>
     <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-primary" wire:click="isTable" ><i class="fa fa-table"></i></button>
+        <button class="btn btn-primary" wire:click="isTable"><i class="fa fa-table"></i></button>
     </div>
 
-    @if(!$is_table)
+    @if (!$is_table)
         <div class="d-flex flex-column min-vh-100">
             <div class="flex-grow-1">
                 <div class="container">
                     <div class="d-flex justify-content-end mb-3">
-                        <input type="text" class="form-control w-25" placeholder="Buscar..." wire:model.blur.enter.live="search">
+                        <input type="text" class="form-control w-25" placeholder="Buscar..."
+                            wire:model.blur.enter.live="search">
                     </div>
                     <div class="row g-3">
 
-                        @foreach($data ?? [] as $product)
-
+                        @foreach ($data ?? [] as $product)
                             <div class="col-6 col-md-4 col-lg-3 col-xl-3">
 
                                 <div class="card h-100 shadow-sm">
@@ -43,34 +44,26 @@
 
                                         $photo_url = null;
                                         if (Storage::disk('local')->exists("products/{$product->id}.jpg")) {
-                                            $photo_url = Storage::disk('local')
-                                                ->temporaryUrl("products/{$product->id}.jpg",
-                                                    now()->addMinutes(5)
-                                                );
-                                        }else{
+                                            $photo_url = Storage::disk('local')->temporaryUrl("products/{$product->id}.jpg", now()->addMinutes(5));
+                                        } else {
                                             $v = false;
                                             $p = $product?->parent;
-                                            do{
-                                                if($p?->id != null){
-                                                    if(Storage::disk('local')->exists("products/{$p->id}.jpg")) {
-                                                        $photo_url = Storage::disk('local')
-                                                            ->temporaryUrl("products/{$p->id}.jpg",
-                                                                now()->addMinutes(5)
-                                                            );
+                                            do {
+                                                if ($p?->id != null) {
+                                                    if (Storage::disk('local')->exists("products/{$p->id}.jpg")) {
+                                                        $photo_url = Storage::disk('local')->temporaryUrl("products/{$p->id}.jpg", now()->addMinutes(5));
                                                         $v = true;
                                                     }
-                                                }else{
+                                                } else {
                                                     $v = true;
                                                 }
                                                 $p = $p?->parent ?? null;
-                                            }while(!$v);
+                                            } while (!$v);
                                         }
                                     @endphp
 
-                                    @if($photo_url != null)
-                                        <img
-                                            src="{{ $photo_url }}"
-                                            class="card-img-top product-image"
+                                    @if ($photo_url != null)
+                                        <img src="{{ $photo_url }}" class="card-img-top product-image"
                                             alt="{{ $product->name }}">
                                     @else
                                         <div class="card-img-top product-image text-center p-5 border bg-gray">
@@ -81,14 +74,18 @@
                                         <h6 class="card-title text-truncate">
                                             <strong>{{ $product->name }}</strong>
                                         </h6>
-                                        <div class="badge" style="background: {{ $product->brand?->color_bg ?? 'white' }};color: {{ $product->brand?->color_fg ?? 'black' }};">
-                                            {{ $product->brand?->name ?? 'Ninguno'}}
+                                        <div class="badge"
+                                            style="background: {{ $product->brand?->color_bg ?? 'white' }};color: {{ $product->brand?->color_fg ?? 'black' }};">
+                                            {{ $product->brand?->name ?? 'Ninguno' }}
                                         </div>
                                         <h5 class="text-success mt-2">
-                                            <strong>Bs {{ number_format($product->price*$rate,2) }}</strong>
+                                            <strong>{{ $settings->currency_main == App\Enums\Currency::BS->value ? 'Bs' : 'Usd' }}
+                                                {{ number_format($product->price * ($settings->currency_main == App\Enums\Currency::BS->value ? $rate : 1), 2) }}</strong>
                                         </h5>
                                         <div class="mt-auto">
-                                            <button wire:click="getProduct('{{ $product->id }}')" data-bs-toggle="modal" data-bs-target="#modal-product" class="btn btn-primary w-100">
+                                            <button wire:click="getProduct('{{ $product->id }}')"
+                                                data-bs-toggle="modal" data-bs-target="#modal-product"
+                                                class="btn btn-primary w-100">
                                                 Ver
                                             </button>
                                         </div>
@@ -105,19 +102,19 @@
                 </div>
             </div>
         </div>
-
     @else
         <livewire:table :heads="$heads" wire:model.live="list">
-            @foreach($data as $item)
+            @foreach ($data as $item)
                 <tr>
                     <td>{{ $item->id }}</td>
                     <td>{{ $item->name }}</td>
                     <td>{{ $item->color }}</td>
                     <td>{{ $item->model }}</td>
                     <td>{{ $item?->brand?->name ?? '' }}</td>
-                    <td>{{ Number::format($item->price,2) }}</td>
+                    <td>{{ Number::format($item->price * ($settings->currency_main == App\Enums\Currency::BS->value ? $rate : 1), 2) }}</td>
                     <td>
-                        <button wire:click="getProduct('{{ $item->id }}')" data-bs-toggle="modal" data-bs-target="#modal-product" class="btn btn-primary"><i class="fa fa-eye"></i></button>
+                        <button wire:click="getProduct('{{ $item->id }}')" data-bs-toggle="modal"
+                            data-bs-target="#modal-product" class="btn btn-primary"><i class="fa fa-eye"></i></button>
                     </td>
                 </tr>
             @endforeach
@@ -126,9 +123,9 @@
     @endif
 
     @island
-    <x-modal id="modal-scanner" title="Escaner">
-        <livewire:scanner wire:model.live="product_id"></livewire:scanner>
-    </x-modal>
+        <x-modal id="modal-scanner" title="Escaner">
+            <livewire:scanner wire:model.live="product_id"></livewire:scanner>
+        </x-modal>
     @endisland
 
     @island

@@ -2,9 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Enums\Currency;
 use App\Enums\Status;
 use App\Enums\Type;
 use App\Models\Product;
+use App\Models\Settings;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -13,6 +15,7 @@ class CatalogView extends Component
     use WithPagination;
 
     public $is_table = true;
+    public Settings $settings;
 
     public $list = [
         'search' => '',
@@ -58,13 +61,14 @@ class CatalogView extends Component
 
     public function render()
     {
+        $this->settings = Settings::first();
         $heads = [
             'Id' => 'id',
             "Nombre" => 'name',
             'Color' => 'color',
             "Modelo" => 'model',
             "Marca" => 'brand_id',
-            "Precio(Usd)" => 'price',
+            "Precio(".($this->settings->currency_main == Currency::BS->value ? 'Bs' : 'Usd').')' => 'price',
             "Acciones" => null
         ];
         if($this->is_table){

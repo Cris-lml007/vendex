@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\Currency;
 use App\Enums\Type;
 use App\Models\DetailTransfer;
 use App\Models\ExchangeRate;
@@ -44,7 +45,7 @@ class CatalogForm extends Component
     {
         $product = Product::find($id);
         $this->name = $product->name;
-        $this->price = Number::format($product->price* \App\Models\ExchangeRate::orderBy('id','desc')->first()->usd_to_bs,2);
+        $this->price = Number::format($product->price * ($this->settings->currency_main == Currency::BS->value ? ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : 1),2);
         $this->category = $product->category?->name ?? '';
         $this->description = $product->description;
         $this->brand = $product->brand?->name ?? '';
@@ -77,10 +78,10 @@ class CatalogForm extends Component
         if($q > 0 && !$this->product->is_serialize){
             if(array_sum($this->stocks) != $q  || array_any($this->stocks,fn($i) => $i < 0)){
                 $this->js('Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Unidades no Disponibles"
-                })');
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Unidades no Disponibles"
+                    })');
                 return;
             }
             try{
@@ -111,8 +112,8 @@ class CatalogForm extends Component
                                 'product_id' => $this->product->id,
                                 'store_id' => $id,
                             ],[
-                                'quantity' => $value,
-                            ]);
+                                    'quantity' => $value,
+                                ]);
 
                             $transfer = DetailTransfer::create([
                                 'transfer_id' => $t->id,
