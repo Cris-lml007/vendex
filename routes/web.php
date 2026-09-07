@@ -23,9 +23,9 @@ use Illuminate\Support\Facades\Route;
 
 foreach (config('tenancy.central_domains') as $domain) {
     Route::domain($domain)->group(function () {
-        Route::get('/', function () {
+        Route::get('/',function (){
             return view('welcome');
-        });
+        })->name('welcome');
     });
 }
 
@@ -119,10 +119,4 @@ Route::prefix('/dashboard')->middleware('auth')->group(function(){
         $pdf->render();
         return $pdf->stream();
     })->name('admin.sell.id');
-});
-
-Route::domain(env('DOMAIN_CENTRAL'))->group(function(){
-    Route::get('/',function (){
-        return view('welcome');
-    })->name('welcome');
 });
