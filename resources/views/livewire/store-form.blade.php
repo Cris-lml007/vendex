@@ -118,7 +118,7 @@
                                 <tr>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->pivot->quantity ?? 0 }}</td>
-                                    <td>{{ Number::format($item->price, 2) }}</td>
+                                    <td>{{ Number::format($item->price* ($settings->currency_main == App\Enums\Currency::BS->value ? $rate : 1), 2) }}</td>
                                     <td>
                                         <a href="{{ route('admin.product.id', $item->id) }}" class="btn btn-primary"><i
                                                 class="fa fa-eye"></i></a>
@@ -129,7 +129,7 @@
                                 <tr>
                                     <td>{{ $item->name }}</td>
                                     <td>1</td>
-                                    <td>{{ Number::format($item->price, 2) }}</td>
+                                    <td>{{ Number::format($item->price* ($settings->currency_main == App\Enums\Currency::BS->value ? $rate : 1), 2) }}</td>
                                     <td>
                                         <a href="{{ route('admin.product.id', $item->id) }}" class="btn btn-primary"><i
                                                 class="fa fa-eye"></i></a>
@@ -151,10 +151,15 @@
                                     <td>{{ $item->product->name }}</td>
                                     <td>{{ $item->referenceable?->customer?->name ?? '---' }}</td>
                                     <td>{{ $item->quantity }}</td>
-                                    <td>{{ Number::format($item->price, 2) }}</td>
+                            <td>{{ Number::format($item->price* ($settings->currency_main == App\Enums\Currency::BS->value ? $item->exchange_rate->usd_to_bs : 1), 2) }}</td>
                                     <td>{{ $item->user->name }}</td>
                                 </tr>
-                            @endforeach
+                                @endforeach
+                                <livewire:slot name="footer">
+                                <th colspan="3">TOTAL</th>
+                                <th>{{ $sales->sum('quantity') }}</th>
+                                <th colspan="2">{{ Number::format($sales->sum("price")* ($settings->currency_main == App\Enums\Currency::BS->value ? $item->exchange_rate->usd_to_bs : 1), 2) }} {{($settings->currency_main == App\Enums\Currency::BS->value ? 'Bs' : 'Usd')}}</th>
+                                </livewire:slot>
                         </livewire:table>
                     </div>
                 </div>
