@@ -114,7 +114,7 @@ class TenancyServiceProvider extends ServiceProvider
         });
 
         \Stancl\Tenancy\Middleware\InitializeTenancyByDomain::$onFail = function () {
-            return redirect(route('welcome'));
+            return redirect(env('DOMAIN_CENTRAL', '/'));
         };
 
 
