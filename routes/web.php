@@ -30,11 +30,6 @@ foreach (config('tenancy.central_domains') as $domain) {
     });
 }
 
-Auth::routes([
-    'register' => false,
-    'reset' => false,
-    'verify' => false,
-]);
 
 Route::middleware(['auth',VerificationStatus::class])->get('/', SellView::class );
 
