@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\ReceiptController;
 use App\Http\Middleware\VerificationStatus;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -145,21 +146,11 @@ Route::middleware([
             Route::can('isAdmin')->get('/reports',ReportView::class)->name('admin.reports');
             Route::can('isAdmin')->get('/settings',SettingsView::class)->name('admin.settings');
 
-            Route::get('/sell/{transaction}',function (\App\Models\Transaction $transaction){
-
-
-                $format = new NumberFormatter('es',NumberFormatter::SPELLOUT);
-                $pdf = Pdf::setOptions([
-                    'isHtml5ParserEnabled' => true,
-                    'isRemoteEnabled' => true,
-                ])->loadView('pdf.receipt',[
-                        'transaction' => $transaction,
-                        'format' => $format,
-                    ]);
-                $pdf->setPaper('letter', 'landscape');
-                $pdf->render();
-                return $pdf->stream();
-            })->name('admin.sell.id');
+            Route::controller(ReceiptController::class)->group(function(){
+                Route::get('/sell/{transaction}','getLetter')->name('admin.sell.id');
+                Route::get('/sell/{transaction}/letter','getLetter')->name('admin.sell.id.letter');
+                Route::get('/sell/{transaction}/thermal','getThermal')->name('admin.sell.id.thermal');
+            });
         });
 
 
