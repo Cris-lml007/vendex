@@ -130,6 +130,7 @@ Route::prefix('/dashboard')->middleware(['auth',VerificationStatus::class])->gro
 
     Route::controller(ReceiptController::class)->group(function(){
         Route::get('/sell/{transaction}','getLetter')->name('admin.sell.id');
+        Route::get('/sell/{transaction}/letter','getLetter')->name('admin.sell.id.letter');
         Route::get('/sell/{transaction}/thermal','getThermal')->name('admin.sell.id.thermal');
     });
 });

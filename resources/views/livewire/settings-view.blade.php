@@ -240,7 +240,7 @@
 
                     </div>
 
-            </div>
+                </div>
 
                 {{-- Moneda Principal --}}
                 <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
@@ -260,11 +260,39 @@
 
                     <div class="custom-control custom-switch">
 
-                    <select class="form-select" wire:model.live="currency_main">
-                        @foreach (\App\Enums\Currency::cases() as $item)
-                            <option value="{{ $item->value }}">{{ $item->name }}</option>
-                        @endforeach
-                    </select>
+                        <select class="form-select" wire:model.live="currency_main">
+                            @foreach (\App\Enums\Currency::cases() as $item)
+                                <option value="{{ $item->value }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+
+                    </div>
+
+                </div>
+
+                {{-- Paper De Recibo --}}
+                <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+
+                    <div>
+
+                        <h5 class="mb-1">
+                            Tamaño de Recibo
+                        </h5>
+
+                        <small class="text-secondary">
+                            Tamaño Principal de Recibo.
+                        </small>
+
+                    </div>
+
+
+                    <div class="custom-control custom-switch">
+
+                        <select class="form-select" wire:model.live="receipt_paper">
+                            @foreach (\App\Enums\TypePaper::cases() as $item)
+                                <option value="{{ $item->value }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
 
                     </div>
 
@@ -282,186 +310,161 @@
     {{-- CONFIGURACION DE PRODUCTOS --}}
     {{-- ========================================================= --}}
 
-@if ($section === 'products')
+    @if ($section === 'products')
 
-    <div class="mb-3">
+        <div class="mb-3">
 
-        <button class="btn btn-secondary" wire:click="$set('section', null)">
-            <i class="fas fa-arrow-left mr-1"></i>
-            Volver
-        </button>
-
-    </div>
-
-
-    <x-card>
-
-        <div class="card-header">
-
-            <h3 class="card-title">
-
-                <i class="fas fa-boxes mr-2"></i>
-
-                Configuración de Productos
-
-            </h3>
+            <button class="btn btn-secondary" wire:click="$set('section', null)">
+                <i class="fas fa-arrow-left mr-1"></i>
+                Volver
+            </button>
 
         </div>
 
 
-        <div class="card-body p-0">
+        <x-card>
 
+            <div class="card-header">
 
-            {{-- Productos Serializados --}}
-            <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+                <h3 class="card-title">
 
-                <div>
+                    <i class="fas fa-boxes mr-2"></i>
 
-                    <h5 class="mb-1">
-                        Productos Serializados
-                    </h5>
+                    Configuración de Productos
 
-                    <small class="text-secondary">
-                        Permitir controlar productos mediante número de serie.
-                    </small>
-
-                </div>
-
-
-                <div class="custom-control custom-switch">
-
-                    <input
-                        type="checkbox"
-                        class="custom-control-input"
-                        id="serialized_products"
-                        wire:model.live="serialized_products"
-                    >
-
-                    <label
-                        class="custom-control-label"
-                        for="serialized_products">
-                    </label>
-
-                </div>
+                </h3>
 
             </div>
 
 
-            {{-- Productos Heredados --}}
-            <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
-
-                <div>
-
-                    <h5 class="mb-1">
-                        Productos Heredados
-                    </h5>
-
-                    <small class="text-secondary">
-                        Permitir gestionar productos heredados entre tiendas.
-                    </small>
-
-                </div>
+            <div class="card-body p-0">
 
 
-                <div class="custom-control custom-switch">
+                {{-- Productos Serializados --}}
+                <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
 
-                    <input
-                        type="checkbox"
-                        class="custom-control-input"
-                        id="inherited_products"
-                        wire:model.live="inherited_products"
-                    >
+                    <div>
 
-                    <label
-                        class="custom-control-label"
-                        for="inherited_products">
-                    </label>
+                        <h5 class="mb-1">
+                            Productos Serializados
+                        </h5>
 
-                </div>
+                        <small class="text-secondary">
+                            Permitir controlar productos mediante número de serie.
+                        </small>
 
-            </div>
+                    </div>
 
 
-            {{-- Etiquetas de Productos --}}
-            <div class="p-3 border-bottom">
+                    <div class="custom-control custom-switch">
 
-                <div class="mb-3">
+                        <input type="checkbox" class="custom-control-input" id="serialized_products"
+                            wire:model.live="serialized_products">
 
-                    <h5 class="mb-1">
-                        Etiquetas de Productos
-                    </h5>
+                        <label class="custom-control-label" for="serialized_products">
+                        </label>
 
-                    <small class="text-secondary">
-                        Selecciona las etiquetas que deseas mostrar como columnas
-                        adicionales en el listado de productos.
-                    </small>
+                    </div>
 
                 </div>
 
 
-                <div class="row">
+                {{-- Productos Heredados --}}
+                <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
 
-                    @forelse($available_tags as $tag)
+                    <div>
 
-                        <div class="col-md-4 col-lg-3 mb-2">
+                        <h5 class="mb-1">
+                            Productos Heredados
+                        </h5>
 
-                            <div class="custom-control custom-checkbox">
+                        <small class="text-secondary">
+                            Permitir gestionar productos heredados entre tiendas.
+                        </small>
 
-                                <input
-                                    type="checkbox"
-                                    class="custom-control-input"
-                                    id="tag_{{ Str::slug($tag) }}"
-                                    wire:model="selected_tags"
-                                    value="{{ $tag }}"
-                                >
-                                <label
-                                    class="custom-control-label"
-                                    for="tag_{{ Str::slug($tag) }}"
-                                >
-                                    {{ $tag }}
-                                </label>
+                    </div>
+
+
+                    <div class="custom-control custom-switch">
+
+                        <input type="checkbox" class="custom-control-input" id="inherited_products"
+                            wire:model.live="inherited_products">
+
+                        <label class="custom-control-label" for="inherited_products">
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                {{-- Etiquetas de Productos --}}
+                <div class="p-3 border-bottom">
+
+                    <div class="mb-3">
+
+                        <h5 class="mb-1">
+                            Etiquetas de Productos
+                        </h5>
+
+                        <small class="text-secondary">
+                            Selecciona las etiquetas que deseas mostrar como columnas
+                            adicionales en el listado de productos.
+                        </small>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        @forelse($available_tags as $tag)
+                            <div class="col-md-4 col-lg-3 mb-2">
+
+                                <div class="custom-control custom-checkbox">
+
+                                    <input type="checkbox" class="custom-control-input"
+                                        id="tag_{{ Str::slug($tag) }}" wire:model="selected_tags"
+                                        value="{{ $tag }}">
+                                    <label class="custom-control-label" for="tag_{{ Str::slug($tag) }}">
+                                        {{ $tag }}
+                                    </label>
+
+                                </div>
 
                             </div>
 
-                        </div>
+                        @empty
 
-                    @empty
+                            <div class="col-12">
 
-                        <div class="col-12">
+                                <small class="text-secondary">
+                                    No hay etiquetas de productos disponibles.
+                                </small>
 
-                            <small class="text-secondary">
-                                No hay etiquetas de productos disponibles.
-                            </small>
+                            </div>
+                        @endforelse
 
-                        </div>
-
-                    @endforelse
+                    </div>
 
                 </div>
 
-            </div>
 
+                {{-- Guardar --}}
+                <div class="d-flex justify-content-end p-3">
 
-            {{-- Guardar --}}
-            <div class="d-flex justify-content-end p-3">
+                    <button type="button" class="btn btn-primary" wire:click="save">
+                        <i class="fas fa-save mr-1"></i>
+                        Guardar configuración
+                    </button>
 
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    wire:click="save"
-                >
-                    <i class="fas fa-save mr-1"></i>
-                    Guardar configuración
-                </button>
+                </div>
+
 
             </div>
 
+        </x-card>
 
-        </div>
-
-    </x-card>
-
-@endif
+    @endif
 
 
 
@@ -878,12 +881,12 @@
                         </div>
 
                     </div>
-            </div>
-            <div class="row">
-                <div class="col d-flex justify-content-center">
-                    <button class="btn btn-primary w-50" wire:click="saveTheme">Guardar</button>
                 </div>
-            </div>
+                <div class="row">
+                    <div class="col d-flex justify-content-center">
+                        <button class="btn btn-primary w-50" wire:click="saveTheme">Guardar</button>
+                    </div>
+                </div>
 
             </div>
 
@@ -892,132 +895,120 @@
 </div>
 
 @assets
-<style>
-/* ==========================================================
-   THEME SELECTOR
-   ========================================================== */
+    <style>
+        /* ==========================================================
+       THEME SELECTOR
+       ========================================================== */
 
-.theme-card {
+        .theme-card {
 
-    cursor: pointer;
+            cursor: pointer;
 
-    border: 2px solid transparent;
+            border: 2px solid transparent;
 
-    transition:
-        transform .2s,
-        border-color .2s;
+            transition:
+                transform .2s,
+                border-color .2s;
 
-}
+        }
 
-.theme-card:hover {
+        .theme-card:hover {
 
-    transform: translateY(-4px);
+            transform: translateY(-4px);
 
-}
+        }
 
-.theme-selected {
+        .theme-selected {
 
-    border-color: var(--color-acento) !important;
+            border-color: var(--color-acento) !important;
 
-    box-shadow:
-        0 0 0 2px var(--color-acento-soft);
+            box-shadow:
+                0 0 0 2px var(--color-acento-soft);
 
-}
-
-
-/* Preview */
-
-.theme-preview {
-
-    height: 80px;
-
-    border-radius:
-        14px 14px 0 0;
-
-}
+        }
 
 
-/* Vendex */
+        /* Preview */
 
-.theme-preview-vendex {
+        .theme-preview {
 
-    background:
-        linear-gradient(
-            135deg,
-            #0F172A,
-            #1E293B
-        );
+            height: 80px;
 
-}
+            border-radius:
+                14px 14px 0 0;
+
+        }
 
 
-/* Midnight */
+        /* Vendex */
 
-.theme-preview-midnight {
+        .theme-preview-vendex {
 
-    background:
-        linear-gradient(
-            135deg,
-            #020617,
-            #0284C7
-        );
+            background:
+                linear-gradient(135deg,
+                    #0F172A,
+                    #1E293B);
 
-}
+        }
 
 
-/* Emerald */
+        /* Midnight */
 
-.theme-preview-emerald {
+        .theme-preview-midnight {
 
-    background:
-        linear-gradient(
-            135deg,
-            #06140F,
-            #10B981
-        );
+            background:
+                linear-gradient(135deg,
+                    #020617,
+                    #0284C7);
 
-}
+        }
 
 
-/* Purple */
+        /* Emerald */
 
-.theme-preview-purple {
+        .theme-preview-emerald {
 
-    background:
-        linear-gradient(
-            135deg,
-            #120C1A,
-            #8B5CF6
-        );
+            background:
+                linear-gradient(135deg,
+                    #06140F,
+                    #10B981);
 
-}
+        }
 
 
-/* Crimson */
+        /* Purple */
 
-.theme-preview-crimson {
+        .theme-preview-purple {
 
-    background:
-        linear-gradient(
-            135deg,
-            #120709,
-            #E11D48
-        );
+            background:
+                linear-gradient(135deg,
+                    #120C1A,
+                    #8B5CF6);
 
-}
+        }
 
 
-/* Light */
+        /* Crimson */
 
-.theme-preview-light {
+        .theme-preview-crimson {
 
-    background:
-        linear-gradient(
-            135deg,
-            #F1F5F9,
-            #4F46E5
-        );
+            background:
+                linear-gradient(135deg,
+                    #120709,
+                    #E11D48);
 
-}
-</style>
+        }
+
+
+        /* Light */
+
+        .theme-preview-light {
+
+            background:
+                linear-gradient(135deg,
+                    #F1F5F9,
+                    #4F46E5);
+
+        }
+    </style>
 @endassets

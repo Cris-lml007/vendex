@@ -16,7 +16,8 @@ class Settings extends Model
         'tutorial',
         'theme',
         'product_tags',
-        'currency_main'
+        'currency_main',
+        'receipt_paper'
     ];
 
     protected function cast(): array {

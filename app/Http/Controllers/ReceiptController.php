@@ -9,6 +9,20 @@ use NumberFormatter;
 
 class ReceiptController extends Controller
 {
+    public function getReceipt(Transaction $transaction, Request $request){
+        $format = new NumberFormatter('es',NumberFormatter::SPELLOUT);
+        $pdf = Pdf::setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true,
+        ])->loadView('pdf.receipt',[
+                'transaction' => $transaction,
+                'format' => $format,
+            ]);
+        $pdf->setPaper('letter', 'landscape');
+        $pdf->render();
+        return $pdf->stream();
+    }
+
     public function getLetter(Transaction $transaction){
         $format = new NumberFormatter('es',NumberFormatter::SPELLOUT);
         $pdf = Pdf::setOptions([

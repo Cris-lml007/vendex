@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Enums\Currency;
+use App\Enums\TypePaper;
 use App\Models\Settings;
 use App\Models\TagProduct;
 use Livewire\Component;
@@ -26,6 +27,8 @@ class SettingsView extends Component
 
     public $currency_main;
 
+    public $receipt_paper;
+
     public $version = 1;
 
     public Settings $settings;
@@ -44,7 +47,8 @@ class SettingsView extends Component
                 'change_password' => false,
                 'tutorial' => true,
                 'theme' => 'vendex',
-                'currency_main' => Currency::USD
+                'currency_main' => Currency::USD,
+                'receipt_paper' => TypePaper::LETTER
             ]);
         }else{
             $this->wholesale_price = $settings->wholesale_price;
@@ -56,6 +60,7 @@ class SettingsView extends Component
             $this->theme = $settings->theme;
             $this->selected_tags = json_decode($settings->product_tags);
             $this->currency_main = $settings->currency_main;
+            $this->receipt_paper = $settings->receipt_paper;
         }
         $this->settings = $settings;
 
@@ -65,6 +70,11 @@ class SettingsView extends Component
             ->orderBy('name')
             ->pluck('name')
             ->toArray();
+    }
+
+    public function updatedReceiptPaper(){
+        $this->settings->receipt_paper = $this->receipt_paper;
+        $this->settings->save();
     }
 
     public function updatedWholesalePrice(){

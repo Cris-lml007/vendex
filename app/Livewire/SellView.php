@@ -6,6 +6,7 @@ use App\Enums\Currency;
 use App\Enums\Role;
 use App\Enums\Status;
 use App\Enums\Type;
+use App\Enums\TypePaper;
 use App\Models\Customer;
 use App\Models\DetailTransaction;
 use App\Models\ExchangeRate;
@@ -283,7 +284,7 @@ class SellView extends Component
 
         } else if (result.isDenied) {
 
-            window.open('".route('admin.sell.id', $transaction->id)."', '_blank');
+                    window.open('".route('admin.sell.id'.($this->settings->receipt_paper == TypePaper::_80MM->value ? '.thermal' : ''), $transaction->id)."', '_blank');
 
             setTimeout(() => {
                 window.location.reload();
