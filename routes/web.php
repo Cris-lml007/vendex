@@ -40,7 +40,7 @@ Route::middleware(['auth',VerificationStatus::class])->get('/', SellView::class 
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::prefix('/dashboard')->middleware('auth')->group(function(){
+Route::prefix('/dashboard')->middleware(['auth',VerificationStatus::class])->group(function(){
 
     Route::can('isAdmin')->get('/exchange',ExchangeView::class)->name('admin.exchange');
 
