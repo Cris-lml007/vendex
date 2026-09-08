@@ -3,11 +3,13 @@
         <div class="row mb-3">
             <div class="col">
                 <label for="">Numero de Recibo</label>
-                <input type="text" class="form-control" value="{{ str_pad($transaction->id ?? '', 8, '0', STR_PAD_LEFT)}}" disabled>
+                <input type="text" class="form-control"
+                    value="{{ str_pad($transaction->id ?? '', 8, '0', STR_PAD_LEFT) }}" disabled>
             </div>
             <div class="col">
                 <label for="">Metodo de Pago</label>
-                <input type="text" class="form-control" disabled value="{{ __('messages.'.$transaction?->payment_method?->name ?? '') }}">
+                <input type="text" class="form-control" disabled
+                    value="{{ __('messages.' . $transaction?->payment_method?->name ?? '') }}">
             </div>
         </div>
         <div class="row mb-3">
@@ -45,66 +47,72 @@
                 <h5>Detalle de Venta</h5>
                 <table class="table table-striped">
                     <thead>
-                    <td>Producto</td>
-                    <td>Cantidad</td>
-                    <td>Precio(Bs)</td>
-                    <td>Subtotal</td>
+                        <td>Producto</td>
+                        <td>Cantidad</td>
+                        <td>Precio(Bs)</td>
+                        <td>Subtotal</td>
                     </thead>
                     <tbody>
-                    @foreach($transaction->details ?? [] as $item)
-                        <tr>
-                            <td><a href="{{ route('admin.product.id', $item->product->id) }}">{{ $item->product->name }}@if($item->product->is_serialize)({{ $item->product->id }})@endif</a> </td>
-                            <td>{{ $item->quantity }}</td>
-                    <td>{{ Number::format($item->price*$item->exchange_rate->usd_to_bs,2) }} ({{ $item->wholesale_price == 1 ? 'Mayor' : 'Unidad' }})</td>
-                            <td>{{ Number::format($item->subtotal*$item->exchange_rate->usd_to_bs,2) }}</td>
-                        </tr>
-                    @endforeach
+                        @foreach ($transaction->details ?? [] as $item)
+                            <tr>
+                                <td><a href="{{ route('admin.product.id', $item->product->id) }}">{{ $item->product->name }}
+                                        @if ($item->product->is_serialize)
+                                            ({{ $item->product->id }})
+                                        @endif
+                                    </a> </td>
+                                <td>{{ $item->quantity }}</td>
+                                <td>{{ Number::format($item->price * $item->exchange_rate->usd_to_bs, 2) }}
+                                    ({{ $item->wholesale_price == 1 ? 'Mayor' : 'Unidad' }})</td>
+                                <td>{{ Number::format($item->subtotal, 2) }}</td>
+                            </tr>
+                        @endforeach
                     </tbody>
                     <tfoot>
-                    <th colspan="3">TOTAL</th>
-                    <th>{{ Number::format(($transaction->total ?? 0) * ($transaction?->details[0]?->exchange_rate?->usd_to_bs ?? 0),2) }} Bs</th>
+                        <th colspan="3">TOTAL</th>
+                        <th>{{ Number::format($transaction->total ?? 0, 2) }} Bs</th>
                     </tfoot>
                 </table>
             </div>
         </div>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-primary" href="{{ route('admin.sell.id',$transaction->id ?? 9999999) }}">Generar Recibo</a>
-        <button wire:click="$js.delete()" class="btn btn-danger" @if(!$verify) disabled @endif >Eliminar</button>
+        <a class="btn btn-primary" href="{{ route('admin.sell.id', $transaction->id ?? 9999999) }}">Generar Recibo</a>
+        <button wire:click="$js.delete()" class="btn btn-danger"
+            @if (!$verify) disabled @endif>Eliminar</button>
         <button data-bs-dismiss="modal" class="btn btn-secondary">Cerrar</button>
     </div>
 </div>
 
 @script
-<script>
-    this.$js.delete = () => {
-        $("#modal-sale").modal("hide");
-        window.Swal.fire({
-            icon: "warning",
-            title: "Eliminar?",
-            text: "Esta seguro que desea eliminar, este proceso puede dañar los registros",
-            input: "password",
-            confirmButtonText: "Eliminar",
-            confirmButtonColor: "gray",
-            background: "red",
-            color: "white",
-        }).then( async (result) => {
-            if(result.isConfirmed){
-                let r = await $wire.remove(result.value)
-                console.log(r)
-                if(r){
-                    window.Swal.fire({
-                        title: "Eliminado Correctamente",
-                        icon: "success"
-                    })
-                }else{
-                    window.Swal.fire({
-                        title: "No se pudo Eliminar",
-                        icon: "error"
-                    })
+    <script>
+        this.$js.delete = () => {
+            $("#modal-sale").modal("hide");
+            window.Swal.fire({
+                icon: "warning",
+                title: "Eliminar?",
+                text: "Esta seguro que desea eliminar, este proceso puede dañar los registros",
+                input: "password",
+                confirmButtonText: "Eliminar",
+                confirmButtonColor: "gray",
+                background: "red",
+                color: "white",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    let r = await $wire.remove(result.value)
+                    console.log(r)
+                    if (r) {
+                        window.Swal.fire({
+                            title: "Eliminado Correctamente",
+                            icon: "success"
+                        })
+                    } else {
+                        window.Swal.fire({
+                            title: "No se pudo Eliminar",
+                            icon: "error"
+                        })
+                    }
                 }
-            }
-        });
-    }
-</script>
+            });
+        }
+    </script>
 @endscript
