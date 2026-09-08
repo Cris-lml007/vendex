@@ -23,13 +23,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         //User::factory(10)->create();
-        $tenant1 = Tenant::create(['id' => 'foo']);
-        $tenant1->domains()->create(['domain' => 'foo.localhost']);
-        $tenant2 = Tenant::create(['id' => 'bar']);
-        $tenant2->domains()->create(['domain' => 'bar.localhost']);
-        Tenant::all()->runForEach(function () {
-            User::factory()->create();
-        });
+        // $tenant1 = Tenant::create(['id' => 'foo']);
+        // $tenant1->domains()->create(['domain' => 'foo.localhost']);
+        // $tenant2 = Tenant::create(['id' => 'bar']);
+        // $tenant2->domains()->create(['domain' => 'bar.localhost']);
+        // Tenant::all()->runForEach(function () {
+        //     User::factory()->create();
+        // });
 
 
         User::create([
