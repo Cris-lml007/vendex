@@ -227,7 +227,7 @@
 
                 <td class="text-right total">
                     Bs.
-                    {{ number_format($transaction->total * $transaction->details[0]->exchange_rate->usd_to_bs, 2) }}
+                    {{ number_format($transaction->total, 2) }}
                 </td>
 
             </tr>
@@ -244,7 +244,7 @@
     <div class="literal">
         <strong>SON:</strong>
         @php
-            $total = round($transaction->total * $transaction->details[0]->exchange_rate->usd_to_bs, 2);
+            $total = round($transaction->total, 2);
 
             $entero = (int) floor($total);
             $decimal = (int) round(($total - $entero) * 100);
