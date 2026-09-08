@@ -40,26 +40,23 @@ Auth::routes([
 Route::middleware(['auth',VerificationStatus::class])->get('/', SellView::class );
 
 
+Route::get('/asset/{type}/{store}.jpg', function ($type,$store) {
+    $path = "{$type}/{$store}.jpg";
+
+    abort_unless(
+        Storage::disk('local')->exists($path),
+        404
+    );
+
+    return response()->file(
+        Storage::disk('local')->path($path)
+    );
+
+})->name('store.photo');
+
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::prefix('/dashboard')->middleware(['auth',VerificationStatus::class])->group(function(){
-
-
-    Route::get('/asset/{type}/{store}.jpg', function ($type,$store) {
-        $path = "{$type}/{$store}.jpg";
-
-        abort_unless(
-            Storage::disk('local')->exists($path),
-            404
-        );
-
-        return response()->file(
-            Storage::disk('local')->path($path)
-        );
-
-    })->name('store.photo');
-
-
 
     Route::can('isAdmin')->get('/exchange',ExchangeView::class)->name('admin.exchange');
 
