@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReceiptController;
 use App\Http\Middleware\VerificationStatus;
 use App\Livewire\CatalogView;
 use App\Livewire\CategoryView;
@@ -41,6 +42,23 @@ Route::middleware(['auth',VerificationStatus::class])->get('/', SellView::class 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::prefix('/dashboard')->middleware(['auth',VerificationStatus::class])->group(function(){
+
+
+    Route::get('/asset/{type}/{store}.jpg', function ($type,$store) {
+        $path = "{$type}/{$store}.jpg";
+
+        abort_unless(
+            Storage::disk('local')->exists($path),
+            404
+        );
+
+        return response()->file(
+            Storage::disk('local')->path($path)
+        );
+
+    })->name('store.photo');
+
+
 
     Route::can('isAdmin')->get('/exchange',ExchangeView::class)->name('admin.exchange');
 
@@ -110,19 +128,8 @@ Route::prefix('/dashboard')->middleware(['auth',VerificationStatus::class])->gro
     Route::can('isAdmin')->get('/reports',ReportView::class)->name('admin.reports');
     Route::can('isAdmin')->get('/settings',SettingsView::class)->name('admin.settings');
 
-    Route::get('/sell/{transaction}',function (\App\Models\Transaction $transaction){
-
-
-        $format = new NumberFormatter('es',NumberFormatter::SPELLOUT);
-        $pdf = Pdf::setOptions([
-            'isHtml5ParserEnabled' => true,
-            'isRemoteEnabled' => true,
-        ])->loadView('pdf.receipt',[
-                'transaction' => $transaction,
-                'format' => $format,
-            ]);
-        $pdf->setPaper('letter', 'landscape');
-        $pdf->render();
-        return $pdf->stream();
-    })->name('admin.sell.id');
+    Route::controller(ReceiptController::class)->group(function(){
+        Route::get('/sell/{transaction}','getLetter')->name('admin.sell.id');
+        Route::get('/sell/{transaction}/thermal','getThermal')->name('admin.sell.id.thermal');
+    });
 });
