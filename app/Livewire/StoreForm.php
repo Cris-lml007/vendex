@@ -116,14 +116,14 @@ class StoreForm extends Component
     {
         $heads = ['Nombre'=> 'name',
             'Disponibles' =>null,
-            'Precio'.'('.($this->settings->currency_main == Currency::BS->value ? 'Bs' : 'Usd').')' => null,
+            'Precio'.'('.($this->settings->currency_main == Currency::BS ? 'Bs' : 'Usd').')' => null,
             'Acciones' => null
         ];
         $heads1 = ['Id' => null,
             'Producto' => null,
             'Cliente' => null,
             'Cantidad' => null,
-            'Precio'.'('.($this->settings->currency_main == Currency::BS->value ? 'Bs' : 'Usd').')' => null,
+            'Precio'.'('.($this->settings->currency_main == Currency::BS ? 'Bs' : 'Usd').')' => null,
             'Por' => null
         ];
 

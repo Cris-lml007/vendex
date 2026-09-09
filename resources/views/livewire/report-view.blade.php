@@ -133,7 +133,7 @@
 
                         <h3 class="mb-0 text-white">
 
-                                    {{ $settings->currency_main == App\Enums\Currency::BS->value ? 'Bs' : 'Usd' }}
+                                    {{ $settings->currency_main == App\Enums\Currency::BS ? 'Bs' : 'Usd' }}
                             {{ number_format($totalAmount,2) }}
 
                         </h3>
@@ -174,7 +174,7 @@
 
                         <h3 class="mb-0 text-white">
 
-                            {{ $settings->currency_main == App\Enums\Currency::BS->value ? 'Bs' : 'Usd' }}
+                            {{ $settings->currency_main == App\Enums\Currency::BS ? 'Bs' : 'Usd' }}
                             {{ number_format($averageSale ?? 0,2) }}
 
                         </h3>
@@ -280,7 +280,7 @@
                         </td>
 
                         <td class="text-end">
-                                {{ $settings->currency_main == App\Enums\Currency::BS->value ? "Bs" : "Usd" }} {{ number_format($item->total,2) }}
+                                {{ $settings->currency_main == App\Enums\Currency::BS ? "Bs" : "Usd" }} {{ number_format($item->total,2) }}
                         </td>
 
                     </tr>
@@ -393,7 +393,7 @@
 
                                 <td class="text-end">
 
-                                {{ $settings->currency_main == App\Enums\Currency::BS->value ? 'Bs' : 'Usd' }}
+                                {{ $settings->currency_main == App\Enums\Currency::BS ? 'Bs' : 'Usd' }}
                                     {{ number_format($transaction->total,2) }}
 
                                 </td>

@@ -58,7 +58,7 @@ class SettingsView extends Component
             $this->change_password = $settings->change_password;
             $this->show_tutorial = $settings->tutorial;
             $this->theme = $settings->theme;
-            $this->selected_tags = json_decode($settings->product_tags);
+            $this->selected_tags = $settings->product_tags;
             $this->currency_main = $settings->currency_main;
             $this->receipt_paper = $settings->receipt_paper;
         }

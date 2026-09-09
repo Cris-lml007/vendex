@@ -68,7 +68,7 @@ class CatalogView extends Component
             'Color' => 'color',
             "Modelo" => 'model',
             "Marca" => 'brand_id',
-            "Precio(".($this->settings->currency_main == Currency::BS->value ? 'Bs' : 'Usd').')' => 'price',
+            "Precio(".($this->settings->currency_main == Currency::BS ? 'Bs' : 'Usd').')' => 'price',
             "Acciones" => null
         ];
         if($this->is_table){

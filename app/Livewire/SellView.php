@@ -97,9 +97,9 @@ class SellView extends Component
                 return;
             }
             if($this->is_whosale){
-                $this->product_price = $p->wholesale_price * ($this->settings->currency_main == Currency::BS->value ? ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : 1);
+                $this->product_price = $p->wholesale_price * ($this->settings->currency_main == Currency::BS ? ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : 1);
             }else{
-                $this->product_price = $p->price * ($this->settings->currency_main == Currency::BS->value ? ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : 1);
+                $this->product_price = $p->price * ($this->settings->currency_main == Currency::BS ? ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : 1);
             }
 
             $p = Product::find($this->product_id);

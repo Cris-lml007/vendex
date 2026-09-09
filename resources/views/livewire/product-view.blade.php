@@ -15,7 +15,7 @@
                         <td>{{ $item->id }}</td>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->model }}</td>
-                        @foreach (json_decode($settings->product_tags) ?? [] as $tag)
+                        @foreach ($settings->product_tags ?? [] as $tag)
                             <td>{{ $item->tags()->where('name', 'like', $tag)->first()->value ?? '---' }}</td>
                         @endforeach
                         <td>{{ $item->color ?? '' }}</td>
@@ -46,7 +46,7 @@
                         @endphp
 
                         <td>{{ $total }}</td>
-                        <td>{{ Number::format($item->price * ($settings->currency_main == App\Enums\Currency::BS->value ? $rate : 1), precision: 2) }}</td>
+                        <td>{{ Number::format($item->price * ($settings->currency_main == App\Enums\Currency::BS ? $rate : 1), precision: 2) }}</td>
                         <td>
                             <a href="{{ route('admin.product.id', $item->id) }}" class="btn btn-primary"><i
                                     class="fa fa-eye"></i></a>

@@ -104,11 +104,11 @@ class ReportView extends Component
             return $transaction->details->sum(function ($detail) {
                 return $detail->quantity * $detail->price;
             });
-        }) *  ($this->settings->currency_main == Currency::BS->value ?  $this->rate : 1);
+        }) *  ($this->settings->currency_main == Currency::BS ?  $this->rate : 1);
 
         $this->averageSale = ($this->totalSales > 0
             ? $this->totalAmount / $this->totalSales
-            : 0) *  ($this->settings->currency_main == Currency::BS->value ?  $this->rate : 1);
+            : 0) *  ($this->settings->currency_main == Currency::BS ?  $this->rate : 1);
     }
 
     public function exportPdf()
@@ -345,7 +345,7 @@ class ReportView extends Component
 
             ->selectRaw('SUM(detail_transactions.quantity) as quantity')
 
-            ->selectRaw('SUM(detail_transactions.quantity * detail_transactions.price)'.($this->settings->currency_main == Currency::BS->value ? "* exchange_rates.usd_to_bs" : '').' as total')
+            ->selectRaw('SUM(detail_transactions.quantity * detail_transactions.price)'.($this->settings->currency_main == Currency::BS ? "* exchange_rates.usd_to_bs" : '').' as total')
 
             ->groupBy(
                 'products.id',
