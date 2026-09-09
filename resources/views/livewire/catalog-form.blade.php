@@ -43,7 +43,7 @@
         </div>
         <div class="row mb-3">
             <div class="col">
-                <label for="">Precio ({{ $settings->currency_main == App\Enums\Currency::BS->value ? 'Bs' : 'Usd' }})</label>
+                <label for="">Precio ({{ $settings->currency_main == App\Enums\Currency::BS ? 'Bs' : 'Usd' }})</label>
                 <input type="text" class="form-control" wire:model="price" placeholder="Ingrese Precio" disabled>
                 @error('price')
                     <span class="text-danger">{{ $message }}</span>

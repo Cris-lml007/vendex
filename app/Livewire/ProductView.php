@@ -52,7 +52,7 @@ class ProductView extends Component
 
         $this->settings = Settings::first();
 
-        foreach (json_decode($this->settings->product_tags) ?? [] as $value) {
+        foreach ($this->settings->product_tags ?? [] as $value) {
             $heads [$value] = $value;
         }
 
@@ -61,7 +61,7 @@ class ProductView extends Component
         $heads ['Marca'] = 'brand_id';
         $heads ['Categoria'] = null;
         $heads ['Cantidad'] = null;
-        $heads ['Precio ('.($this->settings->currency_main == Currency::BS->value ? 'Bs' : 'Usd').')'] = 'price';
+        $heads ['Precio ('.($this->settings->currency_main == Currency::BS ? 'Bs' : 'Usd').')'] = 'price';
         $heads ['Acciones'] = null;
 
         $search = $this->list['search'];

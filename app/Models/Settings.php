@@ -20,7 +20,7 @@ class Settings extends Model
         'receipt_paper'
     ];
 
-    protected function cast(): array {
+    public function casts(): array {
         return [
             'product_tags' => 'array',
             'currency_main' => Currency::class

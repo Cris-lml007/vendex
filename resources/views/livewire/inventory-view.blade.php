@@ -26,7 +26,7 @@
                                 @endif
                             </a></td>
                         @if ($item->type == \App\Enums\Type::IN)
-                            @if ($current == App\Enums\Currency::BS->value)
+                            @if ($current == App\Enums\Currency::BS)
                                 <td>{{ \Illuminate\Support\Number::format($item->price * $item->exchange_rate->usd_to_bs * $item->quantity, 2) }}
                                 </td>
                             @else
@@ -34,7 +34,7 @@
                             @endif
                             <td>---</td>
                             @php
-                                if ($current == App\Enums\Currency::BS->value) {
+                                if ($current == App\Enums\Currency::BS) {
                                     $income += $item->price * $item->exchange_rate->usd_to_bs * $item->quantity;
                                 } else {
                                     $income += $item->price * $item->quantity;
@@ -43,14 +43,14 @@
                         @else
                             <td>---</td>
 
-                            @if ($current == App\Enums\Currency::BS->value)
+                            @if ($current == App\Enums\Currency::BS)
                                 <td>{{ \Illuminate\Support\Number::format($item->price * $item->exchange_rate->usd_to_bs * $item->quantity, 2) }}
                                 </td>
                             @else
                                 <td>{{ \Illuminate\Support\Number::format($item->price * $item->quantity, 2) }}</td>
                             @endif
                             @php
-                                if ($current == App\Enums\Currency::BS->value) {
+                                if ($current == App\Enums\Currency::BS) {
                                     $expense += $item->price * $item->exchange_rate->usd_to_bs * $item->quantity;
                                 } else {
                                     $expense += $item->price * $item->quantity;

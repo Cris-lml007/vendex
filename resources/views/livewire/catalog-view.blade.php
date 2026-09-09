@@ -79,8 +79,8 @@
                                             {{ $product->brand?->name ?? 'Ninguno' }}
                                         </div>
                                         <h5 class="text-success mt-2">
-                                            <strong>{{ $settings->currency_main == App\Enums\Currency::BS->value ? 'Bs' : 'Usd' }}
-                                                {{ number_format($product->price * ($settings->currency_main == App\Enums\Currency::BS->value ? $rate : 1), 2) }}</strong>
+                                            <strong>{{ $settings->currency_main == App\Enums\Currency::BS ? 'Bs' : 'Usd' }}
+                                                {{ number_format($product->price * ($settings->currency_main == App\Enums\Currency::BS ? $rate : 1), 2) }}</strong>
                                         </h5>
                                         <div class="mt-auto">
                                             <button wire:click="getProduct('{{ $product->id }}')"
@@ -111,7 +111,7 @@
                     <td>{{ $item->color }}</td>
                     <td>{{ $item->model }}</td>
                     <td>{{ $item?->brand?->name ?? '' }}</td>
-                    <td>{{ Number::format($item->price * ($settings->currency_main == App\Enums\Currency::BS->value ? $rate : 1), 2) }}</td>
+                    <td>{{ Number::format($item->price * ($settings->currency_main == App\Enums\Currency::BS ? $rate : 1), 2) }}</td>
                     <td>
                         <button wire:click="getProduct('{{ $item->id }}')" data-bs-toggle="modal"
                             data-bs-target="#modal-product" class="btn btn-primary"><i class="fa fa-eye"></i></button>

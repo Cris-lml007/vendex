@@ -45,7 +45,7 @@ class CatalogForm extends Component
     {
         $product = Product::find($id);
         $this->name = $product->name;
-        $this->price = Number::format($product->price * ($this->settings->currency_main == Currency::BS->value ? ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : 1),2);
+        $this->price = Number::format($product->price * ($this->settings->currency_main == Currency::BS ? ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : 1),2);
         $this->category = $product->category?->name ?? '';
         $this->description = $product->description;
         $this->brand = $product->brand?->name ?? '';
