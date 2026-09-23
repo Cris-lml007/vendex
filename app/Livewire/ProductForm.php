@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\Currency;
 use App\Enums\Status;
 use App\Enums\Type;
 use App\Models\Brand;
@@ -102,7 +103,7 @@ class ProductForm extends Component
         }
         if($bs != ''){
             $usd = $bs / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
-            $var = $usd;
+            $var = $this->settings->currency_main == Currency::BS ? $bs : $usd;
             $usd = round($usd,2);
         }else{
             $usd = 0;
@@ -118,7 +119,7 @@ class ProductForm extends Component
         }
         if($usd != ''){
             $bs = $usd * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
-            $var = $usd;
+            $var = $this->settings->currency_main == Currency::BS ? $bs : $usd;
             $bs = round($bs,2);
             $usd = round($usd,2);
         }else{
@@ -358,16 +359,16 @@ class ProductForm extends Component
             $this->name = $this->product->name;
             $this->price = $this->product->price;
             $this->color = $this->product->color ?? '';
-            $this->usd = $this->product->price;
+            $this->usd = $this->settings->currency_main == Currency::BS ? $this->price / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : $this->price;
             $this->updatedUsd();
 
             $this->price_purchase = $this->product?->kardex()?->first()?->price ?? null;
-            $this->usd1 = $this->price_purchase;
+            $this->usd1 = $this->settings->currency_main == Currency::BS ? $this->price_purchase / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : $this->price_purchase;
             $this->updatedUsd1();
             $this->store_id = $this->product?->store_id ?? null;
 
             $this->wholesale_price = $this->product->wholesale_price;
-            $this->usd2 = $this->wholesale_price;
+            $this->usd2 = $this->settings->currency_main == Currency::BS ? $this->wholesale_price / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : $this->wholesale_price;
             $this->updatedUsd2();
 
             $this->category = $this->product->category_id;

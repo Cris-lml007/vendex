@@ -24,7 +24,7 @@ class Product extends Model
         );
     }
 
-    public function wholesale_price(): Attribute{
+    public function wholesalePrice(): Attribute{
         return Attribute::make(
             get: fn($value) => Settings::first()->currency_main == Currency::BS ? $value * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : $value,
             set: fn($value) => Settings::first()->currency_main == Currency::BS ? (float)$value / (float)ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : $value
