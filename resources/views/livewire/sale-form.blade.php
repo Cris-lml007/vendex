@@ -61,7 +61,7 @@
                                         @endif
                                     </a> </td>
                                 <td>{{ $item->quantity }}</td>
-                                <td>{{ Number::format($item->price * $item->exchange_rate->usd_to_bs, 2) }}
+                                <td>{{ Number::format($item->price, 2) }}
                                     ({{ $item->wholesale_price == 1 ? 'Mayor' : 'Unidad' }})</td>
                                 <td>{{ Number::format($item->subtotal, 2) }}</td>
                             </tr>
