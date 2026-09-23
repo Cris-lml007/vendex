@@ -9,6 +9,8 @@ use App\Livewire\ExchangeView;
 use App\Livewire\InventoryView;
 use App\Livewire\ProductForm;
 use App\Livewire\ProductView;
+use App\Livewire\QuotationForm;
+use App\Livewire\QuotationView;
 use App\Livewire\ReportView;
 use App\Livewire\SaleView;
 use App\Livewire\SellView;
@@ -131,4 +133,7 @@ Route::prefix('/dashboard')->middleware(['auth',VerificationStatus::class])->gro
         Route::get('/sell/{transaction}/letter','getLetter')->name('admin.sell.id.letter');
         Route::get('/sell/{transaction}/thermal','getThermal')->name('admin.sell.id.thermal');
     });
+
+    Route::get('/quotations',QuotationView::class)->name('quotations');
+    Route::get('/quotation-create',QuotationForm::class)->name('quotations.create');
 });
