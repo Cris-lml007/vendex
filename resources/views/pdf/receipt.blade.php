@@ -209,11 +209,11 @@
                     </td>
 
                     <td class="text-right">
-                        {{ number_format($detail->price * $detail->exchange_rate->usd_to_bs, 2) }}
+                        {{ number_format($detail->price, 2) }}
                     </td>
 
                     <td class="text-right">
-                        {{ number_format($detail->quantity * $detail->price * $detail->exchange_rate->usd_to_bs, 2) }}
+                        {{ number_format($detail->quantity * $detail->price, 2) }}
                     </td>
 
                 </tr>
