@@ -479,8 +479,7 @@
                         <td class="col-price">
 
                             {{ number_format(
-                                $detail->price *
-                                $detail->exchange_rate->usd_to_bs,
+                                $detail->price,
                                 2
                             ) }}
 
@@ -493,8 +492,7 @@
 
                             {{ number_format(
                                 $detail->quantity *
-                                $detail->price *
-                                $detail->exchange_rate->usd_to_bs,
+                                $detail->price,
                                 2
                             ) }}
 

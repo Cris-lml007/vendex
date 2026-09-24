@@ -543,7 +543,7 @@
 })->sum('quantity') ?? 0 }}</td>
                     </tfoot>
                 </table>
-
+                                {{ $products->links() }}
             </div>
 
         </div>
