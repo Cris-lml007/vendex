@@ -403,9 +403,9 @@ class ReportView extends Component
                     }
 
                 })
-                ->get();
+                ->paginate();
         }else{
-            $products = Product::all();
+            $products = Product::paginate();
         }
 
         return view('livewire.report-view', [

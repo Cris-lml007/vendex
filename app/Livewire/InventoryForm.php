@@ -2,10 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Enums\Currency;
 use App\Enums\Type;
 use App\Models\ExchangeRate;
 use App\Models\Kardex;
 use App\Models\Product;
+use App\Models\Settings;
 use App\Models\Stock;
 use App\Models\Store;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +29,7 @@ class InventoryForm extends Component
     public $store_name;
     public $kardex_type;
     public Kardex $kardex;
+    public Settings $settings;
 
     public $bs;
     public $usd;
@@ -41,12 +44,12 @@ class InventoryForm extends Component
 
         if($this->bs != ''){
             if($this?->kardex?->id != null){
-                $this->usd = $this->bs / $this->kardex->exchange_rate->usd_to_bs;
+                $this->usd = (float)$this->bs / (float)$this->kardex->exchange_rate->usd_to_bs;
             }else{
-                $this->usd = $this->bs / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+                $this->usd = (float)$this->bs / (float)ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
             }
-            $this->price = $this->usd;
-            $this->usd = round($this->usd,2);
+            $this->price = $this->settings->currency_main == Currency::USD ? (float) $this->usd : (float) $this->bs;
+            $this->usd = $this->usd;
         }else{
             $this->usd = 0;
             $this->price = 0;
@@ -64,13 +67,14 @@ class InventoryForm extends Component
 
         if($this->usd != ''){
             if($this?->kardex?->id != null){
-                $this->bs = $this->usd * $this->kardex->exchange_rate->usd_to_bs;
+                $this->bs = (float)$this->usd * (float)$this->kardex->exchange_rate->usd_to_bs;
             }else{
-                $this->bs = $this->usd * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+                $this->bs = (float)$this->usd * (float)ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
             }
-            $this->price = $this->usd;
-            $this->bs = round($this->bs,2);
-            $this->usd = round($this->usd,2);
+            $this->price = $this->settings->currency_main == Currency::USD ? (float) $this->usd : (float) $this->bs;
+            // $this->price = $this->settings->currency_main == Currency::BS ? (float)$this->bs : (float)$this->usd;
+            $this->bs = $this->bs;
+            $this->usd = $this->usd;
         }else{
             $this->bs = 0;
             $this->price = 0;
@@ -105,14 +109,23 @@ class InventoryForm extends Component
     public function mount()
     {
         $this->kardex = new Kardex();
+        $this->settings = Settings::first();
     }
+
+
     #[On('getKardex')]
     public function getKardex($id){
         $this->kardex = Kardex::find($id);
         $this->_id = $this->kardex->product_id;
         $this->quantity = $this->kardex->quantity;
-        $this->price = $this->kardex->price;
-        $this->usd = $this->price;
+        $this->bs = 0;
+        if($this->settings->currency_main == Currency::BS){
+            $this->price = $this->kardex->price / $this->kardex->exchange_rate->usd_to_bs;
+        }else{
+            $this->price = $this->kardex->price;
+        }
+
+        $this->usd = (float)$this->price;
         $this->updatedUsd();
         $store = Store::find($this->kardex->store_id);
         $this->store_name = $store->name;
@@ -147,7 +160,7 @@ class InventoryForm extends Component
                         'store_id' => $item,
                         'product_id' => $this->_id,
                         'quantity' => $value,
-                        'price' => $this->price,
+                        'price' => (float)$this->price,
                         'type' => Type::IN,
                         'user_id' => Auth::user()->id,
                         'exchange_rate_id' => ExchangeRate::orderBy('id','desc')->first()->id,

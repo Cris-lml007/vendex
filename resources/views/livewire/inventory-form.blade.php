@@ -45,9 +45,9 @@
                         @else
                             <div class="input-group-text">Bs({{ Number::format(\App\Models\ExchangeRate::orderBy('id','desc')->first()->usd_to_bs,2) }})</div>
                         @endif
-                        <input type="text" class="form-control" wire:model.blur.live="bs">
+                        <input type="text" class="form-control" wire:model.blur.live="bs" @if($kardex?->id != null) disabled @endif>
                         <div class="input-group-text"><i class="fa fa-share"></i></div>
-                        <input type="text" class="form-control" wire:model.blur.live="usd">
+                        <input type="text" class="form-control" wire:model.blur.live="usd" @if($kardex?->id != null) disabled @endif>
                         <div class="input-group-text">Usd(1.00)</div>
                     </div>
                     @error('price')

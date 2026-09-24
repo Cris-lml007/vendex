@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Currency;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +16,20 @@ class DetailTransaction extends Model
         'exchange_rate_id',
         'wholesale_price'
     ];
+
+
+    public function price(): Attribute{
+        return Attribute::make(
+            get: function($value){
+                if($this->id != null){
+                    return Settings::first()->currency_main == Currency::BS ? $value * $this->exchange_rate->usd_to_bs : $value;
+                }else{
+                    return Settings::first()->currency_main == Currency::BS ? $value * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : $value;
+                }
+            },
+            set: fn($value) => Settings::first()->currency_main == Currency::BS ? (float)$value / (float)ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : $value
+        );
+    }
 
     public function kardex(){
         return $this->morphOne(Kardex::class, 'referenceable');
@@ -31,7 +46,7 @@ class DetailTransaction extends Model
     public function subtotal(): Attribute{
         return Attribute::make(
             get: function(){
-                return $this->price*$this->quantity * $this->exchange_rate->usd_to_bs;
+                return $this->price*$this->quantity;
             }
         );
     }
