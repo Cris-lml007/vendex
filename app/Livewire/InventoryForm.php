@@ -44,12 +44,12 @@ class InventoryForm extends Component
 
         if($this->bs != ''){
             if($this?->kardex?->id != null){
-                $this->usd = $this->bs / $this->kardex->exchange_rate->usd_to_bs;
+                $this->usd = (float)$this->bs / (float)$this->kardex->exchange_rate->usd_to_bs;
             }else{
-                $this->usd = $this->bs / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+                $this->usd = (float)$this->bs / (float)ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
             }
-            $this->price = $this->usd;
-            $this->usd = round($this->usd,2);
+            $this->price = $this->settings->currency_main == Currency::USD ? (float) $this->usd : (float) $this->bs;
+            $this->usd = $this->usd;
         }else{
             $this->usd = 0;
             $this->price = 0;
@@ -67,13 +67,14 @@ class InventoryForm extends Component
 
         if($this->usd != ''){
             if($this?->kardex?->id != null){
-                $this->bs = $this->usd * $this->kardex->exchange_rate->usd_to_bs;
+                $this->bs = (float)$this->usd * (float)$this->kardex->exchange_rate->usd_to_bs;
             }else{
-                $this->bs = $this->usd * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
+                $this->bs = (float)$this->usd * (float)ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
             }
-            $this->price = $this->usd;
-            $this->bs = round($this->bs,2);
-            $this->usd = round($this->usd,2);
+            $this->price = $this->settings->currency_main == Currency::USD ? (float) $this->usd : (float) $this->bs;
+            // $this->price = $this->settings->currency_main == Currency::BS ? (float)$this->bs : (float)$this->usd;
+            $this->bs = $this->bs;
+            $this->usd = $this->usd;
         }else{
             $this->bs = 0;
             $this->price = 0;
@@ -159,7 +160,7 @@ class InventoryForm extends Component
                         'store_id' => $item,
                         'product_id' => $this->_id,
                         'quantity' => $value,
-                        'price' => $this->price,
+                        'price' => (float)$this->price,
                         'type' => Type::IN,
                         'user_id' => Auth::user()->id,
                         'exchange_rate_id' => ExchangeRate::orderBy('id','desc')->first()->id,
