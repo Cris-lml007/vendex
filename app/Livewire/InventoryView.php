@@ -19,6 +19,7 @@ class InventoryView extends Component
     use WithPagination;
 
     public $last;
+    public Settings $settings;
 
     public $list = [
         'search' => '',
@@ -47,6 +48,7 @@ class InventoryView extends Component
     }
 
     public function mount(){
+        $this->settings = Settings::first();
         $this->last = Kardex::latest('id')->first()->id ?? null;
         $this->current = Settings::first()->currency_main;
     }

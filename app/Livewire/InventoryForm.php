@@ -2,10 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Enums\Currency;
 use App\Enums\Type;
 use App\Models\ExchangeRate;
 use App\Models\Kardex;
 use App\Models\Product;
+use App\Models\Settings;
 use App\Models\Stock;
 use App\Models\Store;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +29,7 @@ class InventoryForm extends Component
     public $store_name;
     public $kardex_type;
     public Kardex $kardex;
+    public Settings $settings;
 
     public $bs;
     public $usd;
@@ -105,14 +108,23 @@ class InventoryForm extends Component
     public function mount()
     {
         $this->kardex = new Kardex();
+        $this->settings = Settings::first();
     }
+
+
     #[On('getKardex')]
     public function getKardex($id){
         $this->kardex = Kardex::find($id);
         $this->_id = $this->kardex->product_id;
         $this->quantity = $this->kardex->quantity;
-        $this->price = $this->kardex->price;
-        $this->usd = $this->price;
+        $this->bs = 0;
+        if($this->settings->currency_main == Currency::BS){
+            $this->price = $this->kardex->price / $this->kardex->exchange_rate->usd_to_bs;
+        }else{
+            $this->price = $this->kardex->price;
+        }
+
+        $this->usd = (float)$this->price;
         $this->updatedUsd();
         $store = Store::find($this->kardex->store_id);
         $this->store_name = $store->name;

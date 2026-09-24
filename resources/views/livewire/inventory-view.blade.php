@@ -17,6 +17,11 @@
         <x-card>
             <livewire:table :heads="$heads" wire:model.live="list">
                 @foreach ($data as $item)
+                    @php
+                        if ($this->settings->currency_main == \App\Enums\Currency::BS) {
+                            $item->price = $item->price / $item->exchange_rate->usd_to_bs;
+                        }
+                    @endphp
                     <tr>
                         <td><a
                                 @if ($item->type == \App\Enums\Type::OUT) href="{{ route('admin.sell.id', $item->referenceable->id) }}" @endif>{{ $item->id }}</a>
