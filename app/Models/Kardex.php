@@ -28,6 +28,14 @@ class Kardex extends Model
         );
     }
 
+    public function subtotal(): Attribute{
+        return Attribute::make(
+            get: function(){
+                return $this->price*$this->quantity;
+            }
+        );
+    }
+
     public function product(){
         return $this->belongsTo(Product::class);
     }
