@@ -1,3 +1,7 @@
+<x-slot name="header">
+    <h1>Crear Proforma</h1>
+</x-slot>
+
 
 <div>
 
@@ -14,7 +18,7 @@
                 <div class="row">
 
                     {{-- Fecha inicial --}}
-                    <div class="col-md-4">
+                    <div class="col">
 
                         <div class="form-group">
 
@@ -22,12 +26,8 @@
                                 Fecha de inicio
                             </label>
 
-                            <input
-                                type="date"
-                                id="valid_from"
-                                class="form-control @error('valid_from') is-invalid @enderror"
-                                wire:model="valid_from"
-                            >
+                            <input type="date" id="valid_from"
+                                class="form-control @error('valid_from') is-invalid @enderror" wire:model="valid_from">
 
                             @error('valid_from')
                                 <span class="invalid-feedback">
@@ -41,7 +41,7 @@
 
 
                     {{-- Fecha final --}}
-                    <div class="col-md-4">
+                    <div class="col">
 
                         <div class="form-group">
 
@@ -49,12 +49,8 @@
                                 Fecha de vencimiento
                             </label>
 
-                            <input
-                                type="date"
-                                id="valid_to"
-                                class="form-control @error('valid_to') is-invalid @enderror"
-                                wire:model="valid_to"
-                            >
+                            <input type="date" id="valid_to"
+                                class="form-control @error('valid_to') is-invalid @enderror" wire:model="valid_to">
 
                             @error('valid_to')
                                 <span class="invalid-feedback">
@@ -92,13 +88,8 @@
                                 Buscar producto
                             </label>
 
-                            <input
-                                type="text"
-                                id="search"
-                                class="form-control"
-                                placeholder="Buscar por código o nombre..."
-                                wire:model.live="search"
-                            >
+                            <input type="text" id="search" class="form-control"
+                                placeholder="Buscar por código o nombre..." wire:model.live="search">
 
                         </div>
 
@@ -116,12 +107,8 @@
                     <div class="list-group mb-3">
 
                         @foreach ($this->products as $product)
-
-                            <button
-                                type="button"
-                                class="list-group-item list-group-item-action"
-                                wire:click="addProduct('{{ $product->id }}')"
-                            >
+                            <button type="button" class="list-group-item list-group-item-action"
+                                wire:click="addProduct('{{ $product->id }}')">
 
                                 <div class="d-flex justify-content-between align-items-center">
 
@@ -132,11 +119,9 @@
                                         </strong>
 
                                         @if ($product->id)
-
                                             <small class="text-muted d-block">
                                                 Código: {{ $product->id }}
                                             </small>
-
                                         @endif
 
                                     </div>
@@ -152,13 +137,10 @@
                                 </div>
 
                             </button>
-
                         @endforeach
 
                     </div>
-
                 @elseif ($search)
-
                     <div class="alert alert-secondary">
 
                         No se encontraron productos.
@@ -211,7 +193,6 @@
                         <tbody>
 
                             @forelse ($details as $index => $detail)
-
                                 <tr>
 
                                     {{-- Código --}}
@@ -229,12 +210,8 @@
                                     {{-- Cantidad --}}
                                     <td>
 
-                                        <input
-                                            type="number"
-                                            min="1"
-                                            class="form-control"
-                                            wire:model.live="details.{{ $index }}.quantity"
-                                        >
+                                        <input type="number" min="1" class="form-control"
+                                            wire:model.live.blur="details.{{ $index }}.quantity">
 
                                     </td>
 
@@ -242,13 +219,11 @@
                                     {{-- Precio --}}
                                     <td>
 
-                                        <input
-                                            type="number"
-                                            min="0"
-                                            step="0.01"
-                                            class="form-control"
-                                            wire:model.live="details.{{ $index }}.price"
-                                        >
+                                        <div class="input-group">
+                                            <input type="number" min="0" step="0.01" class="form-control"
+                                                wire:model.live.blur="details.{{ $index }}.price">
+                                            <button class="input-group-text btn btn-primary"><i class="fa fa-share"></i></button>
+                                        </div>
 
                                     </td>
 
@@ -258,14 +233,7 @@
 
                                         Bs.
 
-                                        {{
-                                            number_format(
-                                                ($detail['quantity'] ?? 0)
-                                                *
-                                                ($detail['price'] ?? 0),
-                                                2
-                                            )
-                                        }}
+                                        {{ number_format(($detail['quantity'] ?? 0) * ($detail['price'] ?? 0), 2) }}
 
                                     </td>
 
@@ -273,11 +241,8 @@
                                     {{-- Eliminar --}}
                                     <td class="text-center">
 
-                                        <button
-                                            type="button"
-                                            class="btn btn-sm btn-danger"
-                                            wire:click="removeProduct({{ $index }})"
-                                        >
+                                        <button type="button" class="btn btn-sm btn-danger"
+                                            wire:click="removeProduct({{ $index }})">
 
                                             <i class="fas fa-trash"></i>
 
@@ -291,17 +256,13 @@
 
                                 <tr>
 
-                                    <td
-                                        colspan="6"
-                                        class="text-center text-muted py-4"
-                                    >
+                                    <td colspan="6" class="text-center text-muted py-4">
 
                                         No hay productos agregados a la proforma.
 
                                     </td>
 
                                 </tr>
-
                             @endforelse
 
                         </tbody>
@@ -312,15 +273,11 @@
                         {{-- ================================================= --}}
 
                         @if (count($details))
-
                             <tfoot>
 
                                 <tr>
 
-                                    <th
-                                        colspan="4"
-                                        class="text-right"
-                                    >
+                                    <th colspan="4" class="text-right">
                                         Total
                                     </th>
 
@@ -337,7 +294,6 @@
                                 </tr>
 
                             </tfoot>
-
                         @endif
 
                     </table>
@@ -357,20 +313,12 @@
 
             <div class="d-flex justify-content-end">
 
-                <a
-                    href="{{ route('quotations') }}"
-                    class="btn btn-secondary mr-2"
-                >
+                <a href="{{ route('quotations') }}" class="btn btn-secondary mr-2">
                     Cancelar
                 </a>
 
 
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    wire:click="save"
-                    wire:loading.attr="disabled"
-                >
+                <button type="button" class="btn btn-primary" wire:click="save" wire:loading.attr="disabled">
 
                     <span wire:loading.remove wire:target="save">
 
