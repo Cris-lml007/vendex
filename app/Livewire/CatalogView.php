@@ -7,6 +7,7 @@ use App\Enums\Status;
 use App\Enums\Type;
 use App\Models\Product;
 use App\Models\Settings;
+use App\Models\TagProduct;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -63,14 +64,32 @@ class CatalogView extends Component
     {
         $this->settings = Settings::first();
         $heads = [
-            'Id' => 'id',
-            "Nombre" => 'name',
-            'Color' => 'color',
-            "Modelo" => 'model',
-            "Marca" => 'brand_id',
-            "Precio(".($this->settings->currency_main == Currency::BS ? 'Bs' : 'Usd').')' => 'price',
-            "Acciones" => null
+            'ID' => 'id',
+            'Nombre' =>'name',
+            'Modelo' => 'model',
         ];
+
+        $this->settings = Settings::first();
+
+        foreach ($this->settings->product_tags ?? [] as $value) {
+            $heads [$value] = $value;
+        }
+
+        $heads ['Color'] = 'color';
+        $heads ['Serializado'] = 'is_serialize';
+        $heads ['Marca'] = 'brand_id';
+        $heads ['Categoria'] = null;
+        $heads ['Cantidad'] = null;
+        $heads ['Precio ('.($this->settings->currency_main == Currency::BS ? 'Bs' : 'Usd').')'] = 'price';
+        $heads ['Acciones'] = null;
+
+        $sortField = $this->list['sort_field'];
+        $sortDirection = $this->list['sort_direction'];
+
+        $productTags = $this->settings->product_tags ?? [];
+        $isTag = in_array($sortField, $productTags);
+
+
         if($this->is_table){
             $search = $this->list['search'];
         }else{
@@ -105,16 +124,35 @@ class CatalogView extends Component
 
                     }
 
-                })
-                ->orderBy($this->list['sort_field'], $this->list['sort_direction'])
-                ->paginate();
+                });
+                // ->orderBy($this->list['sort_field'], $this->list['sort_direction'])
+                // ->paginate();
 
 
 
         }else {
-            $data = Product::where('status', Status::ACTIVE)
-                ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
-                ->paginate();
+            $data = Product::where('status', Status::ACTIVE);
+                // ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
+                // ->paginate();
+        }
+
+
+        if ($isTag) {
+
+            $data = $data
+                ->orderBy(
+                    TagProduct::select('value')
+                        ->whereColumn('tag_products.product_id', 'products.id')
+                        ->where('name', $sortField)
+                        ->limit(1),
+                    $sortDirection
+                )->paginate();
+
+        } else {
+
+            $data = $data
+                ->orderBy($sortField, $sortDirection)->paginate();
+
         }
 
         $this->list['pages_max'] = $data->lastPage();
