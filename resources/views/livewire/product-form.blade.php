@@ -29,7 +29,8 @@
                         <select class="form-select" wire:model.live="product_id">
                             <option value="">Seleccione Producto</option>
                             @foreach ($products as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}({{ $item->color ?? '' }})
+                                <option value="{{ $item->id }}">{{ $item->id }} - {{ $item->name }} ({{ $item->model }})
+                                                ({{ $item->color ?? '' }})
                                 </option>
                             @endforeach
                         </select>

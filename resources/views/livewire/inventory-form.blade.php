@@ -18,7 +18,8 @@
                     <select class="form-select" wire:model="_id" @if($kardex?->id != null) disabled @endif>
                         <option value="">Seleccione un Producto</option>
                         @foreach ($products as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            <option value="{{ $item->id }}">{{ $item->id }} - {{ $item->name }} ({{ $item->model }})
+                                                ({{ $item->color ?? '' }})</option>
                         @endforeach
                     </select>
                     @error('_id')
