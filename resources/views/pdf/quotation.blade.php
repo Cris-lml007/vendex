@@ -362,7 +362,7 @@
 
     <div class="footer">
 
-        Proforma generada por {{ config('app.name', 'Vendex') }}
+        Proforma generada por https://vendex.space
 
     </div>
 
