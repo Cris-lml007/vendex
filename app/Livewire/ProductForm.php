@@ -104,7 +104,7 @@ class ProductForm extends Component
         if($bs != ''){
             $usd = $bs / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
             $var = $this->settings->currency_main == Currency::BS ? $bs : $usd;
-            $usd = round($usd,2);
+            $usd = $usd;
         }else{
             $usd = 0;
             $var = 0;
@@ -120,8 +120,8 @@ class ProductForm extends Component
         if($usd != ''){
             $bs = $usd * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
             $var = $this->settings->currency_main == Currency::BS ? $bs : $usd;
-            $bs = round($bs,2);
-            $usd = round($usd,2);
+            $bs = $bs;
+            $usd = $usd;
         }else{
             $bs = 0;
             $var = 0;
@@ -241,7 +241,7 @@ class ProductForm extends Component
         if($this->product_id != ''){
             $p = Product::find($this->product_id);
             $this->name = $p->name;
-            $this->price = $p->price;
+            $this->price = $this->settings->currency_main == Currency::BS ? $p->price/ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : $p->price;
             $this->usd = $this->price;
             $this->updatedUsd();
 
