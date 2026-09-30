@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Currency;
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Model;
 
 class Settings extends Model
@@ -17,13 +18,14 @@ class Settings extends Model
         'theme',
         'product_tags',
         'currency_main',
-        'receipt_paper'
+        'receipt_paper',
+        'price_fix'
     ];
 
     public function casts(): array {
         return [
             'product_tags' => 'array',
-            'currency_main' => Currency::class
+            'currency_main' => Currency::class,
         ];
     }
 }
