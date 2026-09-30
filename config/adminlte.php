@@ -314,6 +314,11 @@ return [
             'icon' => 'fas fa-fw fa-list-alt',
         ],
         [
+            'text' => 'Proformas',
+            'route' => 'admin.quotations',
+            'icon' => 'fas fa-fw fa-pen',
+        ],
+        [
             'text' => 'Catalogo',
             'route' => 'admin.catalog',
             'icon' => 'fas fa-fw fa-book',

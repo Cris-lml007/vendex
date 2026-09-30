@@ -10,6 +10,11 @@
         {{-- ========================================================= --}}
         {{-- DATOS DE LA PROFORMA --}}
         {{-- ========================================================= --}}
+        @if ($quotation?->id != null)
+            <div class="col-12 d-flex justify-content-end mb-3">
+                <h5><strong>N° {{ str_pad($quotation->id, 8, '0', STR_PAD_LEFT) }}</strong></h5>
+            </div>
+        @endif
 
         <div class="col-12">
 
@@ -174,7 +179,7 @@
                                     Cantidad
                                 </th>
 
-                                <th width="15%">
+                                <th width="25%">
                                     Precio
                                 </th>
 
@@ -222,7 +227,10 @@
                                         <div class="input-group">
                                             <input type="number" min="0" step="0.01" class="form-control"
                                                 wire:model.live.blur="details.{{ $index }}.price">
-                                            <button class="input-group-text btn btn-primary"><i class="fa fa-share"></i></button>
+                                            <button class="input-group-text btn btn-primary"
+                                                wire:click="changePrice({{ $index }})"><i
+                                                    class="fa fa-share"></i>
+                                                {{ $detail['is_unit'] ? 'Unidad' : 'Mayor' }}</button>
                                         </div>
 
                                     </td>
@@ -233,7 +241,7 @@
 
                                         Bs.
 
-                                        {{ number_format(($detail['quantity'] ?? 0) * ($detail['price'] ?? 0), 2) }}
+                                        {{ number_format((float) ($detail['quantity'] ?? 0) * (float) ($detail['price'] ?? 0) ?? 0, 2) }}
 
                                     </td>
 
@@ -305,6 +313,20 @@
         </div>
 
 
+        @error('details.*.quantity')
+            <div class="row">
+                <div class="alert alert-danger">
+                    {{ $message }}
+                </div>
+            </div>
+        @enderror
+        @error('details.*.price')
+            <div class="row">
+                <div class="alert alert-danger">
+                    {{ $message }}
+                </div>
+            </div>
+        @enderror
         {{-- ========================================================= --}}
         {{-- BOTONES --}}
         {{-- ========================================================= --}}
@@ -313,9 +335,15 @@
 
             <div class="d-flex justify-content-end">
 
-                <a href="{{ route('quotations') }}" class="btn btn-secondary mr-2">
+                <a href="{{ route('admin.quotations') }}" class="btn btn-secondary mr-2">
                     Cancelar
                 </a>
+
+                @if ($quotation?->id != null)
+                    <a href="{{ route('admin.quotation.id.pdf', $quotation->id) }}"
+                        class="btn btn-success mr-2">Generar
+                        Pdf</a>
+                @endif
 
 
                 <button type="button" class="btn btn-primary" wire:click="save" wire:loading.attr="disabled">

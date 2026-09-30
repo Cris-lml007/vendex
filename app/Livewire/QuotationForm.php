@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Quotation;
 use App\Models\Settings;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Number;
 use Livewire\Component;
 
 class QuotationForm extends Component
@@ -20,12 +21,70 @@ class QuotationForm extends Component
 
     public $details = [];
     public Settings $settings;
+    public ?Quotation $quotation = null;
 
-    public function mount()
+    public function mount(?Quotation $quotation = null)
     {
         $this->settings = Settings::first();
+
+        $this->quotation = $quotation;
+
+        if ($quotation) {
+
+            $this->valid_from = $quotation->valid_from;
+            $this->valid_to = $quotation->valid_to;
+
+            $this->details = $quotation->details->map(function ($detail) {
+
+                $product = $detail->product;
+
+                $isUnit = $detail->is_unit;
+
+                return [
+                    'product_id' => $product->id,
+                    'name' => $product->name,
+                    'quantity' => $detail->quantity,
+                    'price' => Number::format($detail->price,2),
+
+                    'unit' => Number::format($product->price, 2),
+
+                    'wholesale' => Number::format(
+                        $product->wholesale_price,
+                        2
+                    ),
+
+                    'is_unit' => $isUnit,
+                ];
+
+            })->toArray();
+
+            return;
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | Nueva proforma
+    |--------------------------------------------------------------------------
+    */
+
         $this->valid_from = now()->format('Y-m-d');
-        $this->valid_to = now()->addDays(7)->format('Y-m-d');
+
+        $this->valid_to = now()
+            ->addDays(7)
+            ->format('Y-m-d');
+    }
+
+
+
+
+    public function changePrice($id){
+        if($this->details[$id]['is_unit']){
+            $this->details[$id]['price'] = $this->details[$id]['wholesale'];
+            $this->details[$id]['is_unit'] = false;
+        }else{
+            $this->details[$id]['price'] = $this->details[$id]['unit'];
+            $this->details[$id]['is_unit'] = true;
+        }
     }
 
     /*
@@ -108,7 +167,10 @@ class QuotationForm extends Component
             'product_id' => $product->id,
             'name' => $product->name,
             'quantity' => 1,
-            'price' => $product->price,
+            'price' => Number::format($product->price,2),
+            'unit' => Number::format($product->price,2),
+            'wholesale' => Number::format( $product->wholesale_price,2),
+            'is_unit' => true
         ];
 
         $this->search = '';
@@ -189,15 +251,51 @@ class QuotationForm extends Component
                 'numeric',
                 'min:0',
             ],
-        ]);
+        ], attributes: [
+                'details.*.quantity' => 'cantidades',
+                'details.*.price' => 'precios',
+            ]);
 
         DB::transaction(function () {
 
-            $quotation = Quotation::create([
-                'user_id' => auth()->id(),
-                'valid_from' => $this->valid_from,
-                'valid_to' => $this->valid_to,
-            ]);
+            /*
+        |--------------------------------------------------------------------------
+        | Crear o recuperar proforma
+        |--------------------------------------------------------------------------
+        */
+
+            if ($this->quotation) {
+
+                $quotation = $this->quotation;
+
+                $quotation->update([
+                    'valid_from' => $this->valid_from,
+                    'valid_to' => $this->valid_to,
+                ]);
+
+                /*
+            |--------------------------------------------------------------------------
+            | Eliminamos los detalles anteriores
+            |--------------------------------------------------------------------------
+            */
+
+                $quotation->details()->delete();
+
+            } else {
+
+                $quotation = Quotation::create([
+                    'user_id' => auth()->id(),
+                    'valid_from' => $this->valid_from,
+                    'valid_to' => $this->valid_to,
+                ]);
+            }
+
+
+            /*
+        |--------------------------------------------------------------------------
+        | Guardar detalles
+        |--------------------------------------------------------------------------
+        */
 
             foreach ($this->details as $detail) {
 
@@ -206,16 +304,52 @@ class QuotationForm extends Component
                     'product_id' => $detail['product_id'],
                     'quantity' => $detail['quantity'],
                     'price' => $detail['price'],
+                    'is_unit' => $detail['is_unit']
                 ]);
             }
         });
 
         session()->flash(
             'success',
-            'La proforma fue registrada correctamente.'
+            $this->quotation
+            ? 'La proforma fue actualizada correctamente.'
+            : 'La proforma fue registrada correctamente.'
         );
 
-        return redirect()->route('quotations');
+
+
+                $this->js("
+    Swal.fire({
+        title: '¡Proforma Generada!',
+        text: '¿Desea imprimir la Proforma?',
+        icon: 'success',
+
+        confirmButtonText: 'Nueva Proforma',
+        denyButtonText: 'Imprimir Proforma',
+
+        showDenyButton: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false
+
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            window.location.replace('" .route('admin.quotations') ."');
+
+        } else if (result.isDenied) {
+
+            window.open('".route('admin.quotation.id.pdf',$this->quotation->id)."', '_blank');
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+
+        }
+
+    });
+");
+        // return redirect()->route('admin.quotations');
     }
 
     public function render()

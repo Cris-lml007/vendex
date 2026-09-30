@@ -15,6 +15,9 @@ class QuotationView extends Component
     ];
 
 
+    public function getQuotation($id){
+        return redirect(route('admin.quotation.id',$id));
+    }
 
     public function render()
     {

@@ -25,4 +25,9 @@ class Quotation extends Model
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
     }
+
+    public function details()
+    {
+        return $this->hasMany(DetailQuotation::class);
+    }
 }

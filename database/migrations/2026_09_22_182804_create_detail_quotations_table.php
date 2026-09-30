@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('detail_quotations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('quotation_id');
-            $table->unsignedBigInteger('product_id');
+            $table->string('product_id');
             $table->unsignedBigInteger('quantity');
             $table->decimal('price',15,8);
+            $table->integer('is_unit')->default(1);
             $table->timestamps();
         });
 

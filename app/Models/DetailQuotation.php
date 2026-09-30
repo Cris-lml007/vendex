@@ -10,6 +10,12 @@ class DetailQuotation extends Model
         'quotation_id',
         'product_id',
         'price',
-        'quantity'
+        'quantity',
+        'is_unit'
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class,'product_id','id');
+    }
 }
