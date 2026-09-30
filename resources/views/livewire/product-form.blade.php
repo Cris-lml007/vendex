@@ -333,7 +333,7 @@
                                                         <th>Id</th>
                                                         <th>Nombre</th>
                                                         <th>Color</th>
-                                                        <th>Precio(Usd)</th>
+                                                        <th>Precio(Bs)</th>
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
