@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Enums\Currency;
+use App\Enums\Status;
 use App\Enums\Type;
 use App\Models\ExchangeRate;
 use App\Models\Kardex;
@@ -33,6 +34,7 @@ class InventoryForm extends Component
 
     public $bs;
     public $usd;
+    public $search;
 
     public function updatedBs(){
         //verificar que solo sea numberos y puntos
@@ -192,7 +194,45 @@ class InventoryForm extends Component
             'Cantidad' => 'quantity',
         ];
         $stores = Store::all();
-        $products = Product::where('is_serialize',false)->get();
+
+
+        if($this->search != ''){
+
+            $terms = preg_split('/\s+/', trim($this->search));
+
+            $products = Product::where('status', Status::ACTIVE)
+                ->where('is_serialize',false)
+                ->where(function ($query) use ($terms) {
+
+                    foreach ($terms as $term) {
+
+                        $query->where(function ($q) use ($term) {
+
+                            $q->where('name', 'like', "%{$term}%")
+                                ->orWhere('id', 'like', "%{$term}%")
+                                ->orWhere('model', 'like', "%{$term}%")
+                                ->orWhere('price', 'like', "%{$term}%")
+                                ->orWhere('color', 'like', "%{$term}%")
+
+                                ->orWhereHas('brand', function ($brand) use ($term) {
+                                    $brand->where('name', 'like', "%{$term}%");
+                                })
+
+                                ->orWhereHas('tags', function ($tag) use ($term) {
+                                    $tag->where('name', 'like', "%{$term}%")
+                                        ->orWhere('value', 'like', "%{$term}%");
+                                });
+
+                        });
+
+                    }
+
+                })->get();
+        }else{
+            $products = Product::where('is_serialize',false)->get();
+        }
+
+        // $products = Product::where('is_serialize',false)->get();
         return view('livewire.inventory-form',compact('stores','products','heads'));
     }
 }
