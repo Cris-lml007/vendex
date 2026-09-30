@@ -64,6 +64,15 @@ class ProductView extends Component
         $heads ['Precio ('.($this->settings->currency_main == Currency::BS ? 'Bs' : 'Usd').')'] = 'price';
         $heads ['Acciones'] = null;
 
+        $sortField = $this->list['sort_field'];
+        $sortDirection = $this->list['sort_direction'];
+
+        $productTags = $this->settings->product_tags ?? [];
+        $isTag = in_array($sortField, $productTags);
+
+
+
+
         $search = $this->list['search'];
         if($search != ''){
 
@@ -98,15 +107,34 @@ class ProductView extends Component
 
                     }
 
-                })
-                ->orderBy($this->list['sort_field'], $this->list['sort_direction'])
-                ->paginate();
+                });
+
+                // ->orderBy($this->list['sort_field'], $this->list['sort_direction'])
+                // ->paginate();
         }else{
             $products = Product::whereNot(function($q){
                 $q->where('is_serialize',true)->where('parent_id','!=',null);
-            })
-                ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
-                ->paginate();
+            });
+                // ->orderBy($this->list['sort_field'],$this->list['sort_direction'])
+                // ->paginate();
+        }
+
+        if ($isTag) {
+
+            $products = $products
+                ->orderBy(
+                    TagProduct::select('value')
+                        ->whereColumn('tag_products.product_id', 'products.id')
+                        ->where('name', $sortField)
+                        ->limit(1),
+                    $sortDirection
+                )->paginate();
+
+        } else {
+
+            $products = $products
+                ->orderBy($sortField, $sortDirection)->paginate();
+
         }
         $this->list['pages_max'] = $products->lastPage();
         //$products = Product::all();
