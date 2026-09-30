@@ -104,7 +104,7 @@ class ProductForm extends Component
         if($bs != ''){
             $usd = $bs / ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
             $var = $this->settings->currency_main == Currency::BS ? $bs : $usd;
-            $usd = round($usd,2);
+            $usd = $usd;
         }else{
             $usd = 0;
             $var = 0;
@@ -120,8 +120,8 @@ class ProductForm extends Component
         if($usd != ''){
             $bs = $usd * ExchangeRate::orderBy('id','desc')->first()->usd_to_bs;
             $var = $this->settings->currency_main == Currency::BS ? $bs : $usd;
-            $bs = round($bs,2);
-            $usd = round($usd,2);
+            $bs = $bs;
+            $usd = $usd;
         }else{
             $bs = 0;
             $var = 0;
@@ -241,11 +241,11 @@ class ProductForm extends Component
         if($this->product_id != ''){
             $p = Product::find($this->product_id);
             $this->name = $p->name;
-            $this->price = $p->price;
+            $this->price = $this->settings->currency_main == Currency::BS ? $p->price/ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : $p->price;
             $this->usd = $this->price;
             $this->updatedUsd();
 
-            $this->wholesale_price = $p->wholesale_price;
+            $this->wholesale_price = $this->settings->currency_main == Currency::BS ? $p->wholesale_price/ExchangeRate::orderBy('id','desc')->first()->usd_to_bs : $p->wholesale_price;
             $this->usd2 = $this->wholesale_price;
             $this->updatedUsd2();
 
@@ -608,7 +608,7 @@ class ProductForm extends Component
                     }
 
                     foreach ($this->product->children ?? [] as $child){
-                        if($child->is_serialize){
+                        // if($child->is_serialize){
                             $child->price = $this->price;
                             $child->wholesale_price = $this->wholesale_price;
                             $child->name = $this->name;
@@ -617,7 +617,7 @@ class ProductForm extends Component
                             $child->model = $this->model;
                             $child->category_id = $this->category;
                             $child->save();
-                        }
+                        // }
                     }
                 });
             }catch (\Exception $exception){
