@@ -3,11 +3,20 @@
         <div class="modal-body">
             <div class="row mb-3">
                 <div class="col">
+                    <label for="">Buscar Producto</label>
+                    <input type="text" class="form-control" wire:model.blur.enter.live="search"
+                        placeholder="Buscar Producto">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
                     <label for="">Codigo</label>
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Ingrese Codigo de Producto"
-                            wire:model="_id" @if($kardex?->id != null) disabled @endif>
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-scanner" class="btn btn-secondary" @if($kardex?->id != null) disabled @endif><i class="fa fa-qrcode"></i></button>
+                            wire:model="_id" @if ($kardex?->id != null) disabled @endif>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-scanner"
+                            class="btn btn-secondary" @if ($kardex?->id != null) disabled @endif><i
+                                class="fa fa-qrcode"></i></button>
                     </div>
                     @error('_id')
                         <span class="text-danger">{{ $message }}</span>
@@ -15,11 +24,13 @@
                 </div>
                 <div class="col">
                     <label for="">Producto</label>
-                    <select class="form-select" wire:model="_id" @if($kardex?->id != null) disabled @endif>
+                    <select class="form-select" wire:model="_id" @if ($kardex?->id != null) disabled @endif>
                         <option value="">Seleccione un Producto</option>
                         @foreach ($products as $item)
-                            <option value="{{ $item->id }}">{{ $item->id }} - {{ $item->name }} ({{ $item->model }})
-                                                ({{ $item->color ?? '' }})</option>
+                            <option value="{{ $item->id }}">{{ $item->id }} - {{ $item->name }}
+                                ({{ $item->model }})
+                                ({{ $item->color ?? '' }})
+                            </option>
                         @endforeach
                     </select>
                     @error('_id')
@@ -31,7 +42,7 @@
                 <div class="col">
                     <label for="">cantidad</label>
                     <input id="quantity" type="number" class="form-control" placeholder="Ingrese Cantidad"
-                        wire:model.live="quantity" @if($kardex?->id != null) disabled @endif>
+                        wire:model.live="quantity" @if ($kardex?->id != null) disabled @endif>
                     @error('quantity')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -41,22 +52,27 @@
                 <div class="col">
                     <label for="">Precio de Adquisición/Venta (Unidad)</label>
                     <div class="input-group">
-                        @if($kardex?->id != null)
-                            <div class="input-group-text">Bs({{ Number::format($kardex->exchange_rate->usd_to_bs,2) }})</div>
+                        @if ($kardex?->id != null)
+                            <div class="input-group-text">Bs({{ Number::format($kardex->exchange_rate->usd_to_bs, 2) }})
+                            </div>
                         @else
-                            <div class="input-group-text">Bs({{ Number::format(\App\Models\ExchangeRate::orderBy('id','desc')->first()->usd_to_bs,2) }})</div>
+                            <div class="input-group-text">
+                                Bs({{ Number::format(\App\Models\ExchangeRate::orderBy('id', 'desc')->first()->usd_to_bs, 2) }})
+                            </div>
                         @endif
-                        <input type="text" class="form-control" wire:model.blur.live="bs" @if($kardex?->id != null) disabled @endif>
+                        <input type="text" class="form-control" wire:model.blur.live="bs"
+                            @if ($kardex?->id != null) disabled @endif>
                         <div class="input-group-text"><i class="fa fa-share"></i></div>
-                        <input type="text" class="form-control" wire:model.blur.live="usd" @if($kardex?->id != null) disabled @endif>
+                        <input type="text" class="form-control" wire:model.blur.live="usd"
+                            @if ($kardex?->id != null) disabled @endif>
                         <div class="input-group-text">Usd(1.00)</div>
                     </div>
                     @error('price')
-                    <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
-            @if($kardex?->id != null)
+            @if ($kardex?->id != null)
                 <div class="row mb-3">
                     <div class="col">
                         <label for="">Tienda/Almacen</label>
@@ -65,8 +81,8 @@
                     <div class="col">
                         <label for="">Tipo</label>
                         <select wire:model="kardex_type" class="form-select" disabled>
-                            @foreach(\App\Enums\Type::cases() as $item)
-                                <option value="{{ $item->value }}">{{ __('messages.'.$item->name) }}</option>
+                            @foreach (\App\Enums\Type::cases() as $item)
+                                <option value="{{ $item->value }}">{{ __('messages.' . $item->name) }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -78,7 +94,8 @@
                     </div>
                     <div class="col">
                         <label for="">Fecha</label>
-                        <input type="datetime-local" class="form-control" value="{{ $kardex?->created_at ?? ''}}" disabled>
+                        <input type="datetime-local" class="form-control" value="{{ $kardex?->created_at ?? '' }}"
+                            disabled>
                     </div>
                 </div>
             @else
@@ -89,35 +106,38 @@
                             @foreach ($stores as $item)
                                 <tr>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ __('messages.'.$item->type->name) }}</td>
+                                    <td>{{ __('messages.' . $item->type->name) }}</td>
                                     <td style="width: 200px;">
                                         <input type="number" class="form-control store-stock"
-                                               placeholder="{{ ((int) $quantity - (int) $total) ?? 0 }}"
-                                               wire:blur="setStock({{ $item->id }}, $event.target.value)">
+                                            placeholder="{{ (int) $quantity - (int) $total ?? 0 }}"
+                                            wire:blur="setStock({{ $item->id }}, $event.target.value)">
                                     </td>
                                 </tr>
                             @endforeach
                             <livewire:slot name="footer">
                                 <th colspan="2" class="text-center">TOTAL</th>
-                                <th @class(['text-danger' => $total != $quantity, 'text-success' => $total == $quantity])>{{ $total }}</th>
+                                <th @class([
+                                    'text-danger' => $total != $quantity,
+                                    'text-success' => $total == $quantity,
+                                ])>{{ $total }}</th>
                             </livewire:slot>
                         </livewire:table>
                         @error('total')
-                        <span class="text-danger">{{ $message }}</span>
+                            <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
             @endif
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" @if($kardex?->id != null) disabled @endif>Guardar</button>
-            <button data-bs-dismiss="modal" type="reset" class="btn btn-secondary" wire:click="restart">Cancelar</button>
+            <button type="submit" class="btn btn-primary"
+                @if ($kardex?->id != null) disabled @endif>Guardar</button>
+            <button data-bs-dismiss="modal" type="reset" class="btn btn-secondary"
+                wire:click="restart">Cancelar</button>
         </div>
     </form>
 </div>
 
 @script
-<script>
-
-</script>
+    <script></script>
 @endscript
