@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Middleware\VerificationStatus;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,8 @@ use App\Livewire\ExchangeView;
 use App\Livewire\InventoryView;
 use App\Livewire\ProductForm;
 use App\Livewire\ProductView;
+use App\Livewire\QuotationForm;
+use App\Livewire\QuotationView;
 use App\Livewire\ReportView;
 use App\Livewire\SaleView;
 use App\Livewire\SellView;
@@ -151,6 +154,14 @@ Route::middleware([
                 Route::get('/sell/{transaction}/letter','getLetter')->name('admin.sell.id.letter');
                 Route::get('/sell/{transaction}/thermal','getThermal')->name('admin.sell.id.thermal');
             });
+
+            Route::controller(QuotationController::class)->group(function(){
+                Route::get('/quotation/{quotation}/pdf','getPdf')->name('admin.quotation.id.pdf');
+            });
+
+            Route::get('/quotations',QuotationView::class)->name('admin.quotations');
+            Route::get('/quotation/{quotation}',QuotationForm::class)->name('admin.quotation.id');
+            Route::get('/quotation-create',QuotationForm::class)->name('admin.quotations.create');
         });
 
 
