@@ -26,8 +26,8 @@ class SaleView extends Component
 
     public $list = [
         'search' => '',
-        'sort_field' => 'Id',
-        'sort_direction' => 'asc',
+        'sort_field' => 'id',
+        'sort_direction' => 'desc',
         'pages' => null
     ];
 

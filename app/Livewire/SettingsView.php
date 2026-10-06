@@ -32,6 +32,7 @@ class SettingsView extends Component
     public $version = 1;
 
     public Settings $settings;
+    public $price_fixed;
 
     public $available_tags;
     public $selected_tags = [];
@@ -61,6 +62,7 @@ class SettingsView extends Component
             $this->selected_tags = $settings->product_tags;
             $this->currency_main = $settings->currency_main;
             $this->receipt_paper = $settings->receipt_paper;
+            $this->price_fixed = $settings->price_fix;
         }
         $this->settings = $settings;
 
@@ -79,6 +81,11 @@ class SettingsView extends Component
 
     public function updatedWholesalePrice(){
         $this->settings->wholesale_price = $this->wholesale_price;
+        $this->settings->save();
+    }
+
+    public function updatedPriceFixed(){
+        $this->settings->price_fix = $this->price_fixed;
         $this->settings->save();
     }
 

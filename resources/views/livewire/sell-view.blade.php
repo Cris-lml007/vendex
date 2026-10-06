@@ -112,7 +112,7 @@
                                 <div class="input-group">
                                     <input data-bs-toggle="tooltip" data-bs-title="adad" type="number" step="0.01"
                                         class="form-control" wire:model="price"
-                                        placeholder="{{ Number::format($product_price ?? 0, 2) ?? '0' }}">
+                                placeholder="{{ Number::format($product_price ?? 0, 2) ?? '0' }}" @if($settings->price_fix) readonly @endif>
                                     <button @if (!$settings->wholesale_price) disabled @endif wire:click="changeWhosale"
                                         type="button" class="btn btn-primary"><i class="fa fa-share"></i>
                                         {{ $is_whosale ? 'Mayor' : 'Menor' }}</button>

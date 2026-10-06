@@ -272,7 +272,8 @@
                         </td>
 
                         <td>
-                            {{ $item->name }}
+                            {{ $item->id }} - {{ $item->name }} ({{ $item->model }})
+                                                ({{ $item->color ?? '' }})
                         </td>
 
                         <td class="text-center">
@@ -465,7 +466,8 @@
 
                     @foreach($products as $product)
                         <tr>
-                                    <td>{{ $product->id }} {{ $product->name }} ({{ $product->model }})</td>
+                                    <td>{{ $product->id }} - {{ $product->name }} ({{ $product->model }})
+                                                ({{ $product->color ?? '' }})</td>
                             @foreach($stores as $s)
                                 <td>{{ $product->stocks()?->where('store_id', $s->id)?->first()?->quantity ?? 0 }}</td>
                             @endforeach

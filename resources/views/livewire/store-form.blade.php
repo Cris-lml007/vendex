@@ -116,7 +116,8 @@
                         <livewire:table :heads="$heads" :searchable="false">
                             @foreach ($stock ?? [] as $item)
                                 <tr>
-                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->id }} - {{ $item->name }} ({{ $item->model }})
+                                                ({{ $item->color ?? '' }})</td>
                                     <td>{{ $item->pivot->quantity ?? 0 }}</td>
                                     <td>{{ Number::format($item->price, 2) }}</td>
                                     <td>
@@ -148,7 +149,8 @@
                                     <td><a
                                             href="{{ route('admin.sell.id', $item->referenceable->id) }}">{{ $item->id }}</a>
                                     </td>
-                                    <td>{{ $item->product->name }}</td>
+                                    <td>{{ $item->id }} - {{ $item->name }} ({{ $item->model }})
+                                                ({{ $item->color ?? '' }})</td>
                                     <td>{{ $item->referenceable?->customer?->name ?? '---' }}</td>
                                     <td>{{ $item->quantity }}</td>
                             <td>{{ Number::format($item->price, 2) }}</td>
