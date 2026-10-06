@@ -240,6 +240,33 @@
 
                     </div>
 
+            </div>
+
+                {{-- Precios fijos --}}
+                <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+
+                    <div>
+
+                        <h5 class="mb-1">
+                            Precios Variables
+                        </h5>
+
+                        <small class="text-secondary">
+                            Permitir Modificar los precio de Venta.
+                        </small>
+
+                    </div>
+
+
+                    <div class="custom-control custom-switch">
+
+                        <input type="checkbox" class="custom-control-input" id="price_fixed"
+                            wire:model.live="price_fixed">
+
+                        <label class="custom-control-label" for="price_fixed"></label>
+
+                    </div>
+
                 </div>
 
                 {{-- Moneda Principal --}}

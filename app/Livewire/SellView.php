@@ -20,6 +20,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Number;
 use Livewire\Component;
 
 class SellView extends Component
@@ -100,6 +101,10 @@ class SellView extends Component
                 $this->product_price = $p->wholesale_price;
             }else{
                 $this->product_price = $p->price;
+            }
+
+            if($this->settings->price_fix){
+                $this->price = Number::format($this->product_price,2);
             }
 
             $p = Product::find($this->product_id);
@@ -298,7 +303,15 @@ class SellView extends Component
             });
         } catch (\Throwable $e) {
             #$this->js('Swal.fire({title: "'. addslashes($e->getMessage()).'", icon: "error",showCancelButton: false})');
-            dd($e->getMessage());
+            // dd($e->getMessage());
+            $this->js("
+        Swal.fire({
+            icon: 'error',
+            title: 'Hubo un Error',
+            text: '{$e->getMessage()}',
+            confirmButtonText: 'Aceptar'
+        });
+    ");
         }
     }
 

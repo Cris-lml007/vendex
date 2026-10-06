@@ -44,14 +44,14 @@
 
                                         $photo_url = null;
                                         if (Storage::disk('local')->exists("products/{$product->id}.jpg")) {
-                                            $photo_url = route('store.photo',['products',$product->id]);
-                                        }else{
+                                            $photo_url = route('store.photo', ['products', $product->id]);
+                                        } else {
                                             $v = false;
                                             $p = $product?->parent;
-                                            do{
-                                                if($p?->id != null){
-                                                    if(Storage::disk('local')->exists("products/{$p->id}.jpg")) {
-                                                        $photo_url = route('store.photo',['products',$p->id]);
+                                            do {
+                                                if ($p?->id != null) {
+                                                    if (Storage::disk('local')->exists("products/{$p->id}.jpg")) {
+                                                        $photo_url = route('store.photo', ['products', $p->id]);
                                                         $v = true;
                                                     }
                                                 } else {
@@ -108,10 +108,39 @@
                 <tr>
                     <td>{{ $item->id }}</td>
                     <td>{{ $item->name }}</td>
-                    <td>{{ $item->color }}</td>
                     <td>{{ $item->model }}</td>
-                    <td>{{ $item?->brand?->name ?? '' }}</td>
-                    <td>{{ Number::format($item->price, 2) }}</td>
+                    @foreach ($settings->product_tags ?? [] as $tag)
+                        <td>{{ $item->tags()->where('name', 'like', $tag)->first()->value ?? '---' }}</td>
+                    @endforeach
+                    <td>{{ $item->color ?? '' }}</td>
+                    <td>{{ $item->is_serialize == 0 ? 'No' : 'Si' }}</td>
+                    @if ($item->brand)
+                        <td><strong
+                                style="color: {{ $item->brand->color_fg }}; background: {{ $item->brand->color_bg }}">{{ $item->brand->name }}</strong>
+                        </td>
+                    @else
+                        <td><strong>---</strong></td>
+                    @endif
+                    <td>{{ $item?->category?->name ?? '---' }}</td>
+
+                    @php
+                        $total =
+                            $item->stocks()->sum('quantity') +
+                            $item
+                                ->children()
+                                ->where('is_serialize', true)
+                                ->where('status', \App\Enums\Status::ACTIVE)
+                                ->whereNotExists(function ($query) use ($item) {
+                                    $query
+                                        ->select(DB::raw(1))
+                                        ->from('detail_transactions')
+                                        ->where('product_id', $item->id);
+                                })
+                                ->count();
+                    @endphp
+
+                    <td>{{ $total }}</td>
+                    <td>{{ Number::format($item->price, precision: 2) }}</td>
                     <td>
                         <button wire:click="getProduct('{{ $item->id }}')" data-bs-toggle="modal"
                             data-bs-target="#modal-product" class="btn btn-primary"><i class="fa fa-eye"></i></button>
