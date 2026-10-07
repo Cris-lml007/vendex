@@ -1049,3 +1049,7 @@ table.dataTable tbody tr:hover{
 h5 {
     color: var(--color-texto-principal);
 }
+
+.text-muted {
+    color: var(--color-texto-principal) !important;
+}

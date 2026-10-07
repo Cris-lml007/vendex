@@ -9,6 +9,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Store extends Model
 {
+
+    public $fillable = [
+        'name',
+        'phone',
+        'type',
+        'status',
+        'address',
+        'email'
+    ];
+
+
     protected function casts(): array
     {
         return [

@@ -20,7 +20,6 @@ use App\Livewire\StoreForm;
 use App\Livewire\StoreView;
 use App\Livewire\TransfersView;
 use App\Livewire\UsersView;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
