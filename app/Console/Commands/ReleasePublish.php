@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Release;
 use App\Models\Tenant;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class ReleasePublish extends Command
 {
@@ -93,6 +94,21 @@ class ReleasePublish extends Command
                     $description,
                     $features
                 ) {
+                        dump([
+                            'tenant' => tenant('id'),
+                            'title' => $title,
+                            'hex' => bin2hex($title),
+                            'encoding' => mb_detect_encoding($title, ['UTF-8'], true),
+                        ]);
+                        dump(
+                            DB::connection('tenant')->selectOne("
+                                SELECT
+                                @@character_set_client AS client,
+                                @@character_set_connection AS connection,
+                                @@character_set_results AS results,
+                                @@collation_connection AS collation
+                                ")
+                        );
                         Release::create([
                             'version' => $version,
                             'title' => $title,
@@ -105,9 +121,7 @@ class ReleasePublish extends Command
 
                 $this->info('  ✓ Release creado');
             } catch (\Throwable $e) {
-                $this->error(
-                    "  ✗ Error: {$e->getMessage()}"
-                );
+                $this->error("  ✗ Error: {$e->getMessage()}");
             }
         }
 
