@@ -117,10 +117,21 @@ protected function loadSheets(): void
     $path = $this->file->getRealPath();
 
     dump([
+        'php' => PHP_VERSION,
+        'cwd' => getcwd(),
+        'tenant' => tenant('id'),
+        'connection' => DB::getDefaultConnection(),
         'path' => $path,
+        'realpath' => realpath($path),
         'exists' => file_exists($path),
         'size' => filesize($path),
     ]);
+
+    dump('IDENTIFY');
+
+    dump(
+        IOFactory::identify($path)
+    );
 
     dump('ANTES DE IOFACTORY');
 
@@ -129,8 +140,6 @@ protected function loadSheets(): void
     dump('DESPUÉS DE IOFACTORY');
 
     $this->sheetNames = $spreadsheet->getSheetNames();
-
-    dump($this->sheetNames);
 }
 
     public function updatedSelectedSheet()
