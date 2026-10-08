@@ -20,6 +20,12 @@ class ReleasePublish extends Command
 
         $description = $this->ask('Descripción');
 
+        dump([
+            'title' => $title,
+            'hex' => bin2hex($title),
+            'encoding' => mb_detect_encoding($title, ['UTF-8'], true),
+        ]);
+
         $this->newLine();
 
         $this->info('Características');
