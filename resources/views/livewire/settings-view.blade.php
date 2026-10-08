@@ -787,7 +787,7 @@
 
                     <label>Versión Actual</label>
 
-                    <input type="text" class="form-control" wire:model="version">
+                    <input type="text" class="form-control" wire:model="version" readonly>
 
                 </div>
 
@@ -958,7 +958,59 @@
 
                         </div>
 
+                </div>
+
+                    {{-- VENDEX LIGHT --}}
+                    <div class="col-lg-3 col-md-6 mb-3">
+
+                        <div class="card theme-card
+                            {{ $theme === 'vendex-light' ? 'theme-selected' : '' }}"
+                            wire:click="setTheme('vendex-light')">
+
+                            <div class="theme-preview theme-preview-light"></div>
+
+                            <div class="card-body text-center">
+
+                                <h5 class="mb-1">
+                                    Vendex Light
+                                </h5>
+
+                                <small class="text-secondary">
+                                    Tema Claro
+                                </small>
+
+                            </div>
+
+                        </div>
+
                     </div>
+
+
+                    {{-- EXCEL --}}
+                    <div class="col-lg-3 col-md-6 mb-3">
+
+                        <div class="card theme-card
+                            {{ $theme === 'excel' ? 'theme-selected' : '' }}"
+                            wire:click="setTheme('excel')">
+
+                            <div class="theme-preview theme-preview-excel"></div>
+
+                            <div class="card-body text-center">
+
+                                <h5 class="mb-1">
+                                    Excel
+                                </h5>
+
+                                <small class="text-secondary">
+                                    Inspirado en Excel
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
                 <div class="row">
                     <div class="col d-flex justify-content-center">
@@ -1108,6 +1160,15 @@
                 linear-gradient(135deg,
                     #F1F5F9,
                     #4F46E5);
+
+        }
+
+        .theme-preview-excel {
+
+            background:
+                linear-gradient(135deg,
+                    white,
+                    #3BD80A);
 
         }
     </style>
