@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     {
 
         // specify the right identification middleware
-        // FilePreviewController::$middleware = ['web', InitializeTenancyByDomain::class];
+        FilePreviewController::$middleware = ['web', InitializeTenancyByDomain::class];
 
         Paginator::useBootstrap();
 
