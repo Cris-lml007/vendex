@@ -67,6 +67,8 @@ class ImportProduct extends Component
         'brands' => [],
     ];
 
+    public $spreadsheet;
+
     /*
     |--------------------------------------------------------------------------
     | Upload
@@ -110,15 +112,22 @@ class ImportProduct extends Component
         }
     }
 
-    protected function loadSheets(): void
-    {
-        $spreadsheet = IOFactory::load(
-            $this->file->getRealPath()
-        );
+protected function loadSheets(): void
+{
+    $path = $this->file->getRealPath();
 
-        $this->sheetNames =
-        $spreadsheet->getSheetNames();
-    }
+    dump([
+        'path' => $path,
+        'exists' => file_exists($path),
+        'size' => filesize($path),
+    ]);
+
+        $this->spreadsheet = IOFactory::load($path);
+
+        dump($this->spreadsheet->getSheetNames());
+
+        $this->sheetNames = $this->spreadsheet->getSheetNames();
+}
 
     public function updatedSelectedSheet()
     {
@@ -133,11 +142,11 @@ class ImportProduct extends Component
 
     protected function loadSelectedSheet(): void
     {
-        $spreadsheet = IOFactory::load(
-            $this->file->getRealPath()
-        );
+        // $spreadsheet = IOFactory::load(
+        //     $this->file->getRealPath()
+        // );
 
-        $sheet = $spreadsheet->getSheet(
+        $sheet = $this->spreadsheet->getSheet(
             $this->selectedSheet
         );
 
