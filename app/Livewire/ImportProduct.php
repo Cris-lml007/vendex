@@ -122,11 +122,15 @@ protected function loadSheets(): void
         'size' => filesize($path),
     ]);
 
-        $this->spreadsheet = IOFactory::load($path);
+    dump('ANTES DE IOFACTORY');
 
-        dump($this->spreadsheet->getSheetNames());
+    $spreadsheet = IOFactory::load($path);
 
-        $this->sheetNames = $this->spreadsheet->getSheetNames();
+    dump('DESPUÉS DE IOFACTORY');
+
+    $this->sheetNames = $spreadsheet->getSheetNames();
+
+    dump($this->sheetNames);
 }
 
     public function updatedSelectedSheet()
