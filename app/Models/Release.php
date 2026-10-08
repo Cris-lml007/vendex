@@ -13,6 +13,7 @@ class Release extends Model
         'description',
         'published_at',
         'active',
+        'features'
     ];
 
     protected $casts = [
