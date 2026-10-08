@@ -78,33 +78,27 @@ class ReleasePublish extends Command
         );
 
         foreach ($tenants as $tenant) {
-
             $this->line("→ Tenant: {$tenant->id}");
 
             try {
-
-                tenancy()->run($tenant, function () use (
+                $tenant->run(function () use (
                     $version,
                     $title,
                     $description,
                     $features
                 ) {
-
-                    Release::create([
-                        'version' => $version,
-                        'title' => $title,
-                        'description' => $description,
-                        'features' => $features,
-                        'published_at' => now(),
-                        'active' => true,
-                    ]);
-
-                });
+                        Release::create([
+                            'version' => $version,
+                            'title' => $title,
+                            'description' => $description,
+                            'features' => $features,
+                            'published_at' => now(),
+                            'active' => true,
+                        ]);
+                    });
 
                 $this->info('  ✓ Release creado');
-
             } catch (\Throwable $e) {
-
                 $this->error(
                     "  ✗ Error: {$e->getMessage()}"
                 );
