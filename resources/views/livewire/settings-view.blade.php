@@ -157,6 +157,57 @@
 
             </div>
 
+
+            {{-- Importar Productos --}}
+            <div class="col-lg-4 col-md-6 mb-3">
+
+                <div class="small-box bg-cyan h-100" style="cursor: pointer"
+                    wire:click="$set('section', 'importProduct')">
+
+                    <div class="inner">
+                        <h4>Importar Productos</h4>
+                        <p>Importar Productos, Categorias y Marcas.</p>
+                    </div>
+
+                    <div class="icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+
+                    <div class="small-box-footer">
+                        Importar
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {{-- Importar Stock --}}
+            <div class="col-lg-4 col-md-6 mb-3">
+
+                <div class="small-box bg-green h-100" style="cursor: pointer"
+                    wire:click="$set('section', 'importStock')">
+
+                    <div class="inner">
+                        <h4>Importar Inventario</h4>
+                        <p>Importar Inventario de Productos.</p>
+                    </div>
+
+                    <div class="icon">
+                        <i class="fas fa-list"></i>
+                    </div>
+
+                    <div class="small-box-footer">
+                        Importar
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+
             {{-- Sistema --}}
             <div class="col-lg-4 col-md-6 mb-3">
 
@@ -240,7 +291,7 @@
 
                     </div>
 
-            </div>
+                </div>
 
                 {{-- Precios fijos --}}
                 <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
@@ -736,7 +787,7 @@
 
                     <label>Versión Actual</label>
 
-                    <input type="text" class="form-control" wire:model="version">
+                    <input type="text" class="form-control" wire:model="version" readonly>
 
                 </div>
 
@@ -907,7 +958,59 @@
 
                         </div>
 
+                </div>
+
+                    {{-- VENDEX LIGHT --}}
+                    <div class="col-lg-3 col-md-6 mb-3">
+
+                        <div class="card theme-card
+                            {{ $theme === 'vendex-light' ? 'theme-selected' : '' }}"
+                            wire:click="setTheme('vendex-light')">
+
+                            <div class="theme-preview theme-preview-light"></div>
+
+                            <div class="card-body text-center">
+
+                                <h5 class="mb-1">
+                                    Vendex Light
+                                </h5>
+
+                                <small class="text-secondary">
+                                    Tema Claro
+                                </small>
+
+                            </div>
+
+                        </div>
+
                     </div>
+
+
+                    {{-- EXCEL --}}
+                    <div class="col-lg-3 col-md-6 mb-3">
+
+                        <div class="card theme-card
+                            {{ $theme === 'excel' ? 'theme-selected' : '' }}"
+                            wire:click="setTheme('excel')">
+
+                            <div class="theme-preview theme-preview-excel"></div>
+
+                            <div class="card-body text-center">
+
+                                <h5 class="mb-1">
+                                    Excel
+                                </h5>
+
+                                <small class="text-secondary">
+                                    Inspirado en Excel
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
                 <div class="row">
                     <div class="col d-flex justify-content-center">
@@ -919,13 +1022,35 @@
 
         </x-card>
     @endif
+    @if ($section === 'importProduct')
+        <div class="mb-3">
+
+            <button class="btn btn-secondary" wire:click="$set('section', null)">
+                <i class="fas fa-arrow-left mr-1"></i>
+                Volver
+            </button>
+
+        </div>
+        <livewire:import-product></livewire:import-product>
+    @endif
+    @if ($section === 'importStock')
+        <div class="mb-3">
+
+            <button class="btn btn-secondary" wire:click="$set('section', null)">
+                <i class="fas fa-arrow-left mr-1"></i>
+                Volver
+            </button>
+
+        </div>
+        <livewire:import-stock></livewire:import-stock>
+    @endif
 </div>
 
 @assets
     <style>
         /* ==========================================================
-       THEME SELECTOR
-       ========================================================== */
+               THEME SELECTOR
+               ========================================================== */
 
         .theme-card {
 
@@ -1035,6 +1160,15 @@
                 linear-gradient(135deg,
                     #F1F5F9,
                     #4F46E5);
+
+        }
+
+        .theme-preview-excel {
+
+            background:
+                linear-gradient(135deg,
+                    white,
+                    #3BD80A);
 
         }
     </style>

@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Enums\Currency;
 use App\Enums\TypePaper;
+use App\Models\Release;
 use App\Models\Settings;
 use App\Models\TagProduct;
 use Livewire\Component;
@@ -29,7 +30,7 @@ class SettingsView extends Component
 
     public $receipt_paper;
 
-    public $version = 1;
+    public $version;
 
     public Settings $settings;
     public $price_fixed;
@@ -72,6 +73,8 @@ class SettingsView extends Component
             ->orderBy('name')
             ->pluck('name')
             ->toArray();
+
+        $this->version = Release::latest()->first()->version;
     }
 
     public function updatedReceiptPaper(){

@@ -70,4 +70,11 @@ class User extends Authenticatable
     public function sales(){
         return $this->hasMany(Transaction::class,'user_id','id');
     }
+
+    public function releases()
+    {
+        return $this->belongsToMany(Release::class)
+            ->withPivot('seen_at')
+            ->withTimestamps();
+    }
 }
