@@ -102,6 +102,7 @@ class ImportProduct extends Component
 
         } catch (\Throwable $e) {
 
+            $this->js('Swal.fire({title: "Vaya Ocurrio un Error...", icon: "error",text:"Excel no Compatible"})');
             $this->addError(
                 'file',
                 'No se pudo leer el archivo: ' .
@@ -133,70 +134,75 @@ class ImportProduct extends Component
 
     protected function loadSelectedSheet(): void
     {
-        $spreadsheet = IOFactory::load(
-            $this->file->getRealPath()
-        );
+        try {
 
-        $sheet = $spreadsheet->getSheet(
-            $this->selectedSheet
-        );
+            $spreadsheet = IOFactory::load(
+                $this->file->getRealPath()
+            );
 
-        $data = $sheet->toArray(
-            null,
-            true,
-            true,
-            false
-        );
+            $sheet = $spreadsheet->getSheet(
+                $this->selectedSheet
+            );
 
-        if (empty($data)) {
+            $data = $sheet->toArray(
+                null,
+                true,
+                true,
+                false
+            );
 
-            $this->headers = [];
-            $this->rows = [];
-            $this->preview = [];
-            $this->totalRows = 0;
+            if (empty($data)) {
 
-            return;
-        }
+                $this->headers = [];
+                $this->rows = [];
+                $this->preview = [];
+                $this->totalRows = 0;
 
-        $this->headers = array_map(
-            fn ($header) =>
-            trim((string) $header),
-            $data[0]
-        );
+                return;
+            }
 
-        unset($data[0]);
+            $this->headers = array_map(
+                fn ($header) =>
+                trim((string) $header),
+                $data[0]
+            );
 
-        $data = array_values(
-            array_filter(
-                $data,
-                function ($row) {
+            unset($data[0]);
 
-                    foreach ($row as $value) {
+            $data = array_values(
+                array_filter(
+                    $data,
+                    function ($row) {
 
-                        if (
-                            $value !== null &&
-                                trim((string) $value) !== ''
-                        ) {
-                            return true;
+                        foreach ($row as $value) {
+
+                            if (
+                                $value !== null &&
+                                    trim((string) $value) !== ''
+                            ) {
+                                return true;
+                            }
                         }
+
+                        return false;
                     }
+                )
+            );
 
-                    return false;
-                }
-            )
-        );
+            $this->rows = $data;
 
-        $this->rows = $data;
+            $this->totalRows =
+            count($data);
 
-        $this->totalRows =
-        count($data);
-
-        $this->preview =
-        array_slice(
-            $data,
-            0,
-            10
-        );
+            $this->preview =
+            array_slice(
+                $data,
+                0,
+                10
+            );
+        } catch (\Throwable $th) {
+            $this->js('Swal.fire({title: "Vaya Ocurrio un Error...", icon: "error",text:"Excel no Compatible"})');
+        }
     }
 
     /*
