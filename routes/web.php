@@ -30,6 +30,13 @@ foreach (config('tenancy.central_domains') as $domain) {
         Route::get('/',function (){
             return view('welcome');
         })->name('welcome');
+
+
+        Auth::routes([
+            'register' => false,
+            'reset' => false,
+            'verify' => false,
+        ]);
     });
 }
 
