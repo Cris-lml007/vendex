@@ -32,11 +32,11 @@ foreach (config('tenancy.central_domains') as $domain) {
         })->name('welcome');
 
 
-        Auth::routes([
-            'register' => false,
-            'reset' => false,
-            'verify' => false,
-        ]);
+        // Auth::routes([
+        //     'register' => false,
+        //     'reset' => false,
+        //     'verify' => false,
+        // ]);
     });
 }
 
