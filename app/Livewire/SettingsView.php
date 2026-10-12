@@ -74,7 +74,7 @@ class SettingsView extends Component
             ->pluck('name')
             ->toArray();
 
-        $this->version = Release::latest()->first()->version;
+        $this->version = Release::latest()?->first()?->version ?? '1.5';
     }
 
     public function updatedReceiptPaper(){
