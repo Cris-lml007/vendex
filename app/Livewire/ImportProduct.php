@@ -113,23 +113,33 @@ class ImportProduct extends Component
 
     protected function loadSheets(): void
     {
-        $spreadsheet = IOFactory::load(
-            $this->file->getRealPath()
-        );
+        try {
+            $spreadsheet = IOFactory::load(
+                $this->file->getRealPath()
+            );
 
-        $this->sheetNames =
-        $spreadsheet->getSheetNames();
+            $this->sheetNames =
+            $spreadsheet->getSheetNames();
+        } catch (\Throwable $th) {
+            $this->js('Swal.fire({title: "Vaya Ocurrio un Error...", icon: "error",text:"Excel no Compatible"})');
+        }
     }
 
     public function updatedSelectedSheet()
     {
-        if (!$this->file) {
-            return;
+        try {
+
+            if (!$this->file) {
+                return;
+            }
+
+            $this->loadSelectedSheet();
+
+            $this->autoMap();
+        } catch (\Throwable $th) {
+            //throw $th;
+            $this->js('Swal.fire({title: "Vaya Ocurrio un Error...", icon: "error",text:"Excel no Compatible"})');
         }
-
-        $this->loadSelectedSheet();
-
-        $this->autoMap();
     }
 
     protected function loadSelectedSheet(): void
@@ -1146,21 +1156,25 @@ class ImportProduct extends Component
             $data['name'] !== ''
         ) {
             $product->name =
-            $data['name'];
+            substr($data['name'],0,255);
+        }else{
+            $product->name = '-';
         }
 
         if (
             $data['model'] !== ''
         ) {
             $product->model =
-            $data['model'];
+            substr($data['model'],0,255);
+        }else{
+            $product->model = '-';
         }
 
         if (
             $data['description'] !== ''
         ) {
             $product->description =
-            $data['description'];
+            substr($data['description'],0,255);
         }
 
         if (
@@ -1168,20 +1182,22 @@ class ImportProduct extends Component
         ) {
             $product->price =
             $data['price'];
+        }else{
+            $product->price = 0;
         }
 
         if (
             $data['color'] !== ''
         ) {
             $product->color =
-            $data['color'];
+            substr($data['color'],0,255);
         }
 
         if (
             $data['parent_id'] !== ''
         ) {
             $product->parent_id =
-            $data['parent_id'];
+            substr($data['parent_id'],0,255);
         }
 
         if (
