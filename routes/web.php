@@ -9,6 +9,7 @@ use App\Livewire\CustomersView;
 use App\Livewire\ExchangeView;
 use App\Livewire\InventoryView;
 use App\Livewire\ProductForm;
+use App\Livewire\ProductPrice;
 use App\Livewire\ProductView;
 use App\Livewire\QuotationForm;
 use App\Livewire\QuotationView;
@@ -141,4 +142,6 @@ Route::prefix('/dashboard')->middleware(['auth',VerificationStatus::class])->gro
     Route::get('/quotations',QuotationView::class)->name('admin.quotations');
     Route::get('/quotation/{quotation}',QuotationForm::class)->name('admin.quotation.id');
     Route::get('/quotation-create',QuotationForm::class)->name('admin.quotations.create');
+
+    Route::get('/prices',ProductPrice::class)->name('admin.prices');
 });
