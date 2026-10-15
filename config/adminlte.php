@@ -382,6 +382,12 @@ return [
             'icon' => 'fas fa-fw fa-user',
         ],
         [
+            'text' => 'Actualizar Precios',
+            'route' => 'admin.prices',
+            'icon' => 'fas fa-fw fa-wallet',
+            'can' => 'isAdmin'
+        ],
+        [
             'text' => 'Tipo de Cambio',
             'route' => 'admin.exchange',
             'icon' => 'fas fa-fw fa-dollar-sign',
